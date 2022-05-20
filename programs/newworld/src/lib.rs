@@ -9,7 +9,15 @@ pub mod newworld {
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         Ok(())
     }
+
+    pub fn add(ctx: Context<Add>) -> Result<()> {
+        msg!("doing some adding");
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
 pub struct Initialize {}
+
+#[derive(Accounts)]
+pub struct Add {}
