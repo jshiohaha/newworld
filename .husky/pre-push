@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+commits=$(git cherry -v | wc -l | xargs)
+echo "commits: $commits"
+git log -$(echo "$commits")
