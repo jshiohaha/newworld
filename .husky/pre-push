@@ -3,4 +3,4 @@
 
 commits=$(git cherry -v | wc -l | xargs)
 echo "commits: $commits"
-git log -$(echo "$commits")
+git log -"$(echo "$commits")"
