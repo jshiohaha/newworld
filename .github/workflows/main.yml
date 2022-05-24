@@ -29,12 +29,12 @@ jobs:
     name: Main workflow
     runs-on: ubuntu-18.04
     steps:
+      - uses: actions/checkout@v3
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-
-      # - uses: actions/checkout@v3
       # - uses: ./.github/actions/anchor-publish/
       #   with:
       #     program: newworld
