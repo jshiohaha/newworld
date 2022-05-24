@@ -2,7 +2,7 @@ name: "Anchor Publish"
 description: "Publishes a verifiable build to anchor"
 inputs:
   program:
-    description: 'The program to build and upload'
+    description: "The program to build and upload"
     required: true
   # anchor-token:
   #   description: 'Token to log in with anchor'
@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/setup/
     - uses: ./.github/actions/setup-anchor/
       with:
