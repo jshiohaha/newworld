@@ -4,15 +4,12 @@ inputs:
   program:
     description: "The program to build and upload"
     required: true
-  # anchor-token:
-  #   description: 'Token to log in with anchor'
-  #   required: true
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - uses: ./.github/actions/setup/
+    # - uses: ./.github/actions/setup/
     - uses: ./.github/actions/setup-anchor/
       with:
         node-version: ${{ env.NODE_VERSION }}

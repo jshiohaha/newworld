@@ -31,23 +31,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      # - uses: ./.github/actions/anchor-publish/
-      #   with:
-      #     program: newworld
+      - uses: ./.github/actions/anchor-publish/
+        with:
+          program: newworld
 
-      # - name: Print program artifacts
-      #   run: |
-      #     ls ../../target/verifiable
-
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     role-to-assume: arn:aws:iam::813125037859:role/uploadVerifiableBuildBinaryToS3Role
-      #     aws-region: us-east-1
-      # - name: Upload verifiable build output to S3
-      #   run: |
-      #     aws s3 cp ../../target/verifiable/newworld.so s3://infrastack-verifiablebuildbinariesbuckete14f8038-76l3dm46th5f/newworld.so
+      - name: Print program artifacts
+        run: |
+          ls ../../target/verifiable
