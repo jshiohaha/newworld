@@ -4,14 +4,6 @@ description: "Setup Anchor"
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
-    - uses: ./.github/actions/install-linux-build-deps
-    - uses: ./.github/actions/install-solana
-      with:
-        solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-    - uses: ./.github/actions/install-rust
-      with:
-        toolchain: ${{ env.RUST_TOOLCHAIN }}
     - uses: actions/cache@v2
 
       name: Cache Anchor ClI
