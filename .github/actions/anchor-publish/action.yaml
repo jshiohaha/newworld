@@ -1,5 +1,11 @@
 name: "Anchor Publish"
 description: "Publishes a verifiable build to anchor"
+
+env:
+  ANCHOR_VERSION: 0.22.0
+  SOLANA_VERSION_STABLE: 1.9.22
+  RUST_TOOLCHAIN: stable
+
 inputs:
   program:
     description: "The program to build and upload"

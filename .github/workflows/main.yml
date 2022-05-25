@@ -16,8 +16,10 @@ permissions:
   contents: read
 
 env:
-  SOLANA_CLI_VERSION: 1.9.14
   NODE_VERSION: 17.0.1
+  ANCHOR_VERSION: 0.22.0
+  SOLANA_VERSION_STABLE: 1.9.22
+  RUST_TOOLCHAIN: stable
 
 defaults:
   run:

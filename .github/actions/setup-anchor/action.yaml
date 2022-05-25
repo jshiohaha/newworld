@@ -1,11 +1,6 @@
 name: Setup Anchor
 description: "Setup Anchor"
 
-env:
-  ANCHOR_VERSION: 0.22.0
-  SOLANA_VERSION_STABLE: 1.9.22
-  RUST_TOOLCHAIN: stable
-
 runs:
   using: "composite"
   steps:
