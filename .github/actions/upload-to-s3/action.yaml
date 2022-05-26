@@ -4,9 +4,6 @@ inputs:
   path-to-file:
     description: "Path to the file to upload"
     required: true
-  is-download-required:
-    description: "Boolean specifying if we should download the file. This is only true when actions/upload-artifact was previously called."
-    required: true
   name:
     description: "The file name that will be exist in S3"
     required: true
@@ -50,7 +47,6 @@ runs:
         aws-region: ${{ inputs.region }}
 
     - uses: actions/download-artifact@v2
-      if: inputs.is-download-required == 'true'
       with:
         name: ${{ inputs.path-to-file }}
         path: .
