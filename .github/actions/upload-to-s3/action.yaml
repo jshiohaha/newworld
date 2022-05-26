@@ -23,6 +23,11 @@ inputs:
     description: "Prefix in the bucket to which the file will upload"
     required: true
 
+outputs:
+  uploaded-file-path:
+    description: Path of the uploaded file
+    value: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
+
 permissions:
   id-token: write
   contents: read
@@ -64,10 +69,3 @@ runs:
         PREFIX: ${{ inputs.prefix }}
         NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.path-to-file }}
-
-  # outputs:
-  #   uploaded-file-path: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
-
-  #       run: echo "::set-output name=bar-output::$(echo 1)"
-  #   outputs:
-  #     foo1-output: ${{ steps.generate-output.outputs.bar-output }}
