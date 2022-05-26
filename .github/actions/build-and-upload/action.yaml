@@ -23,9 +23,9 @@ inputs:
     description: "Prefix in the bucket to which the file will upload"
     required: true
 
-defaults:
-  run:
-    working-directory: ${{ env.working-directory }}
+# defaults:
+#   run:
+#     working-directory: ${{ env.working-directory }}
 
 runs:
   using: "composite"
