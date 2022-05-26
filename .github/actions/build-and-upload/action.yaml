@@ -42,9 +42,9 @@ runs:
       run: |
         ls ./
         echo "1"
-        ls ../
+        ls ./target/
         echo "2"
-        ls ../../
+        ls ./target/deploy
         echo "3"
       shell: bash
 
