@@ -87,8 +87,8 @@ jobs:
                   "package": "newworld"
               }
           END
-          )" > ${{ github.workspace }}/binary-context.json
-          cat ${{ github.workspace }}/binary-context.json
+          )" > binary-context.json
+          cat binary-context.json
           pwd
         shell: bash
 
@@ -96,7 +96,7 @@ jobs:
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary-metadata
         with:
-          path-to-file: ${{ github.workspace }}/binary-context.json
+          path-to-file: ${{ github.workspace }}/programs/newworld/binary-context.json
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}

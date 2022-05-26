@@ -53,7 +53,7 @@ runs:
 
     - name: Verify existence of file to upload
       run: |
-        echo $FILE_PATH
+        echo "$FILE_PATH"
       shell: bash
 
     - name: Cat file boi
