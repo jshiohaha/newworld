@@ -40,16 +40,18 @@ runs:
     - name: LS dir
       id: ls-in-dirs
       run: |
-        ls ../
+        ls ./
         echo "1"
-        ls ../../
+        ls ../
         echo "2"
+        ls ../../
+        echo "3"
       shell: bash
 
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.program-binary }}
-        path: ${{ env.GITHUB_WORKSPACE }}/${{ inputs.program-binary }}
+        path: target/deploy/${{ inputs.program-binary }}
         if-no-files-found: error
 
     # todo: parse toml for version and use that in S3 prefix
@@ -58,7 +60,7 @@ runs:
       id: upload-binary
       with:
         # should be at root of workspace, which is where target/ dir is
-        path-to-file: target/deploy/${{ inputs.program-binary }}
+        path-to-file: ${{ inputs.program-binary }}
         name: ${{ inputs.program-binary }}
         account-id: ${{ inputs.account-id }}
         region: ${{ inputs.region }}
