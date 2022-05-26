@@ -41,46 +41,25 @@ runs:
         # not strictly required since s3 buckets are global, but this is the pattern I noticed other places
         aws-region: ${{ inputs.region }}
 
-      # cat $FILE_PATH
-      # if [ ! -f "$FILE_PATH" ];
-      # then
-      #   echo "File does not exist"
-      #   exit 1
-      # fi
-
     - uses: actions/download-artifact@v2
       with:
         name: ${{ inputs.path-to-file }}
         path: .
 
-    - name: Verify existence of file to upload
-      run: |
-        echo $FILE_PATH
+    - name: Upload file to S3
+      run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
       shell: bash
       env:
-        FILE_PATH: ${{ inputs.path-to-file }}
+        BUCKET: ${{ inputs.bucket }}
+        PREFIX: ${{ inputs.prefix }}
+        NAME: ${{ inputs.name }}
+        FILE_PATH: ${{ inputs.path }}
 
-    - name: Cat file boi
-      run: |
-        cat $FILE_PATH
+    - name: Set URL to binary
+      run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
       shell: bash
       env:
+        BUCKET: ${{ inputs.bucket }}
+        PREFIX: ${{ inputs.prefix }}
+        NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.path-to-file }}
-
-    # - name: Upload file to S3
-    #   run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
-    #   shell: bash
-    #   env:
-    #     BUCKET: ${{ inputs.bucket }}
-    #     PREFIX: ${{ inputs.prefix }}
-    #     NAME: ${{ inputs.name }}
-    #     FILE_PATH: ${{ inputs.path }}
-
-    # - name: Set URL to binary
-    #   run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
-    #   shell: bash
-    #   env:
-    #     BUCKET: ${{ inputs.bucket }}
-    #     PREFIX: ${{ inputs.prefix }}
-    #     NAME: ${{ inputs.name }}
-    #     FILE_PATH: ${{ inputs.path-to-file }}
