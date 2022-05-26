@@ -49,9 +49,9 @@ runs:
         # not strictly required since s3 buckets are global, but this is the pattern I noticed other places
         aws-region: ${{ inputs.region }}
 
-    - if: github.event.inputs.is-download-required == 'true'
-      uses: actions/download-artifact@v2
-      run: echo "fetching artifact"
+    - uses: actions/download-artifact@v2
+      if: github.event.inputs.is-download-required == 'true'
+      # run: echo "fetching artifact"
       with:
         name: ${{ inputs.path-to-file }}
         path: .
