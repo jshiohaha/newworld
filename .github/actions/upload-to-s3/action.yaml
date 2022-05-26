@@ -1,0 +1,68 @@
+name: "Upload File to S3"
+description: "Uploads a file to S3 bucket with a specific prefix"
+inputs:
+  path:
+    description: "Path to the file to upload"
+    required: true
+  name:
+    description: "The file name that will be exist in S3"
+    required: true
+  account-id:
+    description: "AWS account ID"
+    required: true
+  region:
+    description: "AWS region"
+    required: true
+  role:
+    description: "AWS role with permissions to perform desired action"
+    required: true
+  bucket:
+    description: "S3 bucket to which file will upload"
+    required: true
+  prefix:
+    description: "Prefix in the bucket to which the file will upload"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::$ACCOUNT_ID:role/$ROLE
+        # not strictly required since s3 buckets are global, but this is the pattern I noticed other places
+        aws-region: $REGION
+      env:
+        ACCOUNT_ID: ${{ inputs.account-id }}
+        REGION: ${{ inputs.region }}
+        ROLE: ${{ inputs.role }}
+
+    - name: Verify existence of file to upload
+      run: |
+        if [ ! -f "$FILE_PATH" ]; 
+        then
+          echo "File does not exist"
+          exit 1
+        fi
+      shell: bash
+      env:
+        FILE_PATH: ${{ inputs.file-path }}
+
+    - name: Upload file to S3
+      run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
+      shell: bash
+      env:
+        BUCKET: ${{ inputs.bucket }}
+        PREFIX: ${{ inputs.prefix }}
+        NAME: ${{ inputs.name }}
+        FILE_PATH: ${{ inputs.file-path }}
+
+    # - name: Set selected color
+    # run: echo '::set-output name=SELECTED_COLOR::green'
+    # id: random-color-generator
+    # run: echo '::set-output name=SELECTED_COLOR::green'
+# todo: set output
