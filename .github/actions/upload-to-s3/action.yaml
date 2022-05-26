@@ -50,7 +50,7 @@ runs:
         fi
       shell: bash
       env:
-        FILE_PATH: ${{ inputs.file-path }}
+        FILE_PATH: ${{ inputs.path }}
 
     - name: Upload file to S3
       run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
@@ -59,7 +59,7 @@ runs:
         BUCKET: ${{ inputs.bucket }}
         PREFIX: ${{ inputs.prefix }}
         NAME: ${{ inputs.name }}
-        FILE_PATH: ${{ inputs.file-path }}
+        FILE_PATH: ${{ inputs.path }}
 
     - name: Set URL to binary
       run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
