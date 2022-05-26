@@ -65,5 +65,5 @@ runs:
         NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.path-to-file }}
 
-    # outputs:
-    #   uploaded-file-path: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
+  outputs:
+    uploaded-file-path: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
