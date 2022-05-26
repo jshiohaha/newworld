@@ -1,7 +1,7 @@
 name: "Upload File to S3"
 description: "Uploads a file to S3 bucket with a specific prefix"
 inputs:
-  file-path:
+  path-to-file:
     description: "Path to the file to upload"
     required: true
   name:
@@ -53,12 +53,12 @@ runs:
 
     - name: Verify existence of file to upload
       run: |
-        echo ${{ inputs.file-path }}
+        echo ${{ inputs.path-to-file }}
       shell: bash
 
     - name: Cat file boi
       run: |
-        cat ${{ inputs.file-path }}
+        cat ${{ inputs.path-to-file }}
       shell: bash
 
     # - name: Upload file to S3
@@ -77,4 +77,4 @@ runs:
     #     BUCKET: ${{ inputs.bucket }}
     #     PREFIX: ${{ inputs.prefix }}
     #     NAME: ${{ inputs.name }}
-    #     FILE_PATH: ${{ inputs.file-path }}
+    #     FILE_PATH: ${{ inputs.path-to-file }}
