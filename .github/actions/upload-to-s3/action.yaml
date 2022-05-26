@@ -53,7 +53,7 @@ runs:
         BUCKET: ${{ inputs.bucket }}
         PREFIX: ${{ inputs.prefix }}
         NAME: ${{ inputs.name }}
-        FILE_PATH: ${{ inputs.path }}
+        FILE_PATH: ${{ inputs.path-to-file }}
 
     - name: Set URL to binary
       run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
