@@ -1,7 +1,7 @@
 name: "Upload File to S3"
 description: "Uploads a file to S3 bucket with a specific prefix"
 inputs:
-  path:
+  file-path:
     description: "Path to the file to upload"
     required: true
   name:
@@ -56,14 +56,14 @@ runs:
         echo $FILE_PATH
       shell: bash
       env:
-        FILE_PATH: ${{ inputs.path }}
+        FILE_PATH: ${{ inputs.file-path }}
 
     - name: Cat file boi
       run: |
         cat $FILE_PATH
       shell: bash
       env:
-        FILE_PATH: ${{ inputs.path }}
+        FILE_PATH: ${{ inputs.file-path }}
 
     # - name: Upload file to S3
     #   run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
