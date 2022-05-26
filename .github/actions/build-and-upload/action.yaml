@@ -38,7 +38,7 @@ runs:
 
     # todo: parse toml for version and use that in S3 prefix
     - name: LS dir
-      id: upload-binary
+      id: ls-in-dirs
       run: |
         ls ../
         echo "1"
