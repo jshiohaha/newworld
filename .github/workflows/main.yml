@@ -71,7 +71,7 @@ jobs:
         uses: ./.github/actions/build-and-upload/
         id: upload-binary-metadata
         with:
-          # path-to-file: binary-context.json
+          program-name: ../../targets/deploy/newworld.so
           # is-download-required: true
           # name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
