@@ -57,7 +57,7 @@ runs:
 
     - name: Set output path to uploaded file
       id: set-output-for-uploaded-file
-      run: echo '::set-output name=uploaded-file-path::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
+      run: echo "::set-output name=uploaded-file-path::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME"
       shell: bash
       env:
         BUCKET: ${{ inputs.bucket }}
@@ -65,5 +65,9 @@ runs:
         NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.path-to-file }}
 
-  outputs:
-    uploaded-file-path: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
+  # outputs:
+  #   uploaded-file-path: ${{ steps.set-output-for-uploaded-file.outputs.uploaded-file-path }}
+
+  #       run: echo "::set-output name=bar-output::$(echo 1)"
+  #   outputs:
+  #     foo1-output: ${{ steps.generate-output.outputs.bar-output }}
