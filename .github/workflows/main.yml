@@ -102,5 +102,5 @@ jobs:
           prefix: newworld
 
       - name: Print binary output link
-        run: echo "The output path for the binary is ${{ steps.upload-binary-metadata.outputs.BINARY_PATH }}"
+        run: echo ${{ steps.upload-binary-metadata.outputs.uploaded-file-path }}
         shell: bash
