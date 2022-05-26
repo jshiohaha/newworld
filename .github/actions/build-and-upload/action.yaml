@@ -68,35 +68,34 @@ runs:
         bucket: ${{ inputs.bucket }}
         prefix: ${{ inputs.prefix }}/${{ github.event.head_commit.id }}
 
-    # # dump commit context to index.json & upload that
-    # - name: Dump context to metadata
-    #   run: |
-    #     echo "$(cat <<-END
-    #         {
-    #             "binary_path": "${{ steps.upload-binary-metadata.outputs.uploaded-file-path }}",
-    #             "id": "${{ github.event.head_commit.id }}",
-    #             "url": "${{ github.event.head_commit.url }}",
-    #             "timestamp": "${{ github.event.head_commit.timestamp }}"
-    #         }
-    #     END
-    #     )" > ~/binary-context.json
-    #   shell: bash
+    # dump commit context to index.json & upload that
+    - name: Dump context to metadata
+      run: |
+        echo "$(cat <<-END
+            {
+                "binary_path": "${{ steps.upload-binary.outputs.uploaded-file-path }}",
+                "id": "${{ github.event.head_commit.id }}",
+                "url": "${{ github.event.head_commit.url }}",
+                "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }
+        END
+        )" > ~/binary-context.json
+      shell: bash
 
-    # - uses: actions/upload-artifact@v2
-    #   with:
-    #     name: binary-context.json
-    #     path: ~/binary-context.json
-    #     if-no-files-found: error
+    - uses: actions/upload-artifact@v2
+      with:
+        name: binary-context.json
+        path: ~/binary-context.json
+        if-no-files-found: error
 
-    # - name: Upload binary metadata to S3
-    #   uses: ./.github/actions/upload-to-s3/
-    #   id: upload-binary-metadata
-    #   with:
-    #     path-to-file: binary-context.json
-    #     is-download-required: true
-    #     name: index.json
-    #     account-id: ${{ inputs.account-id }}
-    #     region: ${{ inputs.region }}
-    #     role: ${{ inputs.role }}
-    #     bucket: ${{ inputs.bucket }}
-    #     prefix: ${{ inputs.prefix }}
+    - name: Upload binary metadata to S3
+      uses: ./.github/actions/upload-to-s3/
+      id: upload-binary-metadata
+      with:
+        path-to-file: binary-context.json
+        name: index.json
+        account-id: ${{ inputs.account-id }}
+        region: ${{ inputs.region }}
+        role: ${{ inputs.role }}
+        bucket: ${{ inputs.bucket }}
+        prefix: ${{ inputs.prefix }}

@@ -45,26 +45,6 @@ jobs:
       #   with:
       #     toolchain: ${{ env.RUST_TOOLCHAIN }}
 
-      # # todo: parse toml for version and use that in S3 prefix
-      # - name: Upload binary to S3
-      #   uses: ./.github/actions/upload-to-s3/
-      #   id: upload-binary
-      #   with:
-      #     path-to-file: ../../targets/deploy/newworld.so
-      #     is-download-required: false
-      #     name: ${{ env.PROGRAM_NAME }}.so
-      #     account-id: ${{ env.ACCOUNT_ID }}
-      #     region: ${{ env.REGION }}
-      #     role: ${{ env.ROLE }}
-      #     bucket: ${{ env.BUCKET }}
-      #     prefix: newworld/${{ github.event.head_commit.id }}
-
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: binary-context.json
-      #     path: ./programs/newworld/binary-context.json
-      #     if-no-files-found: error
-
       - name: Build and upload
         uses: ./.github/actions/build-and-upload/
         id: upload-binary-metadata
