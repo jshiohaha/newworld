@@ -53,8 +53,10 @@ runs:
 
     - name: Verify existence of file to upload
       run: |
-        echo "$FILE_PATH"
+        echo $FILE_PATH
       shell: bash
+      env:
+        FILE_PATH: ${{ inputs.path-to-file }}
 
     - name: Cat file boi
       run: |
