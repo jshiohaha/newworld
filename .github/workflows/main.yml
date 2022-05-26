@@ -82,7 +82,6 @@ jobs:
       # dump commit context to index.json & upload that
       - name: Dump context to metadata
         run: |
-          echo $WORKDIR
           echo "$(cat <<-END
               {
                   "package": "newworld"
@@ -95,7 +94,8 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: binary-context.json
-          path: binary-context.json
+          path: ./programs/newworld/binary-context.json
+          if-no-files-found: error
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
