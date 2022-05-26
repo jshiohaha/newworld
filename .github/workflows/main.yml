@@ -87,8 +87,8 @@ jobs:
                   "package": "newworld"
               }
           END
-          )" > binary-context.json
-          cat binary-context.json
+          )" > $GITHUB_WORKSPACE/binary-context.json
+          cat $GITHUB_WORKSPACE/binary-context.json
           pwd
         shell: bash
 

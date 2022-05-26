@@ -47,28 +47,38 @@ runs:
       #   echo "File does not exist"
       #   exit 1
       # fi
+    - name: PWD
+      run: pwd
+      shell: bash
+
     - name: Verify existence of file to upload
       run: |
-        pwd
         echo $FILE_PATH
       shell: bash
       env:
         FILE_PATH: ${{ inputs.path }}
 
-    - name: Upload file to S3
-      run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
+    - name: Cat file boi
+      run: |
+        cat $FILE_PATH
       shell: bash
       env:
-        BUCKET: ${{ inputs.bucket }}
-        PREFIX: ${{ inputs.prefix }}
-        NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.path }}
 
-    - name: Set URL to binary
-      run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
-      shell: bash
-      env:
-        BUCKET: ${{ inputs.bucket }}
-        PREFIX: ${{ inputs.prefix }}
-        NAME: ${{ inputs.name }}
-        FILE_PATH: ${{ inputs.file-path }}
+    # - name: Upload file to S3
+    #   run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
+    #   shell: bash
+    #   env:
+    #     BUCKET: ${{ inputs.bucket }}
+    #     PREFIX: ${{ inputs.prefix }}
+    #     NAME: ${{ inputs.name }}
+    #     FILE_PATH: ${{ inputs.path }}
+
+    # - name: Set URL to binary
+    #   run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
+    #   shell: bash
+    #   env:
+    #     BUCKET: ${{ inputs.bucket }}
+    #     PREFIX: ${{ inputs.prefix }}
+    #     NAME: ${{ inputs.name }}
+    #     FILE_PATH: ${{ inputs.file-path }}
