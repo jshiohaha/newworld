@@ -82,20 +82,26 @@ jobs:
       # dump commit context to index.json & upload that
       - name: Dump context to metadata
         run: |
+          echo $WORKDIR
           echo "$(cat <<-END
               {
                   "package": "newworld"
               }
           END
-          )" > $WORKDIR/binary-context.json
-          cat $WORKDIR/binary-context.json
+          )" > binary-context.json
+          cat binary-context.json
         shell: bash
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: binary-context.json
+          path: ./binary-context.json
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary-metadata
         with:
-          path-to-file: ${{ env.WORKDIR }}/binary-context.json
+          path-to-file: binary-context.json
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}

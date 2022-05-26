@@ -47,9 +47,11 @@ runs:
       #   echo "File does not exist"
       #   exit 1
       # fi
-    - name: PWD
-      run: pwd
-      shell: bash
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: ${{ inputs.path-to-file }}
+        path: ./${{ inputs.path-to-file }}
 
     - name: Verify existence of file to upload
       run: |
