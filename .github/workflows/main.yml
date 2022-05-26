@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary
         with:
-          path: ../../targets/deploy/newworld.so
+          path-to-file: ../../targets/deploy/newworld.so
           is-download-required: false
           name: ${{ env.PROGRAM_NAME }}.so
           account-id: ${{ env.ACCOUNT_ID }}
