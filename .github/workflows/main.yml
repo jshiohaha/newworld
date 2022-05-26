@@ -95,7 +95,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: binary-context.json
-          path: ./binary-context.json
+          path: binary-context.json
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
