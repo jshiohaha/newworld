@@ -78,8 +78,8 @@ jobs:
       # "id": "${{ github.event.head_commit.id }}",
       # "url": "${{ github.event.head_commit.url }}",
       # "timestamp": "${{ github.event.head_commit.timestamp }}",
-      
-      dump commit context to index.json & upload that
+
+      # dump commit context to index.json & upload that
       - name: Dump context to metadata
         run: |
           echo "$(cat <<-END
