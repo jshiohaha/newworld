@@ -1,7 +1,7 @@
 name: "Build program and upload output to S3"
 description: "Uploads verifiable build output and metadata to S3"
 inputs:
-  program-name:
+  program-binary:
     description: "Path to the file to upload"
     required: true
   name:
@@ -36,10 +36,20 @@ runs:
 
     - uses: ./.github/actions/anchor-publish/
 
+    # todo: parse toml for version and use that in S3 prefix
+    - name: LS dir
+      id: upload-binary
+      run: |
+        ls ../
+        echo "1"
+        ls ../../
+        echo "2"
+      shell: bash
+
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.program-name }}
-        path: ../../targets/deploy/${{ inputs.program-name }}
+        name: ${{ inputs.program-binary }}
+        path: ../../targets/deploy/${{ inputs.program-binary }}
         if-no-files-found: error
 
     # todo: parse toml for version and use that in S3 prefix
@@ -47,8 +57,8 @@ runs:
       uses: ./.github/actions/upload-to-s3/
       id: upload-binary
       with:
-        path-to-file: ${{ inputs.program-name }}
-        name: ${{ inputs.program-name }}.so
+        path-to-file: ${{ inputs.program-binary }}
+        name: ${{ inputs.program-binary }}
         account-id: ${{ inputs.account-id }}
         region: ${{ inputs.region }}
         role: ${{ inputs.role }}

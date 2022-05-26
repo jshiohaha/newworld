@@ -45,8 +45,6 @@ jobs:
       #   with:
       #     toolchain: ${{ env.RUST_TOOLCHAIN }}
 
-      # - uses: ./.github/actions/anchor-publish/
-
       # # todo: parse toml for version and use that in S3 prefix
       # - name: Upload binary to S3
       #   uses: ./.github/actions/upload-to-s3/
@@ -71,7 +69,7 @@ jobs:
         uses: ./.github/actions/build-and-upload/
         id: upload-binary-metadata
         with:
-          program-name: ../../targets/deploy/newworld.so
+          program-binary: newworld.so
           # is-download-required: true
           # name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
