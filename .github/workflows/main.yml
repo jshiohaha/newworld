@@ -87,15 +87,15 @@ jobs:
                   "package": "newworld"
               }
           END
-          )" > ~/binary-context.json
-          cat ~/binary-context.json
+          )" > $WORKDIR/binary-context.json
+          cat $WORKDIR/binary-context.json
         shell: bash
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary-metadata
         with:
-          path-to-file: ~/binary-context.json
+          path-to-file: ${{ env.WORKDIR }}/binary-context.json
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
