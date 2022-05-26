@@ -44,14 +44,14 @@ runs:
         echo "1"
         ls ./target/
         echo "2"
-        ls ./target/deploy
+        ls ./target/verifiable
         echo "3"
       shell: bash
 
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.program-binary }}
-        path: target/deploy/${{ inputs.program-binary }}
+        path: target/verifiable/${{ inputs.program-binary }}
         if-no-files-found: error
 
     # todo: parse toml for version and use that in S3 prefix
