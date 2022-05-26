@@ -37,40 +37,40 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v3
-      # - uses: ./.github/actions/install-linux-build-deps
-      # - uses: ./.github/actions/install-solana
-      #   with:
-      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      # - uses: ./.github/actions/install-rust
-      #   with:
-      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: ./.github/actions/install-linux-build-deps
+      - uses: ./.github/actions/install-solana
+        with:
+          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      - uses: ./.github/actions/install-rust
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
 
-      # - uses: ./.github/actions/anchor-publish/
+      - uses: ./.github/actions/anchor-publish/
 
-      # # todo: parse toml for version and use that in S3 prefix
-      # - name: Upload binary to S3
-      #   uses: ./.github/actions/upload-to-s3/
-      #   id: upload-binary
-      #   with:
-      #     path: ../../targets/deploy/newworld.so
-      #     is-download-required: false
-      #     name: ${{ env.PROGRAM_NAME }}.so
-      #     account-id: ${{ env.ACCOUNT_ID }}
-      #     region: ${{ env.REGION }}
-      #     role: ${{ env.ROLE }}
-      #     bucket: ${{ env.BUCKET }}
-      #     prefix: newworld/${{ github.event.head_commit.id }}
+      # todo: parse toml for version and use that in S3 prefix
+      - name: Upload binary to S3
+        uses: ./.github/actions/upload-to-s3/
+        id: upload-binary
+        with:
+          path: ../../targets/deploy/newworld.so
+          is-download-required: false
+          name: ${{ env.PROGRAM_NAME }}.so
+          account-id: ${{ env.ACCOUNT_ID }}
+          region: ${{ env.REGION }}
+          role: ${{ env.ROLE }}
+          bucket: ${{ env.BUCKET }}
+          prefix: newworld/${{ github.event.head_commit.id }}
 
-      # "binary_path": "${{ steps.upload-binary-metadata.outputs.uploaded-file-path }}",
-      # "id": "${{ github.event.head_commit.id }}",
-      # "url": "${{ github.event.head_commit.url }}",
-      # "timestamp": "${{ github.event.head_commit.timestamp }}",
       # dump commit context to index.json & upload that
       - name: Dump context to metadata
         run: |
           echo "$(cat <<-END
               {
-                  "package": "newworld"
+                  "package": "newworld",
+                  "binary_path": "${{ steps.upload-binary-metadata.outputs.uploaded-file-path }}",
+                  "id": "${{ github.event.head_commit.id }}",
+                  "url": "${{ github.event.head_commit.url }}",
+                  "timestamp": "${{ github.event.head_commit.timestamp }}"
               }
           END
           )" > binary-context.json
