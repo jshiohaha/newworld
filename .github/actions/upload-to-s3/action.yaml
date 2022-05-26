@@ -43,6 +43,7 @@ runs:
 
     - name: Verify existence of file to upload
       run: |
+        cat $FILE_PATH
         if [ ! -f "$FILE_PATH" ]; 
         then
           echo "File does not exist"
