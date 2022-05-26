@@ -51,19 +51,26 @@ runs:
       run: pwd
       shell: bash
 
+    - name: Dump context to metadata
+      run: |
+        echo "$(cat <<-END
+            {
+                "package": "newworld"
+            }
+        END
+        )" > binary-context.json
+        cat binary-context.json
+      shell: bash
+
     - name: Verify existence of file to upload
       run: |
-        echo $FILE_PATH
+        echo binary-context.json
       shell: bash
-      env:
-        FILE_PATH: ${{ inputs.path-to-file }}
 
     - name: Cat file boi
       run: |
-        cat $FILE_PATH
+        cat binary-context.json
       shell: bash
-      env:
-        FILE_PATH: ${{ inputs.path-to-file }}
 
     # - name: Upload file to S3
     #   run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME

@@ -80,17 +80,17 @@ jobs:
       # "timestamp": "${{ github.event.head_commit.timestamp }}",
       #
       # dump commit context to index.json & upload that
-      - name: Dump context to metadata
-        run: |
-          echo "$(cat <<-END
-              {
-                  "package": "newworld"
-              }
-          END
-          )" > ${{ github.workspace }}/binary-context.json
-          cat ${{ github.workspace }}/binary-context.json
-          echo ${{ github.workspace }}
-        shell: bash
+      # - name: Dump context to metadata
+      #   run: |
+      #     echo "$(cat <<-END
+      #         {
+      #             "package": "newworld"
+      #         }
+      #     END
+      #     )" > ${{ github.workspace }}/binary-context.json
+      #     cat ${{ github.workspace }}/binary-context.json
+      #     echo ${{ github.workspace }}
+      #   shell: bash
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
