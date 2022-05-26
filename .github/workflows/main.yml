@@ -66,14 +66,6 @@ jobs:
       #     bucket: ${{ env.BUCKET }}
       #     prefix: newworld/${{ github.event.head_commit.id }}
 
-      - name: Set URL to binary
-        run: echo '::set-output name=BINARY_PATH::output-path'
-        shell: bash
-
-      - name: Print binary output link
-        run: echo "The output path for the binary is ${{ steps.upload-binary.outputs.BINARY_PATH }}"
-        shell: bash
-
       # "binary_path": "${{ steps.upload-binary.outputs.url }}"
       # "id": "${{ github.event.head_commit.id }}",
       # "url": "${{ github.event.head_commit.url }}",
@@ -108,3 +100,7 @@ jobs:
           role: ${{ env.ROLE }}
           bucket: ${{ env.BUCKET }}
           prefix: newworld
+
+      - name: Print binary output link
+        run: echo "The output path for the binary is ${{ steps.upload-binary-metadata.outputs.BINARY_PATH }}"
+        shell: bash
