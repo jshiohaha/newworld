@@ -46,12 +46,6 @@ jobs:
           toolchain: ${{ env.RUST_TOOLCHAIN }}
 
       - uses: ./.github/actions/anchor-publish/
-        with:
-          program: $PROGRAM_NAME
-
-      - name: Print program artifacts
-        run: |
-          ls ../../target/verifiable
 
       # todo: parse toml for version and use that in S3 prefix
       - name: Upload binary to S3
@@ -59,6 +53,7 @@ jobs:
         id: upload-binary
         with:
           path: ../../targets/deploy/newworld.so
+          is-download-required: false
           name: ${{ env.PROGRAM_NAME }}.so
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
@@ -93,6 +88,7 @@ jobs:
         id: upload-binary-metadata
         with:
           path-to-file: binary-context.json
+          is-download-required: true
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
