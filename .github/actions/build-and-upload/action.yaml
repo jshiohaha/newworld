@@ -2,7 +2,10 @@ name: "Build program and upload output to S3"
 description: "Uploads verifiable build output and metadata to S3"
 inputs:
   program-binary:
-    description: "Path to the file to upload"
+    description: "Program binary to upload"
+    required: true
+  path-to-binary:
+    description: "Path to the binary to upload"
     required: true
   name:
     description: "The file name that will be exist in S3"
@@ -49,7 +52,7 @@ runs:
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.program-binary }}
-        path: ../../targets/deploy/${{ inputs.program-binary }}
+        path: ${{ inputs.path-to-binary }}/${{ inputs.program-binary }}
         if-no-files-found: error
 
     # todo: parse toml for version and use that in S3 prefix

@@ -70,6 +70,7 @@ jobs:
         id: upload-binary-metadata
         with:
           program-binary: newworld.so
+          path-to-binary: ../../targets/deploy/
           # is-download-required: true
           # name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
