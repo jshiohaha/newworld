@@ -56,7 +56,7 @@ runs:
         aws-region: ${{ inputs.region }}
 
     - uses: actions/download-artifact@v2
-      if: github.event.inputs.is-download-required == 'true'
+      if: inputs.is-download-required == 'true'
       with:
         name: ${{ inputs.path-to-file }}
         path: .
