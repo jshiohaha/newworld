@@ -1,25 +1,12 @@
 name: "Anchor Publish"
 description: "Publishes a verifiable build to anchor"
 
-env:
-  ANCHOR_VERSION: 0.22.0
-  SOLANA_VERSION_STABLE: 1.9.22
-  RUST_TOOLCHAIN: stable
-
-inputs:
-  program:
-    description: "The program to build and upload"
-    required: true
-
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    # - uses: ./.github/actions/setup/
     - uses: ./.github/actions/setup-anchor/
       with:
         node-version: ${{ env.NODE_VERSION }}
     - run: ~/.cargo/bin/anchor build --verifiable
       shell: bash
-      env:
-        PROGRAM: ${{ inputs.program }}

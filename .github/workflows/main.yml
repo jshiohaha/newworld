@@ -60,11 +60,15 @@ jobs:
         with:
           path: ../../targets/deploy/newworld.so
           name: ${{ env.PROGRAM_NAME }}.so
-          account-id:
+          account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
           role: ${{ env.ROLE }}
           bucket: ${{ env.BUCKET }}
           prefix: newworld/${{ github.event.head_commit.id }}
+
+      - name: Print binary output link
+        run: echo "The output path for the binary is ${{ steps.upload-binary.outputs.BINARY_PATH }}"
+        shell: bash
 
         # dump commit context to index.json & upload that
       - name: Dump context to metadata

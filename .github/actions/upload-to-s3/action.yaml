@@ -23,6 +23,10 @@ inputs:
     description: "Prefix in the bucket to which the file will upload"
     required: true
 
+permissions:
+  id-token: write
+  contents: read
+
 runs:
   using: "composite"
   steps:
@@ -57,8 +61,10 @@ runs:
         NAME: ${{ inputs.name }}
         FILE_PATH: ${{ inputs.file-path }}
 
-    # - name: Set selected color
-    # run: echo '::set-output name=SELECTED_COLOR::green'
-    # id: random-color-generator
-    # run: echo '::set-output name=SELECTED_COLOR::green'
-# todo: set output
+    - name: Set URL to binary
+      run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
+      env:
+        BUCKET: ${{ inputs.bucket }}
+        PREFIX: ${{ inputs.prefix }}
+        NAME: ${{ inputs.name }}
+        FILE_PATH: ${{ inputs.file-path }}
