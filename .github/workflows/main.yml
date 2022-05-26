@@ -59,11 +59,11 @@ jobs:
         id: upload-binary
         with:
           path: ../../targets/deploy/newworld.so
-          name: $PROGRAM_NAME.so
-          account-id: $ACCOUNT_ID
-          region: $REGION
-          role: $ROLE
-          bucket: $BUCKET
+          name: ${{ env.PROGRAM_NAME }}.so
+          account-id:
+          region: ${{ env.REGION }}
+          role: ${{ env.ROLE }}
+          bucket: ${{ env.BUCKET }}
           prefix: newworld/${{ github.event.head_commit.id }}
 
         # dump commit context to index.json & upload that
@@ -87,8 +87,8 @@ jobs:
         with:
           path: ./binary-context.json
           name: index.json
-          account-id: $ACCOUNT_ID
-          region: $REGION
-          role: $ROLE
-          bucket: $BUCKET
+          account-id: ${{ env.ACCOUNT_ID }}
+          region: ${{ env.REGION }}
+          role: ${{ env.ROLE }}
+          bucket: ${{ env.BUCKET }}
           prefix: newworld
