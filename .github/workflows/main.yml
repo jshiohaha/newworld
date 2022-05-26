@@ -78,25 +78,24 @@ jobs:
       # "id": "${{ github.event.head_commit.id }}",
       # "url": "${{ github.event.head_commit.url }}",
       # "timestamp": "${{ github.event.head_commit.timestamp }}",
-      #
-      # dump commit context to index.json & upload that
-      # - name: Dump context to metadata
-      #   run: |
-      #     echo "$(cat <<-END
-      #         {
-      #             "package": "newworld"
-      #         }
-      #     END
-      #     )" > ${{ github.workspace }}/binary-context.json
-      #     cat ${{ github.workspace }}/binary-context.json
-      #     echo ${{ github.workspace }}
-      #   shell: bash
+      
+      dump commit context to index.json & upload that
+      - name: Dump context to metadata
+        run: |
+          echo "$(cat <<-END
+              {
+                  "package": "newworld"
+              }
+          END
+          )" > /binary-context.json
+          cat /binary-context.json
+        shell: bash
 
       - name: Upload binary metadata to S3
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary-metadata
         with:
-          path-to-file: ${{ github.workspace }}/programs/newworld/binary-context.json
+          path-to-file: /binary-context.json
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
