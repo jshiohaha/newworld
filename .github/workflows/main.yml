@@ -87,7 +87,7 @@ jobs:
         id: upload-binary-metadata
         with:
           path-to-file: binary-context.json
-          is-download-required: true
+          is-download-required: "true"
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
