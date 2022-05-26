@@ -96,7 +96,7 @@ jobs:
         uses: ./.github/actions/upload-to-s3/
         id: upload-binary-metadata
         with:
-          path: ${{ env.GITHUB_WORKSPACE }}/binary-context.json
+          path: ${{ GITHUB_WORKSPACE }}/binary-context.json
           name: index.json
           account-id: ${{ env.ACCOUNT_ID }}
           region: ${{ env.REGION }}
