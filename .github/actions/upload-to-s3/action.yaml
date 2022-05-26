@@ -53,13 +53,17 @@ runs:
 
     - name: Verify existence of file to upload
       run: |
-        echo ${{ inputs.path-to-file }}
+        echo "$(pwd)/$FILE_PATH"
       shell: bash
+      env:
+        FILE_PATH: ${{ inputs.path }}
 
     - name: Cat file boi
       run: |
-        cat ${{ inputs.path-to-file }}
+        cat "$(pwd)/$FILE_PATH"
       shell: bash
+      env:
+        FILE_PATH: ${{ inputs.path }}
 
     # - name: Upload file to S3
     #   run: aws s3 cp $FILE_PATH s3://$BUCKET/$PREFIX/$NAME
