@@ -37,49 +37,58 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/install-linux-build-deps
-      - uses: ./.github/actions/install-solana
-        with:
-          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      - uses: ./.github/actions/install-rust
-        with:
-          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      # - uses: ./.github/actions/install-linux-build-deps
+      # - uses: ./.github/actions/install-solana
+      #   with:
+      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      # - uses: ./.github/actions/install-rust
+      #   with:
+      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
 
-      - uses: ./.github/actions/anchor-publish/
-        with:
-          program: $PROGRAM_NAME
+      # - uses: ./.github/actions/anchor-publish/
+      #   with:
+      #     program: $PROGRAM_NAME
 
-      - name: Print program artifacts
-        run: |
-          ls ../../target/verifiable
+      # - name: Print program artifacts
+      #   run: |
+      #     ls ../../target/verifiable
 
-      # todo: parse toml for version and use that in S3 prefix
-      - name: Upload binary to S3
-        uses: ./.github/actions/upload-to-s3/
-        id: upload-binary
-        with:
-          path: ../../targets/deploy/newworld.so
-          name: ${{ env.PROGRAM_NAME }}.so
-          account-id: ${{ env.ACCOUNT_ID }}
-          region: ${{ env.REGION }}
-          role: ${{ env.ROLE }}
-          bucket: ${{ env.BUCKET }}
-          prefix: newworld/${{ github.event.head_commit.id }}
+      # # todo: parse toml for version and use that in S3 prefix
+      # - name: Upload binary to S3
+      #   uses: ./.github/actions/upload-to-s3/
+      #   id: upload-binary
+      #   with:
+      #     path: ../../targets/deploy/newworld.so
+      #     name: ${{ env.PROGRAM_NAME }}.so
+      #     account-id: ${{ env.ACCOUNT_ID }}
+      #     region: ${{ env.REGION }}
+      #     role: ${{ env.ROLE }}
+      #     bucket: ${{ env.BUCKET }}
+      #     prefix: newworld/${{ github.event.head_commit.id }}
 
-      - name: Print binary output link
-        run: echo "The output path for the binary is ${{ steps.upload-binary.outputs.BINARY_PATH }}"
-        shell: bash
+      - name: Set URL to binary
+        run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
+        env:
+          BUCKET: ${{ inputs.bucket }}
+          PREFIX: ${{ inputs.prefix }}
+          NAME: ${{ inputs.name }}
+          FILE_PATH: ${{ inputs.file-path }}
 
-        # dump commit context to index.json & upload that
+      # - name: Print binary output link
+      #   run: echo "The output path for the binary is ${{ steps.upload-binary.outputs.BINARY_PATH }}"
+      #   shell: bash
+
+      # "binary_path": "${{ steps.upload-binary.outputs.url }}"
+      # "id": "${{ github.event.head_commit.id }}",
+      # "url": "${{ github.event.head_commit.url }}",
+      # "timestamp": "${{ github.event.head_commit.timestamp }}",
+
+      # dump commit context to index.json & upload that
       - name: Dump context to metadata
         run: |
           echo "$(cat <<-END
               {
-                  "package": "newworld",
-                  "binary_path": "${{ steps.upload-binary.outputs.url }}"
-                  "id": "${{ github.event.head_commit.id }}",
-                  "url": "${{ github.event.head_commit.url }}",
-                  "timestamp": "${{ github.event.head_commit.timestamp }}",
+                  "package": "newworld"
               }
           END
           )" > binary-context.json

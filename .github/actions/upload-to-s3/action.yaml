@@ -63,6 +63,7 @@ runs:
 
     - name: Set URL to binary
       run: echo '::set-output name=BINARY_PATH::https://$BUCKET.s3.amazonaws.com/$PREFIX/$NAME'
+      shell: bash
       env:
         BUCKET: ${{ inputs.bucket }}
         PREFIX: ${{ inputs.prefix }}
