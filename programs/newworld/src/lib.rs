@@ -16,6 +16,7 @@ pub mod newworld {
     }
 }
 
+// new comen
 #[derive(Accounts)]
 pub struct Initialize {}
 
