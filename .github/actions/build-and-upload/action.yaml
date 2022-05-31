@@ -23,31 +23,13 @@ inputs:
     description: "Prefix in the bucket to which the file will upload"
     required: true
 
-# defaults:
-#   run:
-#     working-directory: ${{ env.working-directory }}
-
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
       with:
         node-version: ${{ env.NODE_VERSION }}
-
     - uses: ./.github/actions/anchor-publish/
-
-    # todo: parse toml for version and use that in S3 prefix
-    - name: LS dir
-      id: ls-in-dirs
-      run: |
-        ls ./
-        echo "1"
-        ls ./target/
-        echo "2"
-        ls ./target/verifiable
-        echo "3"
-      shell: bash
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.program-binary }}
