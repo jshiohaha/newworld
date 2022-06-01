@@ -50,7 +50,7 @@ runs:
 
     - name: Set output labels
       id: set-output-for-labels
-      run: echo "::set-output name=labels::labels
+      run: echo "::set-output name=labels::LABELS
       shell: bash
-      with:
-        labels: ${{steps.set-result.outputs.result}}
+      env:
+        LABELS: ${{steps.set-result.outputs.result}}
