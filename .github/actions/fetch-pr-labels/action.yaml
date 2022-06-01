@@ -29,9 +29,9 @@ runs:
       with:
         script: |
           const request = {
-            owner: $OWNER,
-            repo: $REPO,
-            pull_number: $PULL_NUMBER
+            owner: ${env.OWNER},
+            repo: ${env.REPO},
+            pull_number: ${env.PULL_NUMBER}
           }
           core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
           try {
