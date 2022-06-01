@@ -2,6 +2,8 @@ name: PR merge flow
 
 on:
   pull_request:
+    types:
+      - closed
     branches: [main]
 
 permissions:
@@ -35,3 +37,14 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      - name: Check PR Labels
+        id: check-pr-labels
+        uses: paul1k/check-pr-labels@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-number: ${{ github.event.pull_request.number }}
+          labels: '["enhancement"]'
+
+      - name: See result
+        run: echo "${{ steps.check-pr-labels.outputs.result }}"
