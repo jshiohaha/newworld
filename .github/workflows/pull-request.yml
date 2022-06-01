@@ -1,7 +1,7 @@
 name: PR merge flow
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 permissions:
@@ -21,7 +21,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./programs/newworld
+    working-directory: ./newworld/program
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

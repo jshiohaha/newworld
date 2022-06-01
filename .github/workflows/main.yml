@@ -30,7 +30,7 @@ env:
 
 defaults:
   run:
-    working-directory: ./programs/newworld
+    working-directory: ./newworld/program
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -58,13 +58,13 @@ jobs:
       #     bucket: ${{ env.BUCKET }}
       #     prefix: newworld
 
-      - name: Build and upload
-        uses: ./.github/actions/build-and-upload/
-        id: upload-binary-metadata
-        with:
-          program-binary: newworld.so
-          account-id: ${{ env.ACCOUNT_ID }}
-          region: ${{ env.REGION }}
-          role: ${{ env.ROLE }}
-          bucket: ${{ env.BUCKET }}
-          prefix: newworld
+      # - name: Build and upload
+      #   uses: ./.github/actions/build-and-upload/
+      #   id: upload-binary-metadata
+      #   with:
+      #     program-binary: newworld.so
+      #     account-id: ${{ env.ACCOUNT_ID }}
+      #     region: ${{ env.REGION }}
+      #     role: ${{ env.ROLE }}
+      #     bucket: ${{ env.BUCKET }}
+      #     prefix: newworld
