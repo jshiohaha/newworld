@@ -44,7 +44,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pull-number: ${{ github.event.pull_request.number }}
-          labels: '["Version:Major", "Version:Minor", "Version:Patch"]'
+          labels: '["Version:Patch"]'
 
       - name: See result
         run: echo "${{ steps.check-pr-labels.outputs.result }}"

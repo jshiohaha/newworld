@@ -62,3 +62,15 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      - name: Fetch PR labels
+        uses: ./.github/actions/fetch-pr-labels
+        id: fetch-pr-labels
+        with:
+          owner: ${{ env.repository.owner.name }}
+          repo: ${{ env.repository.name }}
+          # static for testing
+          pull_number: 8
+
+      - name: Get label result
+        run: echo "${{ steps.fetch-pr-labels.outputs.labels }}"
