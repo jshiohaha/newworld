@@ -28,12 +28,13 @@ runs:
       id: set-result
       with:
         script: |
+          console.log($OWNER)
           const owner = context.repo.owner
           const repo = context.repo.repo
           const request = {
             owner,
             repo,
-            pull_number: ${{ inputs.pull_number }}
+            pull_number: $PULL_REQUEST
           }
           core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
           try {
@@ -45,10 +46,13 @@ runs:
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
+      env:
+        OWNER: ${{ inputs.owner }}
+        PULL_REQUEST: ${{ inputs.pull_number }}
 
     - name: Set output labels
       id: set-output-for-labels
-      run: echo "::set-output name=labels::LABELS"
+      run: echo "::set-output name=labels::$LABELS"
       shell: bash
       env:
         LABELS: ${{steps.set-result.outputs.result}}
