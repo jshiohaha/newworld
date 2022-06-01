@@ -48,7 +48,7 @@ runs:
 
     - name: Set output labels
       id: set-output-for-labels
-      run: echo "::set-output name=labels::LABELS
+      run: echo "::set-output name=labels::LABELS"
       shell: bash
       env:
         LABELS: ${{steps.set-result.outputs.result}}
