@@ -58,13 +58,13 @@ jobs:
       #     bucket: ${{ env.BUCKET }}
       #     prefix: newworld
 
-      - name: Build and upload
-        uses: ./.github/actions/build-and-upload/
-        id: upload-binary-metadata
-        with:
-          program-binary: newworld.so
-          account-id: ${{ env.ACCOUNT_ID }}
-          region: ${{ env.REGION }}
-          role: ${{ env.ROLE }}
-          bucket: ${{ env.BUCKET }}
-          prefix: newworld
+      # - name: Build and upload
+      #   uses: ./.github/actions/build-and-upload/
+      #   id: upload-binary-metadata
+      #   with:
+      #     program-binary: newworld.so
+      #     account-id: ${{ env.ACCOUNT_ID }}
+      #     region: ${{ env.REGION }}
+      #     role: ${{ env.ROLE }}
+      #     bucket: ${{ env.BUCKET }}
+      #     prefix: newworld
