@@ -17,6 +17,7 @@ pub mod newworld {
 }
 
 // new comment
+// new comment 2
 #[derive(Accounts)]
 pub struct Initialize {}
 
