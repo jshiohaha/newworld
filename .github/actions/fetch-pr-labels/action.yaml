@@ -28,8 +28,8 @@ runs:
       id: set-result
       with:
         script: |
-          const owner = ${{ context.repo.owner }}
-          const repo = ${{ context.repo.repo }}
+          const owner = context.repo.owner
+          const repo = context.repo.repo
           const request = {
             owner,
             repo,
