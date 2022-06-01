@@ -67,8 +67,8 @@ jobs:
         uses: ./.github/actions/fetch-pr-labels
         id: fetch-pr-labels
         with:
-          owner: ${{ env.event.repository.owner.name }}
-          repo: ${{ env.event.repository.name }}
+          owner: ${{ context.repo.owner }}
+          repo: ${{ context.repo.repo }}
           # static for testing
           pull_number: 8
 
