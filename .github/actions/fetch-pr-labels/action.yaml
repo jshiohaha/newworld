@@ -28,10 +28,12 @@ runs:
       id: set-result
       with:
         script: |
-          console.log(${{ context.repo.owner }})
+          const owner = ${{ github.event.repo.owner }}
+          const repo = ${{ github.event.repo.repo }}
+
           const request = {
-            owner: context.repo.owner,
-            repo: context.repo.owner,
+            owner,
+            repo,
             pull_number: ${{ inputs.pull_number }}
           }
           core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
