@@ -1,0 +1,50 @@
+name: Program Auction House
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  id-token: write
+  contents: read
+
+# env:
+#   NODE_VERSION: 17.0.1
+#   ANCHOR_VERSION: 0.22.0
+#   SOLANA_VERSION_STABLE: 1.9.22
+#   RUST_TOOLCHAIN: stable
+#   PROGRAM_NAME: newworld
+#   ACCOUNT_ID: 813125037859
+#   REGION: us-east-1
+#   ROLE: uploadToS3Role
+#   BUCKET: programbuildsinfrastack-verifiablebuildbinariesb-1umx6gqtqe6gl
+
+defaults:
+  run:
+    working-directory: ./programs/newworld
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  pr-merge-worklfow:
+    name: PR merge workflow
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Test PR flow
+        uses: jshiohaha/create-pull-request@v0
+        id: pr-merge-flow
+        with:
+          repo-owner: jshiohaha
+          repo-name: newworld
+          auth-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-number: 4
+          package: newworld
+          language: js

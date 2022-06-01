@@ -7,6 +7,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main]
+  # pull_request:
+  #   branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -55,3 +57,14 @@ jobs:
       #     role: ${{ env.ROLE }}
       #     bucket: ${{ env.BUCKET }}
       #     prefix: newworld
+
+      - name: Build and upload
+        uses: ./.github/actions/build-and-upload/
+        id: upload-binary-metadata
+        with:
+          program-binary: newworld.so
+          account-id: ${{ env.ACCOUNT_ID }}
+          region: ${{ env.REGION }}
+          role: ${{ env.ROLE }}
+          bucket: ${{ env.BUCKET }}
+          prefix: newworld
