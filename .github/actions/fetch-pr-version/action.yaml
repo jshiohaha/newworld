@@ -1,0 +1,60 @@
+name: "Fetch PR version command"
+description: "Fetch semvar version command given PR"
+inputs:
+  owner:
+    description: "Path to the file to upload"
+    required: true
+  repo:
+    description: "Path to the file to upload"
+    required: true
+  pull_number:
+    description: "Path to the file to upload"
+    required: true
+
+outputs:
+  version:
+    description: Label names
+    value: ${{ steps.set-version-output.outputs.version }}
+
+permissions:
+  contents: read
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+
+    - name: Fetch PR labels
+      uses: ./.github/actions/fetch-pr-labels
+      id: fetch-pr-labels
+      with:
+        owner: ${{ inputs.owner }}
+        repo: ${{ inputs.repo }}
+        pull_number: ${{ inputs.pull_number }}
+
+    # parse labels
+    - name: Parse PR labels for semvar version
+      uses: actions/github-script@v4
+      id: parse-labels-for-version
+      with:
+        script: |
+          const labels = $LABELS
+          console.log(labels.length);
+          console.log(labels);
+          if (labels.length === 0) return "none";
+          const isMajor = labels.filter(l => l.toLowerCase() === "version:major").length > 0
+          if (isMajor) return "major"
+          const isMinor = labels.filter(l => l.toLowerCase() === "version:minor").length > 0
+          if (isMinor) return "minor"
+          const isPatch = labels.filter(l => l.toLowerCase() === "version:patch").length > 0
+          if (isPatch) return "patch"
+          return "none"
+      env:
+        LABELS: ${{ steps.fetch-pr-labels.outputs.labels }}
+
+    - name: Set output path to uploaded file
+      id: set-version-output
+      run: echo "::set-output name=version-cmd::$VERSION
+      shell: bash
+      env:
+        VERSION: ${{ steps.parse-labels-for-version.outputs.result }}

@@ -64,8 +64,8 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       - name: Fetch PR labels
-        uses: ./.github/actions/fetch-pr-labels
-        id: fetch-pr-labels
+        uses: ./.github/actions/fetch-pr-version
+        id: fetch-pr-version
         with:
           owner: context.repo.owner
           repo: context.repo.repo
@@ -73,4 +73,4 @@ jobs:
           pull_number: 8
 
       - name: Get label result
-        run: echo "${{ steps.fetch-pr-labels.outputs.labels }}"
+        run: echo "${{ steps.fetch-pr-version.outputs.version }}"
