@@ -13,7 +13,7 @@ inputs:
 
 outputs:
   version:
-    description: Label names
+    description: Version commmand
     value: ${{ steps.set-version-output.outputs.version }}
 
 permissions:
@@ -38,7 +38,7 @@ runs:
       id: parse-labels-for-version
       with:
         script: |
-          const labels = $LABELS
+          const labels = ${{ steps.fetch-pr-labels.outputs.labels }}
           console.log(labels.length);
           console.log(labels);
           if (labels.length === 0) return "none";
@@ -49,8 +49,6 @@ runs:
           const isPatch = labels.filter(l => l.toLowerCase() === "version:patch").length > 0
           if (isPatch) return "patch"
           return "none"
-      env:
-        LABELS: ${{ steps.fetch-pr-labels.outputs.labels }}
 
     - name: Set output path to uploaded file
       id: set-version-output

@@ -63,7 +63,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Fetch PR labels
+      - name: Fetch version command for PR
         uses: ./.github/actions/fetch-pr-version
         id: fetch-pr-version
         with:
