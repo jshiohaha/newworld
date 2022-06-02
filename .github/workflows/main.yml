@@ -72,5 +72,5 @@ jobs:
           # static for testing
           pull_number: 8
 
-      - name: Get label result
+      - name: Get version result
         run: echo "${{ steps.fetch-pr-version.outputs.version }}"

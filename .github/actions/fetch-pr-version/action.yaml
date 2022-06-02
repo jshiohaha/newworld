@@ -52,7 +52,7 @@ runs:
 
     - name: Set output path to uploaded file
       id: set-version-output
-      run: echo "::set-output name=version-cmd::$VERSION"
+      run: echo "::set-output name=version::$VERSION"
       shell: bash
       env:
         VERSION: ${{ steps.parse-labels-for-version.outputs.result }}
