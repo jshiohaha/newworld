@@ -81,34 +81,32 @@ jobs:
           # static for testing
           pull_number: 8
 
-      - name: Print output from version step
-        run: echo "${{ steps.fetch-pr-review-comments.outputs.version }}"
+      - name: npm login
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
 
-      # - name: npm login
-      #   run: |
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
+      - name: Upgrade program version
+        if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
+        id: upgrade-program-version
+        # alt: we might have to parse and then change directories
+        # npm version ${{ steps.fetch-pr-version.outputs.version }}
+        run: |
+          yarn install
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git log
+          npm version ${{ steps.fetch-pr-review-comments.outputs.version }}
+          git log
+        shell: bash
 
-      # - name: Upgrade program version
-      #   if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
-      #   id: upgrade-program-version
-      #   # alt: we might have to parse and then change directories
-      #   run: |
-      #     yarn install
-      #     git config user.name github-actions[bot]
-      #     git config user.email github-actions[bot]@users.noreply.github.com
-      #     git log
-      #     npm version ${{ steps.fetch-pr-version.outputs.version }}
-      #     git log
-      #   shell: bash
+      - name: Publish artifacts
+        run: npm publish
+        shell: bash
 
-      # - name: Publish artifacts
-      #   run: npm publish
-      #   shell: bash
-
-      # # ${{ github.ref }}
-      # # https://github.com/marketplace/actions/github-push
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main
+      # ${{ github.ref }}
+      # https://github.com/marketplace/actions/github-push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
