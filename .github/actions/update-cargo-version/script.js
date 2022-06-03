@@ -17,7 +17,7 @@ const CARGO_TOML_PATH = "./Config.toml";
 //   return `${major}.${minor}.${patch}`;
 // };
 
-module.exports = ({ github, context }, semvar) => {
+module.exports = ({ github, context, toml }, semvar) => {
   // const CARGO_TOML_PATH = "./Cargo.toml";
   // console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
   // // Test both the read and write permissions
