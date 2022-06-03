@@ -33,7 +33,7 @@ runs:
         echo "------"
         echo "${{ env.RUNNER_TEMP }}"
         echo "------"
-        ls ~/.config/yarn/global
+        ls ~/.config/yarn/global/node_modules/
       shell: bash
 
     - name: Update cargo version
