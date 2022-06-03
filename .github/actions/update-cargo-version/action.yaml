@@ -20,7 +20,9 @@ runs:
       shell: bash
 
     - name: Dump dir contents
-      run: ls ~/.config/yarn/global/node_modules/@iarna
+      run: |
+        pwd ~/.config
+        ls ~/.config/yarn/global/node_modules/@iarna/toml
       shell: bash
 
     - name: Update cargo version
@@ -28,7 +30,6 @@ runs:
       id: update-cargo-version
       with:
         script: |
-          const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
