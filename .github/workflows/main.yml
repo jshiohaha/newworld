@@ -89,9 +89,9 @@ jobs:
           git log
         shell: bash
 
-      - name: Publish artifacts
-        run: npm publish
-        shell: bash
+      # - name: Publish artifacts
+      #   run: npm publish
+      #   shell: bash
 
       # ${{ github.ref }}
       # https://github.com/marketplace/actions/github-push
