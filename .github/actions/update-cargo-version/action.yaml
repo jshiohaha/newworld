@@ -30,6 +30,7 @@ runs:
       id: update-cargo-version
       with:
         script: |
+          const toml = require('/home/runner/work/newworld/newworld/yarn/global/node_modules/@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
