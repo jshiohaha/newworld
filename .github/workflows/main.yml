@@ -94,13 +94,13 @@ jobs:
       #   run: npm publish
       #   shell: bash
 
-      # ${{ github.ref }}
-      # https://github.com/marketplace/actions/github-push
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+      # # ${{ github.ref }}
+      # # https://github.com/marketplace/actions/github-push
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: main
 
       - name: Upgrade program version
         id: push-changes
