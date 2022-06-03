@@ -3,7 +3,7 @@ const fs = require("fs");
 const MAJOR = "major";
 const MINOR = "minor";
 const PATCH = "patch";
-const CARGO_TOML_PATH = "./Config.toml";
+const CARGO_TOML_PATH = "./newworld/program/Cargo.toml";
 
 const getUpdatedVersion = (semvar, { major, minor, patch }) => {
   if (semvar === MAJOR) {
