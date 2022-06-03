@@ -78,8 +78,8 @@ jobs:
         uses: ./.github/actions/fetch-pr-review-comments
         id: fetch-pr-review-comments
         with:
-          owner: context.repo.owner
-          repo: context.repo.repo
+          owner: ${{context.repo.owner}}
+          repo: ${{context.repo.repo}}
           # static for testing
           pull_number: 8
 
