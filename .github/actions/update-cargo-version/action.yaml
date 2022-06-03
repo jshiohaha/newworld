@@ -43,4 +43,4 @@ runs:
   #   required: true
   # cargo-path: ./newworld/program/Cargo.toml
 
-https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js
+# https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js
