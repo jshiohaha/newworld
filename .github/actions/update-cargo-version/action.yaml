@@ -16,7 +16,12 @@ runs:
     - uses: actions/checkout@v3
 
     - name: Dump dir contents
-      run: ls .
+      run: |
+        ls .
+        echo "======"
+        ls ..
+        echo "======"
+        ls ...
       shell: bash
 
     # - name: Update cargo version
