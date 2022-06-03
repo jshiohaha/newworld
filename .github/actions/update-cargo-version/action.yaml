@@ -16,7 +16,8 @@ runs:
     - uses: actions/checkout@v3
 
     - name: Install packages
-      run: yarn global add @iarna/toml
+      run: npm install -g @iarna/toml
+      # yarn global add @iarna/toml
       shell: bash
 
     - name: Dump dir contents
@@ -30,7 +31,7 @@ runs:
       id: update-cargo-version
       with:
         script: |
-          const toml = require('/home/runner/work/newworld/newworld/yarn/global/node_modules/@iarna/toml/toml.js')
+          const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
