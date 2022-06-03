@@ -1,6 +1,3 @@
-const fs = require("fs");
-const TOML = require("@iarna/toml");
-
 const MAJOR = "major";
 const MINOR = "minor";
 const PATCH = "patch";
@@ -18,7 +15,7 @@ const getUpdatedVersion = (semvar, { major, minor, patch }) => {
   return `${major}.${minor}.${patch}`;
 };
 
-module.exports = ({ github, context }, semvar) => {
+module.exports = ({ github, context, fs, toml }, semvar) => {
   const CARGO_TOML_PATH = "./Cargo.toml";
   console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
 
