@@ -23,5 +23,5 @@ runs:
       with:
         script: |
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = script({github, context}, ${{ inputs.cargo-path }}, ${{ inputs.semvar }})
+          const result = script({github, context}, '${{ inputs.cargo-path }}', ${{ inputs.semvar }})
           console.log(result)
