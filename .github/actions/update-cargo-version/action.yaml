@@ -19,7 +19,7 @@ runs:
   steps:
     - uses: actions/checkout@v3
     - name: Update cargo version
-      uses: actions/github-script@v6
+      uses: actions/github-script@v4
       id: update-cargo-version
       with:
         script: |
@@ -27,5 +27,6 @@ runs:
           const fs = require('fs')
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
-          console.log(result)
+
+# const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
+# console.log(result)
