@@ -13,6 +13,7 @@ permissions:
   contents: write
   package: write
 
+# '${{ inputs.cargo-path }}',
 runs:
   using: "composite"
   steps:
@@ -24,5 +25,5 @@ runs:
         script: |
           yarn add fs @iarna/toml
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = script({github, context}, '${{ inputs.cargo-path }}', ${{ inputs.semvar }})
+          const result = script({github, context}, ${{ inputs.semvar }})
           console.log(result)
