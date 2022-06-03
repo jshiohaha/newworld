@@ -23,6 +23,10 @@ runs:
         echo "------"
         ls ../..
         echo "------"
+        ls ../../..
+        echo "------"
+        ls ../../../..
+        echo "------"
       shell: bash
 
     - name: Update cargo version
