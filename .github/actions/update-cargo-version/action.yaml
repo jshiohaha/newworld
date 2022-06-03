@@ -16,21 +16,23 @@ runs:
     - uses: actions/checkout@v3
 
     - name: Install packages
-      run: yarn global add @iarna/toml
+      run: |
+        yarn init --yes
+        yarn add @iarna/toml
       shell: bash
 
-    - name: Dump dir contents
-      run: |
-        ls ~/.config/yarn/global/node_modules/@iarna/toml/lib
-        cat ~/.config/yarn/global/node_modules/@iarna/toml/package.json
-      shell: bash
+    # - name: Dump dir contents
+    #   run: |
+    #     ls ~/.config/yarn/global/node_modules/@iarna/toml/lib
+    #     cat ~/.config/yarn/global/node_modules/@iarna/toml/package.json
+    #   shell: bash
 
     - name: Update cargo version
       uses: actions/github-script@v4
       id: update-cargo-version
       with:
         script: |
-          const toml = require('~/.config/yarn/global/node_modules/@iarna/toml/toml')
+          const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
