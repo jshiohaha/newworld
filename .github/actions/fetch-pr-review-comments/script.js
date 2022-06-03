@@ -68,7 +68,7 @@ fetchPullRequestReviewsDesc = async (
       owner,
       repo,
       pull_number,
-      direction: "desc",
+      direction: "asc",
       per_page,
       page,
     });
@@ -91,7 +91,7 @@ fetchPullRequestReviewsDesc = async (
 
   console.log(`Fetched ${reviews.length} reviews for PR ${pull_number}`);
 
-  return reviews.length === 0 ? [] : reviews;
+  return reviews.length === 0 ? [] : reviews.reverse();
 };
 
 module.exports = async ({ github, context, core }, pull_number) => {
