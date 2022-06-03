@@ -14,12 +14,15 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - name: Update cargo version
-      uses: actions/github-script@v4
-      id: update-cargo-version
-      with:
-        script: |
-          ls .
+
+    - name: Dump dir contents
+      run: ls .
+    # - name: Update cargo version
+    #   uses: actions/github-script@v4
+    #   id: update-cargo-version
+    #   with:
+    #     script: |
+    #       ls .
   # const toml = require('node_modules/@iarna/toml')
   # const script = require('.github/actions/update-cargo-version/script.js')
 
