@@ -24,12 +24,6 @@ runs:
         yarn add @iarna/toml
       shell: bash
 
-    - name: Dump dir contents
-      run: |
-        ls ~/.config/yarn/global/node_modules/@iarna/toml/lib
-        cat ~/.config/yarn/global/node_modules/@iarna/toml/package.json
-      shell: bash
-
     - name: Update cargo version
       uses: actions/github-script@v4
       id: update-cargo-version
