@@ -103,6 +103,7 @@ module.exports = async ({ github, context, core }, pull_number) => {
   );
   const version = findFirstReviewWithVersion(reviews);
   console.log("version: ", version);
-  core.exportVariable("version", version);
-  core.setOutput("version", version);
+  core.exportVariable("REVIEW_VERSION", version);
+
+  return version;
 };

@@ -23,11 +23,11 @@ runs:
       with:
         script: |
           const script = require('.github/actions/fetch-pr-review-comments/script.js')
-          return await script({github, context, core}, ${{ inputs.pull_number }})
+          const result = await script({github, context, core}, ${{ inputs.pull_number }})
+          console.log(result)
 
     - name: Set version from comments
       id: set-version-from-comments
-      run: echo "::set-output name=version::$VERSION"
+      # env.REVIEW_VERSION exported from script.js
+      run: echo "::set-output name=version::${{ env.REVIEW_VERSION }}"
       shell: bash
-      env:
-        VERSION: ${{steps.fetch-pr-review-version.outputs.result}}
