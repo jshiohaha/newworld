@@ -78,9 +78,7 @@ jobs:
         run: |
           git config user.name 'upgrador-bot'
           git config user.email 'upgrador-bot@users.noreply.github.com'
+          git log
           npm version ${{ steps.fetch-pr-version.outputs.version }}
-          git add .
-          git diff
+          git log
         shell: bash
-# git commit -m 'Automated Commit'
-# git push
