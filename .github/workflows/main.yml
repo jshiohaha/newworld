@@ -30,7 +30,7 @@ env:
 
 defaults:
   run:
-    working-directory: ./newworld/program
+    working-directory: ./newworld/js
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -80,7 +80,7 @@ jobs:
         if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
         id: upgrade-program-version
         run: |
-          cd js
+          ls
           git config user.name 'upgrador-bot'
           git config user.email 'upgrador-bot@users.noreply.github.com'
           git log
