@@ -90,12 +90,12 @@ fetchPullRequestReviewsDesc = async (
   return reviews;
 };
 
-module.exports = async ({ github, core, owner, repo, pull_number }) => {
+module.exports = async ({ github, context, core, pull_number }) => {
   // const { SHA } = process.env;
   const reviews = await fetchPullRequestReviewsDesc(
     github,
-    owner,
-    repo,
+    context.repo.owner,
+    context.repo.repo,
     pull_number
   );
   const version = findFirstReviewWithVersion(reviews);
