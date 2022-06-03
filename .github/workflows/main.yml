@@ -15,8 +15,9 @@ on:
 
 permissions:
   id-token: write
-  contents: read # for checkout
+  contents: write
   packages: write # for publish
+  pull-requests: write
 
 env:
   NODE_VERSION: 17.0.1
@@ -93,7 +94,6 @@ jobs:
       # - name: Publish artifacts
       #   run: npm publish
       #   shell: bash
-
       # # ${{ github.ref }}
       # # https://github.com/marketplace/actions/github-push
       # - name: Push changes
@@ -101,7 +101,6 @@ jobs:
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
       #     branch: main
-
       - name: Upgrade program version
         id: push-changes
         run: |
@@ -109,5 +108,5 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git push
         shell: bash
-        env:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
