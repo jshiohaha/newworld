@@ -27,6 +27,11 @@ runs:
         echo "------"
         ls ../../../..
         echo "------"
+        ls ${{ env.GITHUB_ENV }}
+        echo "------"
+        ls ${{ env.GITHUB_PATH }}
+        echo "------"
+        ls ${{ env.RUNNER_TEMP }}
       shell: bash
 
     - name: Update cargo version
