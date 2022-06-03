@@ -23,9 +23,10 @@ runs:
       id: update-cargo-version
       with:
         script: |
+          yarn add fs '@iarna/toml'
           const script = require('.github/actions/update-cargo-version/script.js')
 
-# yarn add fs @iarna/toml
+#
 # const fs = require('fs')
 # const toml = require('@iarna/toml')
 # const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
