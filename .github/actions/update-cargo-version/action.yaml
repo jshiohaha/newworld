@@ -17,6 +17,8 @@ runs:
 
     - name: Dump dir contents
       run: ls .
+      shell: bash
+
     # - name: Update cargo version
     #   uses: actions/github-script@v4
     #   id: update-cargo-version
