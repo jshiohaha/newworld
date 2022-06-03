@@ -16,14 +16,13 @@ runs:
     - uses: actions/checkout@v3
 
     - name: Install packages
-      run: npm install -g @iarna/toml
-      # yarn global add @iarna/toml
+      run: yarn global add @iarna/toml
       shell: bash
 
     - name: Dump dir contents
       run: |
-        pwd ~/.config
-        ls ~/.config
+        ls ~/.config/yarn/global/node_modules/@iarna/toml
+        cat ~/.config/yarn/global/node_modules/@iarna/toml/package.json
       shell: bash
 
     - name: Update cargo version
@@ -31,7 +30,7 @@ runs:
       id: update-cargo-version
       with:
         script: |
-          const toml = require('@iarna/toml')
+          const toml = require('~/.config/yarn/global/node_modules/@iarna/toml/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
@@ -44,4 +43,4 @@ runs:
   #   required: true
   # cargo-path: ./newworld/program/Cargo.toml
 
-# https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js
+https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js
