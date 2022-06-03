@@ -15,7 +15,7 @@ const getUpdatedVersion = (semvar, { major, minor, patch }) => {
   return `${major}.${minor}.${patch}`;
 };
 
-module.exports = ({ github, context, fs, toml }, semvar) => {
+module.exports = async ({ github, context, core, fs, toml }, semvar) => {
   const CARGO_TOML_PATH = "./Cargo.toml";
   console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
 

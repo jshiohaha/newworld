@@ -27,5 +27,5 @@ runs:
           const fs = require('fs')
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = script({github, context, fs, toml}, ${{ inputs.semvar }})
+          const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
           console.log(result)
