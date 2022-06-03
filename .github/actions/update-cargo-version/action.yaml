@@ -21,7 +21,6 @@ runs:
         script: |
           const script = require('.github/actions/update-cargo-version/script.js')
 
-  # yarn install
   # const toml = require('@iarna/toml')
   # const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
   # const fs = require('fs')

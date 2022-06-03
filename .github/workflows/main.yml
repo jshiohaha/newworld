@@ -81,6 +81,10 @@ jobs:
           # static for testing
           pull_number: 8
 
+      - name: Install packages
+        run: yarn install
+        shell: bash
+
       - name: Update cargo version
         uses: ./.github/actions/update-cargo-version
         id: update-cargo-version
