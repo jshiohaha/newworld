@@ -90,7 +90,7 @@ fetchPullRequestReviewsDesc = async (
   return reviews;
 };
 
-module.exports = async ({ github, context, core, pull_number }) => {
+module.exports = async ({ github, context, core }, pull_number) => {
   // const { SHA } = process.env;
   const reviews = await fetchPullRequestReviewsDesc(
     github,

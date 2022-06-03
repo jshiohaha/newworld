@@ -23,7 +23,7 @@ runs:
       with:
         script: |
           const script = require('.github/actions/fetch-pr-review-comments/script.js')
-          await script({github, context, core, ${{ inputs.pull_number }}})
+          await script({github, context, core}, ${{ inputs.pull_number }})
 
     - name: Set version from comments
       id: set-version-from-comments
