@@ -88,14 +88,13 @@ jobs:
           npm version ${{ steps.fetch-pr-version.outputs.version }}
           git log
         shell: bash
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish artifacts
         run: npm publish
         shell: bash
 
       # ${{ github.ref }}
+      # https://github.com/marketplace/actions/github-push
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
