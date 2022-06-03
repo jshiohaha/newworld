@@ -92,6 +92,11 @@ fetchPullRequestReviewsDesc = async (
 
 module.exports = async ({ github, context, core }, pull_number) => {
   // const { SHA } = process.env;
+  console.log("github: ", github);
+  console.log("context: ", context);
+  console.log("core: ", core);
+  console.log("github.rest: ", github.rest);
+
   const reviews = await fetchPullRequestReviewsDesc(
     github,
     context.repo.owner,
