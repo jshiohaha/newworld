@@ -35,8 +35,7 @@ runs:
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
           const result = script({github, context, toml}, ${{ inputs.semvar }})
-  # const fs = require('fs')
-  # console.log(result)
+          console.log(result)
 
   # cargo-path:
   #   description: "Version update to make"
