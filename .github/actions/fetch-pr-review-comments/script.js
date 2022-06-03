@@ -43,8 +43,10 @@ const isValidReview = (review) => {
   const state = review.state.toLowerCase();
 
   console.log("check VALID_AUTHOR_ASSOCIATIONS");
+  console.log("author_association: ", author_association);
   if (!VALID_AUTHOR_ASSOCIATIONS.includes(author_association)) return false;
   console.log("check VALID_REVIEW_STATES");
+  console.log("state: ", state);
   if (!VALID_REVIEW_STATES.includes(state)) return false;
 
   console.log(`review is valid: ${review}`);
