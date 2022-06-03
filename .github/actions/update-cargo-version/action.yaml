@@ -15,10 +15,15 @@ runs:
   steps:
     - uses: actions/checkout@v3
 
-    # - name: Dump dir contents
-    #   run: |
-    #     const script = require('.github/actions/update-cargo-version/script.js')
-    #   shell: bash
+    - name: Dump dir contents
+      run: |
+        ls .
+        echo "------"
+        ls ..
+        echo "------"
+        ls ../..
+        echo "------"
+      shell: bash
 
     - name: Update cargo version
       uses: actions/github-script@v4
