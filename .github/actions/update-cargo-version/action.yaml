@@ -27,11 +27,13 @@ runs:
         echo "------"
         ls ../../../..
         echo "------"
-        ls ${{ env.GITHUB_ENV }}
+        echo "${{ env.GITHUB_ENV }}"
         echo "------"
-        ls ${{ env.GITHUB_PATH }}
+        echo "${{ env.GITHUB_PATH }}"
         echo "------"
-        ls ${{ env.RUNNER_TEMP }}
+        echo "${{ env.RUNNER_TEMP }}"
+        echo "------"
+        ls ~/.config/yarn/global
       shell: bash
 
     - name: Update cargo version
