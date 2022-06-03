@@ -28,7 +28,7 @@ runs:
       id: fetch-pr-review-version
       with:
         script: |
-          const script = require('./script.js')
+          const script = require('.github/actions/fetch-pr-review-comments/script.js')
           await script({github, context, core, owner, repo, pull_number})
 
     - name: Set version from comments
