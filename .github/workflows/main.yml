@@ -87,7 +87,6 @@ jobs:
         with:
           # static for testing
           semvar: ${{ steps.fetch-pr-review-comments.outputs.version }}
-          cargo-path: ./newworld/program/Cargo.toml
 
       # - name: npm login
       #   run: |

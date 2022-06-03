@@ -5,10 +5,6 @@ inputs:
     description: "Version update to make"
     required: true
 
-  cargo-path:
-    description: "Version update to make"
-    required: true
-
 permissions:
   contents: write
   package: write
@@ -26,7 +22,12 @@ runs:
           yarn install
           const script = require('.github/actions/update-cargo-version/script.js')
 
-# const toml = require('@iarna/toml')
-# const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
-# const fs = require('fs')
-# console.log(result)
+  # const toml = require('@iarna/toml')
+  # const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})
+  # const fs = require('fs')
+  # console.log(result)
+
+  # cargo-path:
+  #   description: "Version update to make"
+  #   required: true
+  # cargo-path: ./newworld/program/Cargo.toml
