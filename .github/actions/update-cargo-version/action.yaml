@@ -31,7 +31,7 @@ runs:
         script: |
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = script({github, context, toml}, ${{ inputs.semvar }})
+          const result = script({github, context, toml}, '${{ inputs.semvar }}')
           console.log(result)
 
   # cargo-path: ./newworld/program/Cargo.toml
