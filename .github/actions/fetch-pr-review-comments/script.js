@@ -1,7 +1,7 @@
 // https://github.com/octokit/octokit.graphql.net/blob/master/Octokit.GraphQL/Model/CommentAuthorAssociation.cs
-export const VALID_AUTHOR_ASSOCIATIONS = ["owner", "member", "contributor"];
-export const VALID_REVIEW_STATES = ["approved", "comment"];
-export const VERSIONING_REGEX = /^(patch|minor|major)$/g;
+const VALID_AUTHOR_ASSOCIATIONS = ["owner", "member", "contributor"];
+const VALID_REVIEW_STATES = ["approved", "comment"];
+const VERSIONING_REGEX = /^(patch|minor|major)$/g;
 
 const findFirstReviewWithVersion = (reviews) => {
   let version = "none";
