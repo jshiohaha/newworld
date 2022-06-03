@@ -1,4 +1,5 @@
 const toml = require("@iarna/toml");
+const fs = require("fs");
 
 const MAJOR = "major";
 const MINOR = "minor";
