@@ -81,7 +81,7 @@ jobs:
         id: upgrade-program-version
         # alt: we might have to parse and then change directories
         run: |
-          ls
+          yarn install
           git config user.name 'upgrador-bot'
           git config user.email 'upgrador-bot@users.noreply.github.com'
           git log
