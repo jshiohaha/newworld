@@ -15,23 +15,17 @@ runs:
   steps:
     - uses: actions/checkout@v3
 
-    - name: Dump dir contents
-      run: |
-        ls .
-        echo "======"
-        ls ..
-        echo "======"
-        ls ...
-      shell: bash
+    # - name: Dump dir contents
+    #   run: |
+    #     const script = require('.github/actions/update-cargo-version/script.js')
+    #   shell: bash
 
-    # - name: Update cargo version
-    #   uses: actions/github-script@v4
-    #   id: update-cargo-version
-    #   with:
-    #     script: |
-    #       ls .
-  # const toml = require('node_modules/@iarna/toml')
-  # const script = require('.github/actions/update-cargo-version/script.js')
+    - name: Update cargo version
+      uses: actions/github-script@v4
+      id: update-cargo-version
+      with:
+        script: |
+          const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
   # const result = await script({github, context, core, fs, toml}, ${{ inputs.semvar }})

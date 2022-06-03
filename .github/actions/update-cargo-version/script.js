@@ -1,7 +1,9 @@
-// const MAJOR = "major";
-// const MINOR = "minor";
-// const PATCH = "patch";
-// const CARGO_TOML_PATH = "./Config.toml";
+const toml = require("@iarna/toml");
+
+const MAJOR = "major";
+const MINOR = "minor";
+const PATCH = "patch";
+const CARGO_TOML_PATH = "./Config.toml";
 
 // const getUpdatedVersion = (semvar, { major, minor, patch }) => {
 //   if (semvar === MAJOR) {
@@ -15,7 +17,7 @@
 //   return `${major}.${minor}.${patch}`;
 // };
 
-module.exports = async ({ github, context, core, toml }, semvar) => {
+module.exports = ({ github, context }, semvar) => {
   // const CARGO_TOML_PATH = "./Cargo.toml";
   // console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
   // // Test both the read and write permissions
