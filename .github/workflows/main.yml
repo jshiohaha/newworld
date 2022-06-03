@@ -109,3 +109,5 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git push
         shell: bash
+        env:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
