@@ -19,6 +19,7 @@ runs:
       id: update-cargo-version
       with:
         script: |
+          const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
