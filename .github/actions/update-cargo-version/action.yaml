@@ -1,0 +1,27 @@
+name: "Update cargo version"
+description: "Update cargo version"
+inputs:
+  semvar:
+    description: "Version update to make"
+    required: true
+
+  cargo-path:
+    description: "Version update to make"
+    required: true
+
+permissions:
+  contents: write
+  package: write
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Update cargo version
+      uses: actions/github-script@v4
+      id: update-cargo-version
+      with:
+        script: |
+          const script = require('.github/actions/update-cargo-version/script.js')
+          const result = script({github, context}, ${{ inputs.cargo-path }}, ${{ inputs.semvar }})
+          console.log(result)
