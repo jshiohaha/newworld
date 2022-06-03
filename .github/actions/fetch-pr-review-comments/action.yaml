@@ -6,7 +6,7 @@ inputs:
     required: true
 
 outputs:
-  labels:
+  version:
     description: Version
     value: ${{ steps.set-version-from-comments.outputs.version }}
 
