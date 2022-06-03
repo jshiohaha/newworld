@@ -29,18 +29,18 @@ module.exports = ({ github, context, toml }, semvar) => {
     // else
     console.log("access ok");
 
-    // let tomlObj = toml.parse(fs.readFileSync(CARGO_TOML_PATH, "utf-8"));
-    // console.log("tomlObj: ", tomlObj);
-    // const package = tomlObj.package;
-    // console.log("package: ", package);
-    // if (!package) throw new Error("No package tag defined in Cargo.toml");
-    // let [major, minor, patch] = package.version.split(".").map((v) => +v);
-    // console.log("major: ", major);
-    // console.log("minor: ", minor);
-    // console.log("patch: ", patch);
-    // const updatedVersion = getUpdatedVersion(semvar, { major, minor, patch });
-    // console.log("updatedVersion: ", updatedVersion);
-    // // update version
+    let tomlObj = toml.parse(fs.readFileSync(CARGO_TOML_PATH, "utf-8"));
+    console.log("tomlObj: ", tomlObj);
+    const package = tomlObj.package;
+    console.log("package: ", package);
+    if (!package) throw new Error("No package tag defined in Cargo.toml");
+    let [major, minor, patch] = package.version.split(".").map((v) => +v);
+    console.log("major: ", major);
+    console.log("minor: ", minor);
+    console.log("patch: ", patch);
+    const updatedVersion = getUpdatedVersion(semvar, { major, minor, patch });
+    console.log("updatedVersion: ", updatedVersion);
+    // update version
     // tomlObj.package.version = updatedVersion;
     // // print updated version
     // console.log("tomlObj: ", tomlObj);
