@@ -15,25 +15,12 @@ runs:
   steps:
     - uses: actions/checkout@v3
 
+    - name: Install packages
+      run: yarn global add @iarna/toml
+      shell: bash
+
     - name: Dump dir contents
-      run: |
-        ls .
-        echo "------"
-        ls ..
-        echo "------"
-        ls ../..
-        echo "------"
-        ls ../../..
-        echo "------"
-        ls ../../../..
-        echo "------"
-        echo "${{ env.GITHUB_ENV }}"
-        echo "------"
-        echo "${{ env.GITHUB_PATH }}"
-        echo "------"
-        echo "${{ env.RUNNER_TEMP }}"
-        echo "------"
-        ls ~/.config/yarn/global/node_modules/
+      run: ls ~/.config/yarn/global/node_modules/
       shell: bash
 
     - name: Update cargo version
@@ -41,6 +28,7 @@ runs:
       id: update-cargo-version
       with:
         script: |
+          const toml = require(~/.config/yarn/global/node_modules/@iarna/toml)
           const script = require('.github/actions/update-cargo-version/script.js')
 
   # const toml = require('@iarna/toml')
