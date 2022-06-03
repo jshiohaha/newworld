@@ -17,7 +17,7 @@ permissions:
   id-token: write
   contents: write
   packages: write # for publish
-  pull-requests: write
+  # pull-requests: write
 
 env:
   NODE_VERSION: 17.0.1
@@ -91,22 +91,14 @@ jobs:
           git log
         shell: bash
 
-      # - name: Publish artifacts
-      #   run: npm publish
-      #   shell: bash
-      # # ${{ github.ref }}
-      # # https://github.com/marketplace/actions/github-push
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main
-      - name: Upgrade program version
-        id: push-changes
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git push
+      - name: Publish artifacts
+        run: npm publish
         shell: bash
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ${{ github.ref }}
+      # https://github.com/marketplace/actions/github-push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
