@@ -96,3 +96,5 @@ jobs:
       - name: Push updated commit
         run: git push
         shell: bash
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
