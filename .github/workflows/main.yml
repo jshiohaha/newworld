@@ -74,12 +74,12 @@ jobs:
       #     # static for testing
       #     pull_number: 8
 
-      # - name: Fetch review comments for PR
-      #   uses: ./.github/actions/fetch-pr-review-comments
-      #   id: fetch-pr-review-comments
-      #   with:
-      #     # static for testing
-      #     pull_number: 8
+      - name: Fetch review comments for PR
+        uses: ./.github/actions/fetch-pr-review-comments
+        id: fetch-pr-review-comments
+        with:
+          # static for testing
+          pull_number: 8
 
       - name: Update cargo version
         uses: ./.github/actions/update-cargo-version

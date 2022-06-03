@@ -38,6 +38,8 @@ module.exports = ({ github, context, toml }, semvar) => {
     console.log("major: ", major);
     console.log("minor: ", minor);
     console.log("patch: ", patch);
+    console.log("semvar: ", semvar);
+
     const updatedVersion = getUpdatedVersion(semvar, { major, minor, patch });
     console.log("updatedVersion: ", updatedVersion);
     // update version
