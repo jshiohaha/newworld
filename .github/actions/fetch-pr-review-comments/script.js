@@ -60,7 +60,7 @@ fetchPullRequestReviewsDesc = async (
   let reviews = []; // string[]
 
   while (true) {
-    const { data } = await github.rest.pulls.listReviews({
+    const { data } = await github.pulls.listReviews({
       owner,
       repo,
       pull_number,
