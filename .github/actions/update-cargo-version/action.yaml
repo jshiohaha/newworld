@@ -20,11 +20,11 @@ runs:
       # yarn global add @iarna/toml
       shell: bash
 
-    - name: Dump dir contents
-      run: |
-        pwd ~/.config
-        ls ~/.config/yarn/global/node_modules/@iarna/toml
-      shell: bash
+    # - name: Dump dir contents
+    #   run: |
+    #     pwd ~/.config
+    #     ls ~/.config/yarn/global/node_modules/@iarna/toml
+    #   shell: bash
 
     - name: Update cargo version
       uses: actions/github-script@v4
