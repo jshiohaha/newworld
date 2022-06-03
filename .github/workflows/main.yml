@@ -79,6 +79,7 @@ jobs:
       - name: Upgrade program version
         if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
         id: upgrade-program-version
+        # alt: we might have to parse and then change directories
         run: |
           ls
           git config user.name 'upgrador-bot'
