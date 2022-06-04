@@ -31,8 +31,6 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
 
     # todo: check if any rust files actually changed in this package?
     # -> then, check in next step
