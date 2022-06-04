@@ -12,6 +12,9 @@ const getPackageAndExtension = (path) => {
 };
 
 fetchAllChangedFiles = async (
+  github,
+  owner,
+  repo,
   pull_number,
   per_page = 100 // max = 100?
 ) => {
@@ -19,11 +22,11 @@ fetchAllChangedFiles = async (
   let files = [];
 
   while (true) {
-    const { data } = await this.octokit.rest.pulls.listFiles({
-      owner: this.owner,
-      repo: this.repo,
+    const { data } = await github.pulls.listFiles({
+      owner,
+      repo,
       pull_number,
-      direction: "desc",
+      direction: "asc",
       per_page,
       page,
     });
