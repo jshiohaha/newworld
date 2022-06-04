@@ -80,7 +80,7 @@ runs:
       run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
       shell: bash
       env:
-        CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
+        CARGO_TOKEN: ${{ inputs.cargo-token }}
         PACKAGE_NAME: ${{ inputs.package-name }}
 
     - name: Push changes
