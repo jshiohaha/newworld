@@ -64,68 +64,35 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      # - name: Fetch version command for PR
-      #   uses: ./.github/actions/fetch-pr-version
-      #   id: fetch-pr-version
+      # - name: Publish updated artifacts to Crates and Github
+      #   uses: ./.github/actions/publish-to-crates
+      #   id: publish-to-crates
       #   with:
-      #     owner: context.repo.owner
-      #     repo: context.repo.repo
-      #     # static for testing
-      #     pull_number: 8
+      #     cargo-token: ${{ secrets.CARGO_TOKEN }}
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     package-name: newworld
+      #     path-to-cargo: ./newworld/program/Cargo.toml
+      #     pull-number: 8 # static for testing
+      #     branch: main # ${{ github.ref }}
 
-      - name: Publish updated artifacts to Crates and Github
-        uses: ./.github/actions/publish-to-crates
-        id: publish-to-crates
+      - name: Publish updated artifacts to NPM and Github
+        uses: ./.github/actions/publish-to-npm
+        id: publish-to-npm
         with:
-          package-name: newworld
-          path-to-cargo: ./newworld/program/Cargo.toml
-          cargo-token: ${{ secrets.CARGO_TOKEN }}
+          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: newworld
+          path-to-package-json: ./newworld/js/package.json
           pull-number: 8 # static for testing
           branch: main # ${{ github.ref }}
 
 
-      # - name: Fetch review comments for PR
-      #   uses: ./.github/actions/fetch-pr-review-comments
-      #   id: fetch-pr-review-comments
-      #   with:
-      #     # static for testing
-      #     pull-number: 8
-
-      # js packages ==============================================
-      # - name: Publish updated artifacts to NPM and Github
-      #   uses: ./.github/actions/publish-to-npm
-      #   id: publish-to-npm
-      #   with:
-      #     # static for testing
-      #     pull_number: 8
-
-      # - name: npm login
-      #   run: |
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
-
-      # - name: Upgrade program version
-      #   if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
-      #   id: upgrade-program-version
-      #   # alt: we might have to parse and then change directories
-      #   # npm version ${{ steps.fetch-pr-version.outputs.version }}
-      #   run: |
-      #     yarn install
-      #     git config user.name github-actions[bot]
-      #     git config user.email github-actions[bot]@users.noreply.github.com
-      #     git log
-      #     npm version ${{ steps.fetch-pr-review-comments.outputs.version }}
-      #     git log
-      #   shell: bash
-
-      # - name: Publish artifacts
-      #   run: npm publish
-      #   shell: bash
-
-      # # ${{ github.ref }}
-      # # https://github.com/marketplace/actions/github-push
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main
+    # from labels instead
+    # - name: Fetch version command for PR
+    #   uses: ./.github/actions/fetch-pr-version
+    #   id: fetch-pr-version
+    #   with:
+    #     owner: context.repo.owner
+    #     repo: context.repo.repo
+    #     # static for testing
+    #     pull_number: 8
