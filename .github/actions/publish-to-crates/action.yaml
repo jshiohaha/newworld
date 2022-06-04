@@ -7,6 +7,10 @@ inputs:
   path-to-cargo:
     description: "Path to the file to upload"
     required: true
+  # cannot load token directly in action, so we need to pass it in
+  cargo-token:
+    description: "Path to the file to upload"
+    required: true
   pull-number:
     description: "Path to the file to upload"
     required: true
@@ -68,7 +72,7 @@ runs:
       run: cargo login $CARGO_TOKEN
       shell: bash
       env:
-        CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
+        CARGO_TOKEN: ${{ inputs.cargo-token }}
 
     # - name: Publish to crates
     #   run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME

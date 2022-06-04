@@ -79,6 +79,7 @@ jobs:
         with:
           package-name: newworld
           path-to-cargo: ./newworld/program/Cargo.toml
+          cargo-token: ${{ secrets.CARGO_TOKEN }}
           pull-number: 8 # static for testing
           branch: main # ${{ github.ref }}
 
