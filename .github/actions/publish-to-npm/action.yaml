@@ -48,13 +48,14 @@ runs:
       env:
         NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
 
+        # yarn install
+
     - name: Upgrade package version
       if: ${{ steps.fetch-pr-review-comments.outputs.version != 'none' }}
       id: update-package-version
       shell: bash
       run: |
         cd $PATH_TO_PACKAGE_JSON
-        yarn install
         git config user.name github-actions[bot]
         git config user.email github-actions[bot]@users.noreply.github.com
         git log
