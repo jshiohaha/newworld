@@ -55,6 +55,7 @@ runs:
         pull-number: ${{ inputs.pull-number }}
 
     - name: npm login
+      if: steps.assert-changed-files.outputs.assertion == 'true'
       shell: bash
       run: |
         echo "//registry.npmjs.org/:_authToken=${NPM_PUBLISH_TOKEN}" > ~/.npmrc
@@ -63,7 +64,7 @@ runs:
 
     #  install
     - name: Upgrade package version
-      if: ${{ steps.fetch-pr-review-comments.outputs.version != 'none' }}
+      if: steps.assert-changed-files.outputs.assertion == 'true' && steps.fetch-pr-review-comments.outputs.version != 'none'
       id: update-package-version
       shell: bash
       run: |
@@ -79,6 +80,7 @@ runs:
         PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
     - name: Publish artifacts
+      if: steps.assert-changed-files.outputs.assertion == 'true'
       run: npm publish $PATH_TO_PACKAGE_JSON
       shell: bash
       env:
@@ -86,6 +88,7 @@ runs:
         PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
     - name: Push changes
+      if: steps.assert-changed-files.outputs.assertion == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github-token }}
