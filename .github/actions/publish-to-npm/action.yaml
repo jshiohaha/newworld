@@ -47,7 +47,7 @@ runs:
       with:
         pull-number: ${{ inputs.pull-number }}
         package-name: ${{ inputs.package-name }}
-        extensions: ["ts"]
+        extensions: '["ts"]'
 
     - name: Dump assert changed files output
       run: echo "${{ steps.assert-changed-files.outputs.assertion }}"

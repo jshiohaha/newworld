@@ -10,6 +10,7 @@ inputs:
   extensions:
     description: "Path to the file to upload"
     required: true
+  # add `excludes` parameter to filter out certain files
 
 outputs:
   assertion:
