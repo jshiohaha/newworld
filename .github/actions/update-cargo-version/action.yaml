@@ -31,9 +31,9 @@ runs:
         script: |
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const result = script({github, context, toml}, '${{ inputs.semvar }}')
-          console.log(result)
+          const updatedVersion = script({github, context, toml}, '${{ inputs.semvar }}')
+          console.log('updatedVersion: ', updatedVersion);
 
-  # cargo-path: ./newworld/program/Cargo.toml
-
+# set output?
+# cargo-path: ./newworld/program/Cargo.toml
 # https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js

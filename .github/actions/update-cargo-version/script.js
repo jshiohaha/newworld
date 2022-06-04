@@ -43,12 +43,14 @@ module.exports = ({ github, context, toml }, semvar) => {
     const updatedVersion = getUpdatedVersion(semvar, { major, minor, patch });
     console.log("updatedVersion: ", updatedVersion);
     // update version
-    // tomlObj.package.version = updatedVersion;
-    // // print updated version
-    // console.log("tomlObj: ", tomlObj);
+    tomlObj.package.version = updatedVersion;
+    // print updated version
+    console.log("tomlObj: ", tomlObj);
     // save updated version
-    // fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
+    fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
+
+    return updatedVersion;
   });
 
-  return "helloworld";
+  return "0.0.0";
 };
