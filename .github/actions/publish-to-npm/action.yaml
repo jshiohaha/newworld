@@ -62,6 +62,7 @@ runs:
         git log
         npm version ${{ steps.fetch-pr-review-comments.outputs.version }}
         git log
+        cat package.json
       env:
         PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
