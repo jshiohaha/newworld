@@ -34,10 +34,16 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    # todo: check if any rust files actually changed in this package?
-    # -> then, check in next step
+    - name: Assert changed files
+      uses: ./.github/actions/assert-changed-files
+      id: assert-changed-files
+      with:
+        pull-number: ${{ inputs.pull-number }}
+        package-name: ${{ inputs.package-name }}
+        extensions: '["rs"]'
 
     - name: Fetch review comments for PR
+      if: steps.assert-changed-files.outputs.assertion == 'true'
       uses: ./.github/actions/fetch-pr-review-comments
       id: fetch-pr-review-comments
       with:
