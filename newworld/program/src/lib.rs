@@ -7,20 +7,16 @@ pub mod newworld {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        msg!("initialize operation");
         Ok(())
     }
 
     pub fn add(ctx: Context<Add>) -> Result<()> {
-        msg!("doing some adding");
+        msg!("add operation");
         Ok(())
     }
 }
 
-// new comment
-// new comment 2
-// new comment 3
-// new comment 4
-// new comment 5
 #[derive(Accounts)]
 pub struct Initialize {}
 
