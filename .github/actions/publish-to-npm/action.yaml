@@ -46,7 +46,9 @@ runs:
     - name: npm login
       shell: bash
       run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
+        echo "//registry.npmjs.org/:_authToken=${NPM_PUBLISH_TOKEN}" > ~/.npmrc
+      env:
+        NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
 
     - name: Upgrade package version
       if: ${{ steps.fetch-pr-review-comments.outputs.version != 'none' }}
