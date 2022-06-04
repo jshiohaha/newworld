@@ -44,6 +44,7 @@ runs:
         pull-number: ${{ inputs.pull-number }}
 
     - name: npm login
+      shell: bash
       run: |
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
 
