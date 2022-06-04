@@ -1,14 +1,18 @@
 name: "Publish to crates registry and Github"
 description: "Uploads a file to S3 bucket with a specific prefix"
 inputs:
+  # cannot load token directly in action, so we need to pass it in
+  cargo-token:
+    description: "Path to the file to upload"
+    required: true
+  # cannot load token directly in action, so we need to pass it in
+  github-token:
+    description: "Path to the file to upload"
+    required: true
   package-name:
     description: "Path to the file to upload"
     required: true
   path-to-cargo:
-    description: "Path to the file to upload"
-    required: true
-  # cannot load token directly in action, so we need to pass it in
-  cargo-token:
     description: "Path to the file to upload"
     required: true
   pull-number:
@@ -86,5 +90,5 @@ runs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ inputs.github-token }}
         branch: ${{ inputs.branch }}
