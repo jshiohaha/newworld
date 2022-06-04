@@ -41,46 +41,56 @@ runs:
 
     # todo: check if any rust files actually changed in this package?
     # -> then, check in next step
-
-    - name: Fetch review comments for PR
-      uses: ./.github/actions/fetch-pr-review-comments
-      id: fetch-pr-review-comments
+    - name: Assert changed files
+      uses: ./.github/actions/assert-changed-files
+      id: assert-changed-files
       with:
         pull-number: ${{ inputs.pull-number }}
+        package-name: ${{ inputs.package-name }}
+        extensions: ["ts"]
 
-    - name: npm login
-      shell: bash
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${NPM_PUBLISH_TOKEN}" > ~/.npmrc
-      env:
-        NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
+    - name: Dump assert changed files output
+      run: echo "${{ steps.assert-changed-files.outputs.assertion }}"
 
-    #  install
-    - name: Upgrade package version
-      if: ${{ steps.fetch-pr-review-comments.outputs.version != 'none' }}
-      id: update-package-version
-      shell: bash
-      run: |
-        cd $PATH_TO_PACKAGE_JSON
-        yarn install
-        git config user.name github-actions[bot]
-        git config user.email github-actions[bot]@users.noreply.github.com
-        git log
-        npm version ${{ steps.fetch-pr-review-comments.outputs.version }}
-        git log
-        cat package.json
-      env:
-        PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
+    # - name: Fetch review comments for PR
+    #   uses: ./.github/actions/fetch-pr-review-comments
+    #   id: fetch-pr-review-comments
+    #   with:
+    #     pull-number: ${{ inputs.pull-number }}
 
-    - name: Publish artifacts
-      run: npm publish $PATH_TO_PACKAGE_JSON
-      shell: bash
-      env:
-        NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
-        PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
+    # - name: npm login
+    #   shell: bash
+    #   run: |
+    #     echo "//registry.npmjs.org/:_authToken=${NPM_PUBLISH_TOKEN}" > ~/.npmrc
+    #   env:
+    #     NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ inputs.github-token }}
-        branch: ${{ inputs.branch }}
+    # #  install
+    # - name: Upgrade package version
+    #   if: ${{ steps.fetch-pr-review-comments.outputs.version != 'none' }}
+    #   id: update-package-version
+    #   shell: bash
+    #   run: |
+    #     cd $PATH_TO_PACKAGE_JSON
+    #     yarn install
+    #     git config user.name github-actions[bot]
+    #     git config user.email github-actions[bot]@users.noreply.github.com
+    #     git log
+    #     npm version ${{ steps.fetch-pr-review-comments.outputs.version }}
+    #     git log
+    #     cat package.json
+    #   env:
+    #     PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
+
+    # - name: Publish artifacts
+    #   run: npm publish $PATH_TO_PACKAGE_JSON
+    #   shell: bash
+    #   env:
+    #     NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
+    #     PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
+
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ inputs.github-token }}
+    #     branch: ${{ inputs.branch }}

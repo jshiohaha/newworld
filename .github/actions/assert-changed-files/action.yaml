@@ -1,0 +1,37 @@
+name: "Assert changed files in a PR"
+description: "Assert changed files in a PR"
+inputs:
+  pull-number:
+    description: "Path to the file to upload"
+    required: true
+  package-name:
+    description: "Path to the file to upload"
+    required: true
+  extensions:
+    description: "Path to the file to upload"
+    required: true
+
+outputs:
+  assertion:
+    description: Version
+    value: ${{ steps.set-assertion.outputs.assertion }}
+
+permissions:
+  contents: read
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Check changed files against target package and file types
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const script = require('.github/actions/assert-changed-files/script.js')
+          await script({github, context, core}, ${{ inputs.pull-number }}, ${{ inputs.package-name }}, ${{ inputs.extensions }})
+
+    - name: Set assertion from comments
+      id: set-assertion
+      # env.ASSERTION exported from script.js
+      run: echo "::set-output name=assertion::${{ env.ASSERTION }}"
+      shell: bash
