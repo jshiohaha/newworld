@@ -38,7 +38,6 @@ runs:
         node-version: ${{ inputs.node-version }}
         cache: "yarn"
         cache-dependency-path: ${{ inputs.path-to-package-json}}/yarn.lock
-        registry-url: "https://registry.npmjs.org"
 
     # todo: check if any rust files actually changed in this package?
     # -> then, check in next step
