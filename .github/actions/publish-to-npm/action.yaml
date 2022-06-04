@@ -65,12 +65,12 @@ runs:
       env:
         PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
-    # - name: Publish artifacts
-    #   run: npm publish
-    #   shell: bash
+    - name: Publish artifacts
+      run: npm publish
+      shell: bash
 
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ inputs.github-token }}
-    #     branch: ${{ inputs.branch }}
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.github-token }}
+        branch: ${{ inputs.branch }}
