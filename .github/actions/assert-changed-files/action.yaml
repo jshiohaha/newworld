@@ -29,7 +29,7 @@ runs:
       with:
         script: |
           const script = require('.github/actions/assert-changed-files/script.js')
-          await script({github, context, core}, ${{ inputs.pull-number }}, ${{ inputs.package-name }}, ${{ inputs.extensions }})
+          await script({github, context, core}, ${{ inputs.pull-number }}, '${{ inputs.package-name }}', '${{ inputs.extensions }}')
 
     - name: Set assertion from comments
       id: set-assertion
