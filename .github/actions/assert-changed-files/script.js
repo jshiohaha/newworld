@@ -68,7 +68,11 @@ module.exports = async (
   });
 
   console.log(
-    `Found ${filteredFiles.length} that match package ${package} and extension ${extension}`
+    `Found ${
+      filteredFiles.length
+    } that match package ${target_package} and extension ${JSON.stringify(
+      parsed_target_extensions
+    )}`
   );
   const assertion = filteredFiles.length > 0;
   core.exportVariable("ASSERTION", assertion);
