@@ -76,15 +76,15 @@ runs:
       env:
         CARGO_TOKEN: ${{ inputs.cargo-token }}
 
-    # - name: Publish to crates
-    #   run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
-    #   shell: bash
-    #   env:
-    #     CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
-    #     PACKAGE_NAME: ${{ inputs.package-name }}
+    - name: Publish to crates
+      run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
+      shell: bash
+      env:
+        CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
+        PACKAGE_NAME: ${{ inputs.package-name }}
 
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: ${{ inputs.branch }}
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ inputs.branch }}
