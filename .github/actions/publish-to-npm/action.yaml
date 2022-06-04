@@ -39,9 +39,12 @@ runs:
         cache: "yarn"
         cache-dependency-path: ${{ inputs.path-to-package-json}}/yarn.lock
         registry-url: "https://registry.npmjs.org"
+
     - name: Install dependencies
       shell: bash
-      run: yarn install
+      run: |
+        cd $PATH_TO_PACKAGE_JSON
+        yarn install
 
     # todo: check if any rust files actually changed in this package?
     # -> then, check in next step
@@ -65,7 +68,6 @@ runs:
       id: update-package-version
       shell: bash
       run: |
-        cd $PATH_TO_PACKAGE_JSON
         git config user.name github-actions[bot]
         git config user.email github-actions[bot]@users.noreply.github.com
         git log
