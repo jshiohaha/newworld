@@ -82,7 +82,7 @@ jobs:
           npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-name: newworld
-          path-to-package-json: ./newworld/js/package.json
+          path-to-package-json: ./newworld/js
           pull-number: 8 # static for testing
           branch: main # ${{ github.ref }}
 
