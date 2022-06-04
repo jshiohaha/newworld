@@ -58,11 +58,13 @@ runs:
         git config user.email github-actions[bot]@users.noreply.github.com
         git log
         echo "=========="
-        git add $PATH_TO_CARGO && git commit -m 'chore: update $PACKAGE_NAME crate to v$UPDATED_VERSION' && git tag $PACKAGE_NAME@$UPDATED_VERSION
+        git add $PATH_TO_CARGO && git commit -m 'chore: update ${{ PACKAGE_NAME }} crate to v${{ PACKAGE_NAME }}' && git tag $PACKAGE_NAME@$UPDATED_VERSION
         echo "=========="
         git status
         echo "=========="
         git log
+        echo "=========="
+        git tag
       env:
         PACKAGE_NAME: ${{ inputs.package-name }}
         UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
