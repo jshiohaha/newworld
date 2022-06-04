@@ -78,10 +78,11 @@ runs:
         PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
     - name: Publish artifacts
-      run: npm publish
+      run: npm publish $PATH_TO_PACKAGE_JSON
       shell: bash
       env:
         NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
+        PATH_TO_PACKAGE_JSON: ${{ inputs.path-to-package-json }}
 
     - name: Push changes
       uses: ad-m/github-push-action@master
