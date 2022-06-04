@@ -102,7 +102,7 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git log
           echo "=========="
-          git add Cargo.toml && git commit -m \"chore: update crate to new version\" && git tag package:version
+          git add Cargo.toml && git commit -m 'chore: update crate to new version' && git tag package:version
           echo "=========="
           git status
           echo "=========="
