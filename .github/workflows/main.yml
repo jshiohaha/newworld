@@ -103,7 +103,7 @@ jobs:
           git log
           echo "=========="
           git add -A && git commit -m ""
-          "git add package.json && git commit -m \"chore: update crate to new version\" && git tag package:version",
+          "git add Cargo.toml && git commit -m \"chore: update crate to new version\" && git tag package:version",
           echo "=========="
           git status
           echo "=========="
