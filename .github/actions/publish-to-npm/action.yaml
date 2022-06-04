@@ -34,12 +34,14 @@ runs:
   steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v2
+      shell: bash
       with:
         node-version: ${{ inputs.node-version }}
         cache: "yarn"
         cache-dependency-path: ${{ inputs.path-to-package-json}}/yarn-lock.json
         registry-url: "https://registry.npmjs.org"
     - name: Install dependencies
+      shell: bash
       run: yarn install
 
     # todo: check if any rust files actually changed in this package?
