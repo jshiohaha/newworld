@@ -1,0 +1,84 @@
+name: "Publish to crates registry and Github"
+description: "Uploads a file to S3 bucket with a specific prefix"
+inputs:
+  package-name:
+    description: "Path to the file to upload"
+    required: true
+  path-to-cargo:
+    description: "Path to the file to upload"
+    required: true
+  pull-number:
+    description: "Path to the file to upload"
+    required: true
+  branch:
+    description: "Path to the file to upload"
+    required: true
+
+permissions:
+  id-token: read # maybe write?
+  contents: write
+  packages: write # for publish
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    # todo: check if any rust files actually changed in this package?
+    # -> then, check in next step
+
+    - name: Fetch review comments for PR
+      uses: ./.github/actions/fetch-pr-review-comments
+      id: fetch-pr-review-comments
+      with:
+        pull-number: ${{ inputs.pull-number }}
+
+    - name: Update cargo version
+      if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
+      uses: ./.github/actions/update-cargo-version
+      id: update-cargo-version
+      with:
+        # static for testing
+        semvar: ${{ steps.fetch-pr-review-comments.outputs.version }}
+        cargo-path: ${{ inputs.path-to-cargo }}
+
+    - name: Upgrade program version
+      id: upgrade-program-version
+      shell: bash
+      run: |
+        git status
+        echo "=========="
+        git config user.name github-actions[bot]
+        git config user.email github-actions[bot]@users.noreply.github.com
+        git log
+        echo "=========="
+        git add $PATH_TO_CARGO && git commit -m 'chore: update $PACKAGE_NAME crate to v$UPDATED_VERSION' && git tag $PACKAGE_NAME@$UPDATED_VERSION
+        echo "=========="
+        git status
+        echo "=========="
+        git log
+      env:
+        PACKAGE_NAME: ${{ inputs.package-name }}
+        UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
+        PATH_TO_CARGO: ${{ inputs.path-to-cargo }}
+
+    - name: Login via cargo
+      run: cargo login $CARGO_REGISTRY_TOKEN
+      shell: bash
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+    # - name: Publish to crates
+    #   run: cargo publish --token $CARGO_REGISTRY_TOKEN -p $PACKAGE_NAME
+    #   shell: bash
+    #   env:
+    #     CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    #     PACKAGE_NAME: ${{ inputs.package-name }}
+
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: ${{ inputs.branch }}

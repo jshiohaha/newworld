@@ -1,7 +1,7 @@
 name: "Fetch version from PR review"
 description: "Fetch version from PR review"
 inputs:
-  pull_number:
+  pull-number:
     description: "Path to the file to upload"
     required: true
 
@@ -23,7 +23,7 @@ runs:
       with:
         script: |
           const script = require('.github/actions/fetch-pr-review-comments/script.js')
-          const result = await script({github, context, core}, ${{ inputs.pull_number }})
+          const result = await script({github, context, core}, ${{ inputs.pull-number }})
           console.log(result)
 
     - name: Set version from comments

@@ -7,7 +7,7 @@ inputs:
   repo:
     description: "Path to the file to upload"
     required: true
-  pull_number:
+  pull-number:
     description: "Path to the file to upload"
     required: true
 
@@ -31,9 +31,9 @@ runs:
           const request = {
             owner: ${{ inputs.owner }},
             repo: ${{ inputs.repo }},
-            pull_number: ${{ inputs.pull_number }}
+            pull_number: ${{ inputs.pull-number }}
           }
-          core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+          core.info(`Getting PR #${request.pull-number} from ${request.owner}/${request.repo}`)
           try {
             const { data } = await github.pulls.get(request)
             core.info(`Got PR data: ${JSON.stringify(data)}`)

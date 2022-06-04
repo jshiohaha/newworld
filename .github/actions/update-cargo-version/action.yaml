@@ -4,21 +4,24 @@ inputs:
   semvar:
     description: "Version update to make"
     required: true
-  # cargo-path:
-  #   description: "Version update to make"
-  #   required: true
+  cargo-path:
+    description: "Version update to make"
+    required: true
+
+outputs:
+  version:
+    description: Updated version based on semvar convention
+    value: ${{ steps.set-updated-version.outputs.version }}
 
 permissions:
-  contents: write
-  package: write
+  contents: read
 
-# '${{ inputs.cargo-path }}',
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
 
-    - name: Install packages
+    - name: Install dependency packages for script
       run: |
         yarn init --yes
         yarn add @iarna/toml
@@ -31,9 +34,11 @@ runs:
         script: |
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const updatedVersion = script({github, context, toml}, '${{ inputs.semvar }}')
+          const updatedVersion = script({github, context, core, toml}, '${{ inputs.cargo-path }}', '${{ inputs.semvar }}')
           console.log('updatedVersion: ', updatedVersion);
 
-# set output?
-# cargo-path: ./newworld/program/Cargo.toml
-# https://github.com/alyssabenipayo/cloned-hfla-site/blob/919be6ed3c346144808b94a2a7e38b95454fba1f/github-actions/pr-instructions/post-comment.js
+    - name: Set updated version
+      id: set-updated-version
+      # env.UPDATED_VERSION exported from script.js
+      run: echo "::set-output name=version::${{ env.UPDATED_VERSION }}"
+      shell: bash

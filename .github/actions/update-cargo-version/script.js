@@ -17,8 +17,8 @@ const getUpdatedVersion = (semvar, { major, minor, patch }) => {
   return `${major}.${minor}.${patch}`;
 };
 
-module.exports = ({ github, context, toml }, semvar) => {
-  // const CARGO_TOML_PATH = "./Cargo.toml";
+module.exports = ({ github, context, core, toml }, cargo_path, semvar) => {
+  console.log("cargo_path: ", cargo_path);
   console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
   // Test both the read and write permissions
   fs.access(CARGO_TOML_PATH, fs.constants.R_OK | fs.constants.W_OK, (err) => {
@@ -49,8 +49,10 @@ module.exports = ({ github, context, toml }, semvar) => {
     // save updated version
     fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
 
-    return updatedVersion;
+    // set output var to read in subsequent steps
+    core.exportVariable("UPDATED_VERSION", updatedVersion);
   });
 
-  return "0.0.0";
+  // set default output var
+  core.exportVariable("UPDATED_VERSION", "0.0.0");
 };

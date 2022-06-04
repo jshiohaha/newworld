@@ -17,7 +17,6 @@ permissions:
   id-token: write
   contents: write
   packages: write # for publish
-  # pull-requests: write
 
 env:
   NODE_VERSION: 17.0.1
@@ -74,42 +73,31 @@ jobs:
       #     # static for testing
       #     pull_number: 8
 
-      - name: Fetch review comments for PR
-        uses: ./.github/actions/fetch-pr-review-comments
-        id: fetch-pr-review-comments
+      - name: Publish updated artifacts to Crates and Github
+        uses: ./.github/actions/publish-to-crates
+        id: publish-to-crates
         with:
-          # static for testing
-          pull_number: 8
+          package-name: newworld
+          path-to-cargo: ./newworld/program/Cargo.toml
+          pull-number: 8 # static for testing
+          branch: main # ${{ github.ref }}
 
-      # rust packages ==============================================
 
-      - name: Update cargo version
-        if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
-        uses: ./.github/actions/update-cargo-version
-        id: update-cargo-version
-        with:
-          # static for testing
-          semvar: ${{ steps.fetch-pr-review-comments.outputs.version }}
-
-      - name: Upgrade program version
-        id: upgrade-program-version
-        # alt: we might have to parse and then change directories
-        # npm version ${{ steps.fetch-pr-version.outputs.version }}
-        run: |
-          git status
-          echo "=========="
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git log
-          echo "=========="
-          git add Cargo.toml && git commit -m 'chore: update crate to new version'
-          echo "=========="
-          git status
-          echo "=========="
-          git log
-        shell: bash
+      # - name: Fetch review comments for PR
+      #   uses: ./.github/actions/fetch-pr-review-comments
+      #   id: fetch-pr-review-comments
+      #   with:
+      #     # static for testing
+      #     pull-number: 8
 
       # js packages ==============================================
+      # - name: Publish updated artifacts to NPM and Github
+      #   uses: ./.github/actions/publish-to-npm
+      #   id: publish-to-npm
+      #   with:
+      #     # static for testing
+      #     pull_number: 8
+
       # - name: npm login
       #   run: |
       #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc

@@ -7,7 +7,7 @@ inputs:
   repo:
     description: "Path to the file to upload"
     required: true
-  pull_number:
+  pull-number:
     description: "Path to the file to upload"
     required: true
 
@@ -30,7 +30,7 @@ runs:
       with:
         owner: ${{ inputs.owner }}
         repo: ${{ inputs.repo }}
-        pull_number: ${{ inputs.pull_number }}
+        pull_number: ${{ inputs.pull-number }}
 
     # parse labels
     - name: Parse PR labels for semvar version
