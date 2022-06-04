@@ -50,6 +50,7 @@ runs:
         extensions: '["ts"]'
 
     - name: Dump assert changed files output
+      shell: bash
       run: echo "${{ steps.assert-changed-files.outputs.assertion }}"
 
     # - name: Fetch review comments for PR
