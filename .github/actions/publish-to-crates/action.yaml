@@ -59,18 +59,18 @@ runs:
         echo "Updated version: ${{ steps.update-cargo-version.outputs.version }}"
         echo "Updated OK: ${{ steps.update-cargo-version.outputs.update-ok }}"
 
-    # - name: Commit and tag version changes
-    #   if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
-    #   id: upgrade-program-version
-    #   shell: bash
-    #   run: |
-    #     git config user.name github-actions[bot]
-    #     git config user.email github-actions[bot]@users.noreply.github.com
-    #     git add $PATH_TO_CARGO && git commit -m "chore: update ${PACKAGE_NAME} crate to v${UPDATED_VERSION}" && git tag $PACKAGE_NAME@$UPDATED_VERSION
-    #   env:
-    #     PACKAGE_NAME: ${{ inputs.package-name }}
-    #     UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
-    #     PATH_TO_CARGO: ${{ inputs.path-to-cargo }}
+    - name: Commit and tag version changes
+      if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
+      id: upgrade-program-version
+      shell: bash
+      run: |
+        git config user.name github-actions[bot]
+        git config user.email github-actions[bot]@users.noreply.github.com
+        git add $PATH_TO_CARGO && git commit -m "chore: update ${PACKAGE_NAME} crate to v${UPDATED_VERSION}" && git tag $PACKAGE_NAME@$UPDATED_VERSION
+      env:
+        PACKAGE_NAME: ${{ inputs.package-name }}
+        UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
+        PATH_TO_CARGO: ${{ inputs.path-to-cargo }}
 
     # - name: Cargo login
     #   if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
