@@ -3,9 +3,17 @@ const fs = require("fs");
 const MAJOR = "major";
 const MINOR = "minor";
 const PATCH = "patch";
-const CARGO_TOML_PATH = "./newworld/program/Cargo.toml";
 
-const getUpdatedVersion = (semvar, { major, minor, patch }) => {
+/**
+ * Compute the updated version based on the semvar value
+ *
+ * @param {semvar} string The string representation of the version update to make
+ * @param {version} string The current semantic version
+ * @return {string} The updated version
+ */
+const getUpdatedVersion = (semvar, version) => {
+  let [major, minor, patch] = version.split(".").map((v) => +v);
+
   if (semvar === MAJOR) {
     major += 1;
   } else if (semvar === MINOR) {
@@ -17,42 +25,41 @@ const getUpdatedVersion = (semvar, { major, minor, patch }) => {
   return `${major}.${minor}.${patch}`;
 };
 
-module.exports = ({ github, context, core, toml }, cargo_path, semvar) => {
-  console.log("cargo_path: ", cargo_path);
-  console.log("CARGO_TOML_PATH: ", CARGO_TOML_PATH);
-  // Test both the read and write permissions
-  fs.access(CARGO_TOML_PATH, fs.constants.R_OK | fs.constants.W_OK, (err) => {
-    console.log("\n> Checking Permission for reading and writing to file");
-    if (err) {
-      throw new Error("No read and write access");
-    }
-    // else
-    console.log("access ok");
+/**
+ * Parse the Cargo.toml for the current version, and bump the version based on the semvar update value.
+ *
+ * @param {github} obj An @actions/github object
+ * @param {toml} obj A @iarna/toml object
+ * @param {cargo_path} string The path to the Cargo.toml to update
+ * @param {semvar} string The semvar udpate value
+ * @return void
+ */
+module.exports = ({ core, toml }, cargo_path, semvar) => {
+  if ([MAJOR, MINOR, PATCH].includes(semvar)) {
+    // Verify read and write permissions
+    fs.access(cargo_path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
+      console.log("\n> Checking Permission for reading and writing to file");
+      if (err) {
+        throw new Error("No read and write access");
+      }
 
-    let tomlObj = toml.parse(fs.readFileSync(CARGO_TOML_PATH, "utf-8"));
-    console.log("tomlObj: ", tomlObj);
-    const package = tomlObj.package;
-    console.log("package: ", package);
-    if (!package) throw new Error("No package tag defined in Cargo.toml");
-    let [major, minor, patch] = package.version.split(".").map((v) => +v);
-    console.log("major: ", major);
-    console.log("minor: ", minor);
-    console.log("patch: ", patch);
-    console.log("semvar: ", semvar);
+      let tomlObj = toml.parse(fs.readFileSync(CARGO_TOML_PATH, "utf-8"));
+      if (!tomlObj.package)
+        throw new Error("No package tag defined in Cargo.toml");
 
-    const updatedVersion = getUpdatedVersion(semvar, { major, minor, patch });
-    console.log("updatedVersion: ", updatedVersion);
-    // update version
-    tomlObj.package.version = updatedVersion;
-    // print updated version
-    console.log("tomlObj: ", tomlObj);
-    // save updated version
-    fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
+      tomlObj.package.version = getUpdatedVersion(
+        semvar,
+        tomlObj.package.version
+      );
 
-    // set output var to read in subsequent steps
-    core.exportVariable("UPDATED_VERSION", updatedVersion);
-  });
+      fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
+      // set output var to read in subsequent steps
+      core.exportVariable("UPDATED_VERSION", updatedVersion);
+      core.exportVariable("UPDATE_OK", true);
+    });
+  }
 
-  // set default output var
+  // set default output vars
   core.exportVariable("UPDATED_VERSION", "0.0.0");
+  core.exportVariable("UPDATE_OK", false);
 };

@@ -1,30 +1,30 @@
-name: "Publish to crates registry and Github"
-description: "Uploads a file to S3 bucket with a specific prefix"
+name: "Publish to updated package artifacts"
+description: "Publish to Crates registry and push updates to Github"
 inputs:
   # cannot load token directly in action, so we need to pass it in
   cargo-token:
-    description: "Path to the file to upload"
+    description: "Cargo token for authenticated requests"
     required: true
   # cannot load token directly in action, so we need to pass it in
   github-token:
-    description: "Path to the file to upload"
+    description: "Github token for authenticated requests"
     required: true
   package-name:
-    description: "Path to the file to upload"
+    description: "Package name to update"
     required: true
   path-to-cargo:
-    description: "Path to the file to upload"
+    description: "Path to the package to update's Cargo.toml"
     required: true
   pull-number:
-    description: "Path to the file to upload"
+    description: "Pull request numeric ID"
     required: true
   branch:
-    description: "Path to the file to upload"
+    description: "Branch to update"
     required: true
 
 permissions:
-  id-token: read # maybe write?
-  contents: write
+  id-token: read
+  contents: write # for file updates
   packages: write # for publish
 
 runs:
@@ -34,66 +34,55 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Assert changed files
-      uses: ./.github/actions/assert-changed-files
-      id: assert-changed-files
-      with:
-        pull-number: ${{ inputs.pull-number }}
-        package-name: ${{ inputs.package-name }}
-        extensions: '["rs"]'
-
-    - name: Fetch review comments for PR
+    - name: Map PR review to version update
       if: steps.assert-changed-files.outputs.assertion == 'true'
-      uses: ./.github/actions/fetch-pr-review-comments
-      id: fetch-pr-review-comments
+      uses: ./.github/actions/map-pr-review-to-version
+      id: map-pr-review-to-version
       with:
+        # todo: does this work?
+        owner: ${{ context.repo.owner }}
+        repo: ${{ context.repo.repo }}
         pull-number: ${{ inputs.pull-number }}
 
-    - name: Update cargo version
-      if: ${{ steps.fetch-pr-version.outputs.version != 'none' }}
+    - name: Update version in Cargo.toml
+      if: steps.map-pr-review-to-version.outputs.version != 'none'
       uses: ./.github/actions/update-cargo-version
       id: update-cargo-version
       with:
         # static for testing
-        semvar: ${{ steps.fetch-pr-review-comments.outputs.version }}
+        semvar: ${{ steps.map-pr-review-to-version.outputs.version }}
         cargo-path: ${{ inputs.path-to-cargo }}
 
-    - name: Upgrade program version
+    - name: Commit and tag version changes
+      if: steps.map-pr-review-to-version.outputs.version != 'none'
       id: upgrade-program-version
       shell: bash
       run: |
-        git status
-        echo "=========="
         git config user.name github-actions[bot]
         git config user.email github-actions[bot]@users.noreply.github.com
-        git log
-        echo "=========="
         git add $PATH_TO_CARGO && git commit -m "chore: update ${PACKAGE_NAME} crate to v${UPDATED_VERSION}" && git tag $PACKAGE_NAME@$UPDATED_VERSION
-        echo "=========="
-        git status
-        echo "=========="
-        git log
-        echo "=========="
-        git tag
       env:
         PACKAGE_NAME: ${{ inputs.package-name }}
         UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
         PATH_TO_CARGO: ${{ inputs.path-to-cargo }}
 
-    - name: Login via cargo
+    - name: Cargo login
+      if: steps.map-pr-review-to-version.outputs.version != 'none'
       run: cargo login $CARGO_TOKEN
       shell: bash
       env:
         CARGO_TOKEN: ${{ inputs.cargo-token }}
 
-    - name: Publish to crates
+    - name: Publish to crates registry
+      if: steps.map-pr-review-to-version.outputs.version != 'none'
       run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
       shell: bash
       env:
         CARGO_TOKEN: ${{ inputs.cargo-token }}
         PACKAGE_NAME: ${{ inputs.package-name }}
 
-    - name: Push changes
+    - name: Push changes to Github
+      if: steps.map-pr-review-to-version.outputs.version != 'none'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github-token }}

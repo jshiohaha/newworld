@@ -1,20 +1,20 @@
-name: "Fetch PR labels by name"
-description: "Fetch label names for a given PR"
+name: "Fetch PR labels"
+description: "Fetch all label names assigned to a PR"
 inputs:
   owner:
-    description: "Path to the file to upload"
+    description: "Repository owner"
     required: true
   repo:
-    description: "Path to the file to upload"
+    description: "Repository name"
     required: true
   pull-number:
-    description: "Path to the file to upload"
+    description: "Pull request number"
     required: true
 
 outputs:
   labels:
     description: Label names
-    value: ${{ steps.set-output-for-labels.outputs.labels }}
+    value: ${{ steps.set-output.outputs.labels }}
 
 permissions:
   contents: read
@@ -23,9 +23,9 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - name: Get PR info and parse label names
+    - name: Parse PR data for label names
       uses: actions/github-script@v4
-      id: set-result
+      id: fetch-labels
       with:
         script: |
           const request = {
@@ -44,9 +44,9 @@ runs:
             core.setFailed(`Request failed with error ${err}`)
           }
 
-    - name: Set output labels
-      id: set-output-for-labels
+    - name: Set labels as output
+      id: set-output
       run: echo "::set-output name=labels::$LABELS"
       shell: bash
       env:
-        LABELS: ${{steps.set-result.outputs.result}}
+        LABELS: ${{steps.fetch-labels.outputs.result}}

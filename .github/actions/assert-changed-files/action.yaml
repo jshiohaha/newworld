@@ -4,13 +4,14 @@ inputs:
   pull-number:
     description: "Path to the file to upload"
     required: true
+  # can optionally set required = false
   package-name:
-    description: "Path to the file to upload"
+    description: "Scope of package to assert"
     required: true
   extensions:
-    description: "Path to the file to upload"
+    description: "Scope of file extensions to assert"
     required: true
-  # add `excludes` parameter to filter out certain files
+  # can also add `excludes` parameter to filter out certain files
 
 outputs:
   assertion:
@@ -36,3 +37,10 @@ runs:
       # env.ASSERTION exported from script.js
       run: echo "::set-output name=assertion::${{ env.ASSERTION }}"
       shell: bash
+# - name: Assert changed files
+#   uses: ./.github/actions/assert-changed-files
+#   id: assert-changed-files
+#   with:
+#     pull-number: ${{ inputs.pull-number }}
+#     package-name: ${{ inputs.package-name }}
+#     extensions: '["rs"]'

@@ -79,20 +79,10 @@ jobs:
         uses: ./.github/actions/publish-to-npm
         id: publish-to-npm
         with:
+          node-version: ${{ env.NODE_VERSION }}
           npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-name: newworld
-          path-to-package-json: ./newworld/js
+          path-to-package-dir: ./newworld/js
           pull-number: 8 # static for testing
           branch: main # ${{ github.ref }}
-
-
-    # from labels instead
-    # - name: Fetch version command for PR
-    #   uses: ./.github/actions/fetch-pr-version
-    #   id: fetch-pr-version
-    #   with:
-    #     owner: context.repo.owner
-    #     repo: context.repo.repo
-    #     # static for testing
-    #     pull_number: 8

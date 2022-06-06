@@ -3,30 +3,40 @@ const VALID_AUTHOR_ASSOCIATIONS = ["owner", "member", "contributor"];
 const VALID_REVIEW_STATES = ["approved", "commented"];
 const VERSIONING_REGEX = /^(patch|minor|major)$/g;
 
+/**
+ * Search reviews for first instance with a semvar version command.
+ * Reviews are expected to be in reverse chronological order.
+ *
+ * @param {reviews} list A list of review objects returned from the `listReviews` API
+ * @return {string} The semvar version for the review
+ */
 const findFirstReviewWithVersion = (reviews) => {
   let version = "none";
   for (const review of reviews) {
     if (!isValidReview(review)) continue;
     const reviewVersion = getVersionFromReview(review);
-    if (reviewVersion.length > 0) {
+    if (!reviewVersion) {
       // update version and break, we found the most recent version comment
       version = reviewVersion;
       break;
     }
   }
 
-  console.log("findFirstReviewWithVersion::version: ", version);
-
   return version;
 };
 
+/**
+ * Filters the review body for version update based on `VERSIONING_REGEX`. Returns the last found instance,
+ * otherwise null.
+ *
+ * @param {review} obj A review obj returned from the `listReviews` API
+ * @return {string} The semvar version for the review
+ */
 const getVersionFromReview = (review) => {
   const body = review.body
     .toLowerCase()
     .split("\n")
     .filter((t) => t.length > 0);
-
-  console.log("body: ", body);
 
   const versionCommentsInBody = body.filter((c) =>
     VERSIONING_REGEX.test(c.trim())
@@ -34,25 +44,37 @@ const getVersionFromReview = (review) => {
 
   // return empty list or last matching version comment
   return versionCommentsInBody.length === 0
-    ? []
+    ? null
     : versionCommentsInBody[versionCommentsInBody.length - 1];
 };
 
+/**
+ * Returns true if a review matches heuristics for a valid review. Otherwise, false.
+ *
+ * @param {review} obj A review obj returned from the `listReviews` API
+ * @return {boolean} Indication of whether or not this review is valid
+ */
 const isValidReview = (review) => {
   const author_association = review.author_association.toLowerCase();
   const state = review.state.toLowerCase();
 
-  console.log("check VALID_AUTHOR_ASSOCIATIONS");
-  console.log("author_association: ", author_association);
   if (!VALID_AUTHOR_ASSOCIATIONS.includes(author_association)) return false;
-  console.log("check VALID_REVIEW_STATES");
-  console.log("state: ", state);
   if (!VALID_REVIEW_STATES.includes(state)) return false;
-
-  console.log(`review is valid: ${review}`);
   return true;
 };
 
+/**
+ * Returns all reviews for a given PR in reverse chronological order.
+ * The function will iterate through pages to fetch all reviews,
+ * with a default of 100 reviews per page.
+ *
+ * @param {github} obj An @actions/github object
+ * @param {owner} string The owners of the repository
+ * @param {repo} string The name of the repository
+ * @param {pull_number} n The numeric pull requests ID.
+ * @param {per_page} n The page size for a given GET request.
+ * @return {reviews} The list of reviews associated with this PR
+ */
 fetchPullRequestReviewsDesc = async (
   github,
   owner,
@@ -85,27 +107,31 @@ fetchPullRequestReviewsDesc = async (
       }),
     ];
 
-    console.log(`fetched page ${page}`);
+    console.log(`Fetched reviews page: ${page}`);
     page += 1;
   }
 
   console.log(`Fetched ${reviews.length} reviews for PR ${pull_number}`);
-
   return reviews.length === 0 ? [] : reviews.reverse();
 };
 
-module.exports = async ({ github, context, core }, pull_number) => {
-  // const { SHA } = process.env;
-
+/**
+ * Returns all reviews for a given PR. The function will iterate through pages to fetch all reviews, with a default of 100 reviews per page.
+ *
+ * @param {github} obj An @actions/github object
+ * @param {core} obj An @actions/core object
+ * @param {request} obj The object with request data
+ * @return void
+ */
+// context: _context,
+module.exports = async ({ github, core }, request) => {
+  const { owner, repo, pull_number } = request;
   const reviews = await fetchPullRequestReviewsDesc(
     github,
-    context.repo.owner,
-    context.repo.repo,
+    owner,
+    repo,
     pull_number
   );
   const version = findFirstReviewWithVersion(reviews);
-  console.log("version: ", version);
   core.exportVariable("REVIEW_VERSION", version);
-
-  return version;
 };

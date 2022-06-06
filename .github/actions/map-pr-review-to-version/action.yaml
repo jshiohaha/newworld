@@ -1,0 +1,45 @@
+name: "Map PR review comments to version"
+description:
+  "Map the last comment associated with a package upgrade to the specific semvar version update -
+  patch, minor, or major"
+inputs:
+  owner:
+    description: "Repository owner"
+    required: true
+  repo:
+    description: "Repository name"
+    required: true
+  pull-number:
+    description: "Pull request number"
+    required: true
+
+outputs:
+  version:
+    description: Version
+    value: ${{ steps.set-version.outputs.version }}
+
+permissions:
+  contents: read
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Map review comments to version
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const script = require('.github/actions/map-pr-review-to-version/script.js')
+          const request = {
+            owner: ${{ inputs.owner }},
+            repo: ${{ inputs.repo }},
+            pull_number: ${{ inputs.pull-number }}
+          }
+          core.info(`Getting PR #${request.pull-number} from ${request.owner}/${request.repo}`)
+          await script({github, core}, request)
+
+    - name: Set version
+      id: set-version
+      # env.REVIEW_VERSION exported from script.js
+      run: echo "::set-output name=version::${{ env.REVIEW_VERSION }}"
+      shell: bash

@@ -1,17 +1,20 @@
-name: "Update cargo version"
-description: "Update cargo version"
+name: "Update crate version"
+description: "Update crate version based on semvar version bump"
 inputs:
   semvar:
-    description: "Version update to make"
+    description: "Semvar version update to make"
     required: true
   cargo-path:
-    description: "Version update to make"
+    description: "Path to Cargo.toml"
     required: true
 
 outputs:
   version:
     description: Updated version based on semvar convention
-    value: ${{ steps.set-updated-version.outputs.version }}
+    value: ${{ steps.set-output.outputs.version }}
+  update-ok:
+    description: Updated status indicating whether update was successful or not
+    value: ${{ steps.set-output.outputs.update_ok }}
 
 permissions:
   contents: read
@@ -34,11 +37,12 @@ runs:
         script: |
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          const updatedVersion = script({github, context, core, toml}, '${{ inputs.cargo-path }}', '${{ inputs.semvar }}')
-          console.log('updatedVersion: ', updatedVersion);
+          script({core, toml}, '${{ inputs.cargo-path }}', '${{ inputs.semvar }}')
 
-    - name: Set updated version
-      id: set-updated-version
-      # env.UPDATED_VERSION exported from script.js
-      run: echo "::set-output name=version::${{ env.UPDATED_VERSION }}"
+    - name: Set outputs
+      id: set-output
+      # env.UPDATED_VERSION and env.UPDATE_OK exported from script.js
+      run: |
+        echo "::set-output name=version::${{ env.UPDATED_VERSION }}"
+        echo "::set-output name=update_ok::${{ env.UPDATE_OK }}"
       shell: bash
