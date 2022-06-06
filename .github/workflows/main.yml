@@ -16,7 +16,6 @@ on:
 permissions:
   id-token: write
   contents: write
-  # packages: write # for publish
 
 env:
   NODE_VERSION: 17.0.1
@@ -64,25 +63,24 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Publish updated artifacts to Crates and Github
-        uses: ./.github/actions/publish-to-crates
-        id: publish-to-crates
-        with:
-          cargo-token: ${{ secrets.CARGO_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-name: newworld
-          path-to-cargo: ./newworld/program/Cargo.toml
-          pull-number: 8 # ${{ github.event.number }}
-          branch: main # ${{ github.ref }}
-
-
-      # - name: Publish updated artifacts to NPM and Github
-      #   uses: ./.github/actions/publish-to-npm
-      #   id: publish-to-npm
+      # - name: Publish updated artifacts to Crates and Github
+      #   uses: ./.github/actions/publish-to-crates
+      #   id: publish-to-crates
       #   with:
-      #     npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      #     cargo-token: ${{ secrets.CARGO_TOKEN }}
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
       #     package-name: newworld
-      #     path-to-package-dir: ./newworld/js
+      #     path-to-cargo: ./newworld/program/Cargo.toml
       #     pull-number: 8 # ${{ github.event.number }}
       #     branch: main # ${{ github.ref }}
+
+      - name: Publish updated artifacts to NPM and Github
+        uses: ./.github/actions/publish-to-npm
+        id: publish-to-npm
+        with:
+          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: newworld
+          path-to-package-dir: ./newworld/js
+          pull-number: 8 # ${{ github.event.number }}
+          branch: main # ${{ github.ref }}
