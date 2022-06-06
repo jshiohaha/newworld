@@ -34,17 +34,17 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    # - name: Map PR review to version update
-    #   uses: ./.github/actions/map-pr-review-to-version
-    #   id: map-pr-review-to-version
-    #   with:
-    #     pull-number: ${{ inputs.pull-number }}
-
-    - name: Map PR labels to version update
-      uses: ./.github/actions/map-labels-to-version
-      id: map-pr-review-to-version # map-labels-to-version
+    - name: Map PR review to version update
+      uses: ./.github/actions/map-pr-review-to-version
+      id: map-pr-review-to-version
       with:
         pull-number: ${{ inputs.pull-number }}
+
+    # - name: Map PR labels to version update
+    #   uses: ./.github/actions/map-labels-to-version
+    #   id: map-pr-review-to-version # map-labels-to-version
+    #   with:
+    #     pull-number: ${{ inputs.pull-number }}
 
     - name: Update version in Cargo.toml
       if: steps.map-pr-review-to-version.outputs.version != 'none'
