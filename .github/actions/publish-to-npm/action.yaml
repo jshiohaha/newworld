@@ -52,7 +52,7 @@ runs:
       uses: ./.github/actions/map-labels-to-version
       id: map-pr-review-to-version # map-labels-to-version
       with:
-        pull_number: ${{ inputs.pull-number }}
+        pull-number: ${{ inputs.pull-number }}
 
     - name: Print updated package version
       shell: bash
