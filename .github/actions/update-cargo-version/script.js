@@ -43,7 +43,7 @@ module.exports = ({ core, toml }, cargo_path, semvar) => {
         throw new Error("No read and write access");
       }
 
-      let tomlObj = toml.parse(fs.readFileSync(CARGO_TOML_PATH, "utf-8"));
+      let tomlObj = toml.parse(fs.readFileSync(cargo_path, "utf-8"));
       if (!tomlObj.package)
         throw new Error("No package tag defined in Cargo.toml");
 
@@ -52,7 +52,7 @@ module.exports = ({ core, toml }, cargo_path, semvar) => {
         tomlObj.package.version
       );
 
-      fs.writeFileSync(CARGO_TOML_PATH, toml.stringify(tomlObj));
+      fs.writeFileSync(cargo_path, toml.stringify(tomlObj));
       // set output var to read in subsequent steps
       core.exportVariable("UPDATED_VERSION", updatedVersion);
       core.exportVariable("UPDATE_OK", true);
