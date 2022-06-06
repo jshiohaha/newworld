@@ -35,6 +35,7 @@ const getUpdatedVersion = (semvar, version) => {
  * @return void
  */
 module.exports = ({ core, toml }, cargo_path, semvar) => {
+  console.log("semvar: ", semvar);
   if ([MAJOR, MINOR, PATCH].includes(semvar)) {
     // Verify read and write permissions
     fs.access(cargo_path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
