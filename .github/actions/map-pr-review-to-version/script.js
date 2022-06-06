@@ -132,5 +132,6 @@ module.exports = async ({ github, context, core }, pull_number) => {
     pull_number
   );
   const version = findFirstReviewWithVersion(reviews);
-  core.exportVariable("REVIEW_VERSION", version);
+  // force js to recognize this as a string
+  core.exportVariable("REVIEW_VERSION", `${version}`);
 };
