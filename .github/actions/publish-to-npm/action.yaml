@@ -1,10 +1,6 @@
 name: "Publish to updated package artifacts"
 description: "Publish to NPM registry and push updates to Github"
 inputs:
-  # action fails without explicit node version, so we pass in via param
-  node-version:
-    description: "Node version to use in the action"
-    required: true
   # cannot load token directly in action, so we need to pass it in
   npm-token:
     description: "NPM token for authenticated requests"
@@ -36,21 +32,10 @@ runs:
     - uses: actions/checkout@v3
       with:
         node-version: ${{ env.NODE_VERSION }}
-    # - uses: actions/setup-node@v2
-    #   with:
-    #     node-version: ${{ inputs.node-version }}
-    #     cache: "yarn"
-    #     cache-dependency-path: ${{ inputs.path-to-package-dir}}/yarn.lock
 
-    # - name: Map PR review to version update
-    #   uses: ./.github/actions/map-pr-review-to-version
-    #   id: map-pr-review-to-version
-    #   with:
-    #     pull-number: ${{ inputs.pull-number }}
-
-    - name: Map PR labels to version update
-      uses: ./.github/actions/map-labels-to-version
-      id: map-pr-review-to-version # map-labels-to-version
+    - name: Map PR review to version update
+      uses: ./.github/actions/map-pr-review-to-version
+      id: map-pr-review-to-version
       with:
         pull-number: ${{ inputs.pull-number }}
 
