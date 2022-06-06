@@ -43,7 +43,6 @@ runs:
     #     cache-dependency-path: ${{ inputs.path-to-package-dir}}/yarn.lock
 
     - name: Map PR review to version update
-      if: steps.assert-changed-files.outputs.assertion == 'true'
       uses: ./.github/actions/map-pr-review-to-version
       id: map-pr-review-to-version
       with:
