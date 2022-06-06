@@ -1,7 +1,6 @@
 # required permissions:
-#   id-token: write
-#   contents: write
-#   packages: write
+#   id-token: write for writing to github
+#   contents: write for updating package contents
 
 name: "Publish to updated package artifacts"
 description: "Publish to Crates registry and push updates to Github"

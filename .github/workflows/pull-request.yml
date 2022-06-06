@@ -9,7 +9,6 @@ on:
 permissions:
   id-token: write
   contents: write
-  packages: write # for publish
 
 # env:
 #   NODE_VERSION: 17.0.1
