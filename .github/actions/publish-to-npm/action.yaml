@@ -48,9 +48,12 @@ runs:
       id: map-pr-review-to-version
       with:
         # todo: does this work?
-        owner: context.repo.owner
-        repo: context.repo.repo
+        owner: ${{ github.context.repo.owner }}
+        repo: ${{ github.context.repo.repo }}
         pull-number: ${{ inputs.pull-number }}
+
+    - name: Print updated package version
+      run: echo "Updated version: $steps.map-pr-review-to-version.outputs.version"
 
     - name: Install dependencies && upgrade package version
       if: steps.map-pr-review-to-version.outputs.version != 'none'
@@ -62,6 +65,9 @@ runs:
         git config user.name github-actions[bot]
         git config user.email github-actions[bot]@users.noreply.github.com
         npm version ${{ steps.map-pr-review-to-version.outputs.version }}
+        echo "\n\nLog after update"
+        git log
+        echo "\n\n"
       env:
         PATH_TO_PACKAGE_DIR: ${{ inputs.path-to-package-dir }}
 
