@@ -3,12 +3,6 @@ description:
   "Map the last comment associated with a package upgrade to the specific semvar version update -
   patch, minor, or major"
 inputs:
-  owner:
-    description: "Repository owner"
-    required: true
-  repo:
-    description: "Repository name"
-    required: true
   pull-number:
     description: "Pull request number"
     required: true
@@ -31,8 +25,8 @@ runs:
         script: |
           const script = require('.github/actions/map-pr-review-to-version/script.js')
           const request = {
-            owner: ${{ inputs.owner }},
-            repo: ${{ inputs.repo }},
+            owner: context.repo.owner,
+            repo: context.repo.repo,
             pull_number: ${{ inputs.pull-number }}
           }
           core.info(`Getting PR #${request.pull-number} from ${request.owner}/${request.repo}`)

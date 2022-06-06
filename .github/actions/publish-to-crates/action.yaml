@@ -38,9 +38,6 @@ runs:
       uses: ./.github/actions/map-pr-review-to-version
       id: map-pr-review-to-version
       with:
-        # todo: does this work?
-        owner: ${{ context.repo.owner }}
-        repo: ${{ context.repo.repo }}
         pull-number: ${{ inputs.pull-number }}
 
     - name: Update version in Cargo.toml
