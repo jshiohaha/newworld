@@ -26,5 +26,5 @@ runs:
     - name: Set version
       id: set-version
       # env.REVIEW_VERSION exported from script.js
-      run: echo "::set-output name=version::${{ env.REVIEW_VERSION }}"
+      run: echo "::set-output name=version::'${{ env.REVIEW_VERSION }}'"
       shell: bash

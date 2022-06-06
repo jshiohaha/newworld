@@ -29,11 +29,11 @@ runs:
           const isOfType = (lbls, v) => lbls.filter(l => l.toLowerCase() === v).length > 0
           const labels = ${{ steps.fetch-pr-labels.outputs.labels }}
           if (labels.length > 0) {
-            if (isOfType(labels, "version:major")) return major
-            if (isOfType(labels, "version:minor")) return minor
-            if (isOfType(labels, "version:patch")) return patch
+            if (isOfType(labels, "version:major")) return 'major'
+            if (isOfType(labels, "version:minor")) return 'minor'
+            if (isOfType(labels, "version:patch")) return 'patch'
           }
-          return none
+          return 'none'
 
     - name: Set output path to uploaded file
       id: set-version-output
