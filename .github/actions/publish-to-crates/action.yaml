@@ -39,12 +39,6 @@ runs:
       with:
         pull-number: ${{ inputs.pull-number }}
 
-    # - name: Map PR labels to version update
-    #   uses: ./.github/actions/map-labels-to-version
-    #   id: map-pr-review-to-version # map-labels-to-version
-    #   with:
-    #     pull-number: ${{ inputs.pull-number }}
-
     - name: Update version in Cargo.toml
       if: steps.map-pr-review-to-version.outputs.version != 'none'
       uses: ./.github/actions/update-cargo-version
@@ -72,24 +66,24 @@ runs:
         UPDATED_VERSION: ${{ steps.update-cargo-version.outputs.version }}
         PATH_TO_CARGO: ${{ inputs.path-to-cargo }}
 
-    # - name: Cargo login
-    #   if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
-    #   run: cargo login $CARGO_TOKEN
-    #   shell: bash
-    #   env:
-    #     CARGO_TOKEN: ${{ inputs.cargo-token }}
+    - name: Cargo login
+      if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
+      run: cargo login $CARGO_TOKEN
+      shell: bash
+      env:
+        CARGO_TOKEN: ${{ inputs.cargo-token }}
 
-    # - name: Publish to crates registry
-    #   if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
-    #   run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
-    #   shell: bash
-    #   env:
-    #     CARGO_TOKEN: ${{ inputs.cargo-token }}
-    #     PACKAGE_NAME: ${{ inputs.package-name }}
+    - name: Publish to crates registry
+      if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
+      run: cargo publish --token $CARGO_TOKEN -p $PACKAGE_NAME
+      shell: bash
+      env:
+        CARGO_TOKEN: ${{ inputs.cargo-token }}
+        PACKAGE_NAME: ${{ inputs.package-name }}
 
-    # - name: Push changes to Github
-    #   if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ inputs.github-token }}
-    #     branch: ${{ inputs.branch }}
+    - name: Push changes to Github
+      if: steps.map-pr-review-to-version.outputs.version != 'none' && steps.update-cargo-version.outputs.update-ok == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.github-token }}
+        branch: ${{ inputs.branch }}
