@@ -1,6 +1,6 @@
 export const sum = (a: number, b: number) => {
   if ('development' === process.env.NODE_ENV) {
-    console.log('boop bop');
+    console.log('boop bop mcboop');
   }
   return a + b;
 };
