@@ -49,6 +49,11 @@ runs:
         semvar: ${{ steps.map-pr-review-to-version.outputs.version }}
         cargo-path: ${{ inputs.path-to-cargo }}
 
+    - name: Print updated package version
+      shell: bash
+      run: |
+        echo "Updated version: ${{ steps.map-pr-review-to-version.outputs.version }}"
+
     - name: Commit and tag version changes
       if: steps.map-pr-review-to-version.outputs.version != 'none'
       id: upgrade-program-version
