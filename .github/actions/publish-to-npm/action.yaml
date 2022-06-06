@@ -21,11 +21,6 @@ inputs:
     description: "Branch to update"
     required: true
 
-permissions:
-  id-token: read
-  contents: write # for file updates
-  packages: write # for publish
-
 runs:
   using: "composite"
   steps:
