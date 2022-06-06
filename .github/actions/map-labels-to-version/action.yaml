@@ -1,12 +1,6 @@
 name: "Map labels to version"
 description: "Map labels assigned to a PR to a specific semvar version for package updates"
 inputs:
-  owner:
-    description: "Repository owner"
-    required: true
-  repo:
-    description: "Repository name"
-    required: true
   pull-number:
     description: "Pull request number"
     required: true
@@ -28,7 +22,7 @@ runs:
       uses: ./.github/actions/fetch-pr-labels
       id: fetch-pr-labels
       with:
-        pull_number: ${{ inputs.pull-number }}
+        pull-number: ${{ inputs.pull-number }}
 
     - name: Map labels to version
       uses: actions/github-script@v4
