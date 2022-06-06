@@ -33,9 +33,15 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Map PR review to version update
-      uses: ./.github/actions/map-pr-review-to-version
-      id: map-pr-review-to-version
+    # - name: Map PR review to version update
+    #   uses: ./.github/actions/map-pr-review-to-version
+    #   id: map-pr-review-to-version
+    #   with:
+    #     pull-number: ${{ inputs.pull-number }}
+
+    - name: Map PR labels to version update
+      uses: ./.github/actions/map-labels-to-version
+      id: map-pr-review-to-version # map-labels-to-version
       with:
         pull-number: ${{ inputs.pull-number }}
 
@@ -44,7 +50,6 @@ runs:
       uses: ./.github/actions/update-cargo-version
       id: update-cargo-version
       with:
-        # static for testing
         semvar: ${{ steps.map-pr-review-to-version.outputs.version }}
         cargo-path: ${{ inputs.path-to-cargo }}
 
