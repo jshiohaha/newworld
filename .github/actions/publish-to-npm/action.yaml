@@ -54,7 +54,8 @@ runs:
 
     - name: Print updated package version
       shell: bash
-      run: echo "$steps.map-pr-review-to-version.outputs.version"
+      run: |
+        echo "Updated version: ${{ steps.map-pr-review-to-version.outputs.version }}"
 
     - name: Install dependencies && upgrade package version
       if: steps.map-pr-review-to-version.outputs.version != 'none'
