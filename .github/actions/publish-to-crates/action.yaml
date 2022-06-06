@@ -40,12 +40,6 @@ runs:
       with:
         pull-number: ${{ inputs.pull-number }}
 
-    # - name: Map PR labels to version update
-    #   uses: ./.github/actions/map-labels-to-version
-    #   id: map-pr-review-to-version # map-labels-to-version
-    #   with:
-    #     pull-number: ${{ inputs.pull-number }}
-
     - name: Update version in Cargo.toml
       if: steps.map-pr-review-to-version.outputs.version != 'none'
       uses: ./.github/actions/update-cargo-version

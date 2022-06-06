@@ -23,7 +23,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./newworld/program
+    working-directory: ./newworld/js
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -38,13 +38,13 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Check PR Labels
-        id: check-pr-labels
-        uses: paul1k/check-pr-labels@v1.0.0
+      - name: Publish updated artifacts to NPM and Github
+        uses: ./.github/actions/publish-to-npm
+        id: publish-to-npm
         with:
+          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pull-number: ${{ github.event.pull_request.number }}
-          labels: '["Version:Patch"]'
-
-      - name: See result
-        run: echo "${{ steps.check-pr-labels.outputs.result }}"
+          package-name: newworld
+          path-to-package-dir: ./newworld/js
+          pull-number: ${{ github.event.number }}
+          branch: ${{ github.ref }}
