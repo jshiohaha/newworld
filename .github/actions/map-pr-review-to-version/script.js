@@ -15,7 +15,8 @@ const findFirstReviewWithVersion = (reviews) => {
   for (const review of reviews) {
     if (!isValidReview(review)) continue;
     const reviewVersion = getVersionFromReview(review);
-    if (!reviewVersion) {
+    console.log("reviewVersion: ", reviewVersion);
+    if (reviewVersion !== null) {
       // update version and break, we found the most recent version comment
       version = reviewVersion;
       break;
@@ -124,7 +125,6 @@ fetchPullRequestReviewsDesc = async (
  * @param {pull_number} n The numeric pull request ID
  * @return void
  */
-// context: _context,
 module.exports = async ({ github, context, core }, pull_number) => {
   const reviews = await fetchPullRequestReviewsDesc(
     github,
