@@ -26,15 +26,14 @@ runs:
       id: parse-labels-for-version
       with:
         script: |
+          const isOfType = (lbls, v) => lbls.filter(l => l.toLowerCase() === v).length > 0
           const labels = ${{ steps.fetch-pr-labels.outputs.labels }}
-          if (labels.length === 0) return "none";
-          const isMajor = labels.filter(l => l.toLowerCase() === "version:major").length > 0
-          if (isMajor) return "major"
-          const isMinor = labels.filter(l => l.toLowerCase() === "version:minor").length > 0
-          if (isMinor) return "minor"
-          const isPatch = labels.filter(l => l.toLowerCase() === "version:patch").length > 0
-          if (isPatch) return "patch"
-          return "none"
+          if (labels.length > 0) {
+            if (isOfType(labels, "version:major")) return 'major'
+            if (isOfType(labels, "version:minor")) return 'minor'
+            if (isOfType(labels, "version:patch")) return 'patch'
+          }
+          return 'none'
 
     - name: Set output path to uploaded file
       id: set-version-output
