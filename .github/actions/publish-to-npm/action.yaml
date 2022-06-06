@@ -1,3 +1,8 @@
+# required permissions:
+#   id-token: write
+#   contents: write
+#   packages: write
+
 name: "Publish to updated package artifacts"
 description: "Publish to NPM registry and push updates to Github"
 inputs:

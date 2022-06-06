@@ -12,9 +12,6 @@ outputs:
     description: Version
     value: ${{ steps.set-version.outputs.version }}
 
-permissions:
-  contents: read
-
 runs:
   using: "composite"
   steps:

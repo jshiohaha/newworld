@@ -18,9 +18,6 @@ outputs:
     description: Version
     value: ${{ steps.set-assertion.outputs.assertion }}
 
-permissions:
-  contents: read
-
 runs:
   using: "composite"
   steps:

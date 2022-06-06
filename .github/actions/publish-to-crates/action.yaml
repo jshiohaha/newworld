@@ -1,3 +1,8 @@
+# required permissions:
+#   id-token: write
+#   contents: write
+#   packages: write
+
 name: "Publish to updated package artifacts"
 description: "Publish to Crates registry and push updates to Github"
 inputs:
@@ -21,11 +26,6 @@ inputs:
   branch:
     description: "Branch to update"
     required: true
-
-permissions:
-  id-token: write
-  contents: write # for file updates
-  packages: write # for publish
 
 runs:
   using: "composite"

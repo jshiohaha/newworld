@@ -10,9 +10,6 @@ outputs:
     description: Label names
     value: ${{ steps.set-output.outputs.labels }}
 
-permissions:
-  contents: read
-
 runs:
   using: "composite"
   steps:

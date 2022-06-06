@@ -10,9 +10,6 @@ outputs:
     description: Semvar version
     value: ${{ steps.set-version-output.outputs.version }}
 
-permissions:
-  contents: read
-
 runs:
   using: "composite"
   steps:

@@ -15,7 +15,7 @@ on:
 
 permissions:
   id-token: write
-  contents: write
+  # contents: write
   packages: write # for publish
 
 env:
@@ -75,13 +75,13 @@ jobs:
       #     pull-number: 8 # ${{ github.event.number }}
       #     branch: main # ${{ github.ref }}
 
-      # - name: Publish updated artifacts to NPM and Github
-      #   uses: ./.github/actions/publish-to-npm
-      #   id: publish-to-npm
-      #   with:
-      #     npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-name: newworld
-      #     path-to-package-dir: ./newworld/js
-      #     pull-number: ${{ github.event.number }}
-      #     branch: ${{ github.ref }}
+      - name: Publish updated artifacts to NPM and Github
+        uses: ./.github/actions/publish-to-npm
+        id: publish-to-npm
+        with:
+          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: newworld
+          path-to-package-dir: ./newworld/js
+          pull-number: 8 # ${{ github.event.number }}
+          branch: main # ${{ github.ref }}

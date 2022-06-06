@@ -16,9 +16,6 @@ outputs:
     description: Updated status indicating whether update was successful or not
     value: ${{ steps.set-output.outputs.update_ok }}
 
-permissions:
-  contents: read
-
 runs:
   using: "composite"
   steps:
