@@ -25,8 +25,8 @@ runs:
         script: |
           const script = require('.github/actions/map-pr-review-to-version/script.js')
           const request = {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            owner: ${{ context.repo.owner }},
+            repo: ${{ context.repo.repo }},
             pull_number: ${{ inputs.pull-number }}
           }
           core.info(`Getting PR #${request.pull-number} from ${request.owner}/${request.repo}`)
