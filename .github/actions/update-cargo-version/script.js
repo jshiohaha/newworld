@@ -54,7 +54,7 @@ module.exports = ({ core, toml }, cargo_path, semvar) => {
 
       fs.writeFileSync(cargo_path, toml.stringify(tomlObj));
       // set output var to read in subsequent steps
-      core.exportVariable("UPDATED_VERSION", updatedVersion);
+      core.exportVariable("UPDATED_VERSION", tomlObj.package.version);
       core.exportVariable("UPDATE_OK", true);
     });
   }
