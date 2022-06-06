@@ -34,7 +34,7 @@ runs:
         script: |
           const toml = require('@iarna/toml')
           const script = require('.github/actions/update-cargo-version/script.js')
-          script({core, toml}, '${{ inputs.cargo-path }}', '${{ inputs.semvar }}')
+          script({core, toml}, '${{ inputs.cargo-path }}', ${{ inputs.semvar }})
 
     - name: Set outputs
       id: set-output
