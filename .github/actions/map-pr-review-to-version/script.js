@@ -82,6 +82,7 @@ fetchPullRequestReviewsDesc = async (
   pull_number,
   per_page = 100
 ) => {
+  console.log(`Getting PR #${pull_number} from ${owner}/${repo}`);
   let page = 0;
   let reviews = []; // string[]
 
@@ -120,16 +121,15 @@ fetchPullRequestReviewsDesc = async (
  *
  * @param {github} obj An @actions/github object
  * @param {core} obj An @actions/core object
- * @param {request} obj The object with request data
+ * @param {pull_number} n The numeric pull request ID
  * @return void
  */
 // context: _context,
-module.exports = async ({ github, core }, request) => {
-  const { owner, repo, pull_number } = request;
+module.exports = async ({ github, context, core }, pull_number) => {
   const reviews = await fetchPullRequestReviewsDesc(
     github,
-    owner,
-    repo,
+    context.repo.owner,
+    context.repo.repo,
     pull_number
   );
   const version = findFirstReviewWithVersion(reviews);
