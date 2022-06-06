@@ -48,8 +48,8 @@ runs:
       id: map-pr-review-to-version
       with:
         # todo: does this work?
-        owner: ${{ context.repo.owner }}
-        repo: ${{ context.repo.repo }}
+        owner: context.repo.owner
+        repo: context.repo.repo
         pull-number: ${{ inputs.pull-number }}
 
     - name: Install dependencies && upgrade package version
