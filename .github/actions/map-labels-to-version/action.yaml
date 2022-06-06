@@ -1,19 +1,19 @@
-name: "Fetch PR version command"
-description: "Fetch semvar version command given PR"
+name: "Map labels to version"
+description: "Map labels assigned to a PR to a specific semvar version for package updates"
 inputs:
   owner:
-    description: "Path to the file to upload"
+    description: "Repository owner"
     required: true
   repo:
-    description: "Path to the file to upload"
+    description: "Repository name"
     required: true
   pull-number:
-    description: "Path to the file to upload"
+    description: "Pull request number"
     required: true
 
 outputs:
   version:
-    description: Version commmand
+    description: Semvar version
     value: ${{ steps.set-version-output.outputs.version }}
 
 permissions:
@@ -28,19 +28,14 @@ runs:
       uses: ./.github/actions/fetch-pr-labels
       id: fetch-pr-labels
       with:
-        owner: ${{ inputs.owner }}
-        repo: ${{ inputs.repo }}
         pull_number: ${{ inputs.pull-number }}
 
-    # parse labels
-    - name: Parse PR labels for semvar version
+    - name: Map labels to version
       uses: actions/github-script@v4
       id: parse-labels-for-version
       with:
         script: |
           const labels = ${{ steps.fetch-pr-labels.outputs.labels }}
-          console.log(labels.length);
-          console.log(labels);
           if (labels.length === 0) return "none";
           const isMajor = labels.filter(l => l.toLowerCase() === "version:major").length > 0
           if (isMajor) return "major"

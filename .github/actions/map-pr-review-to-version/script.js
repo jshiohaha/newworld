@@ -15,8 +15,7 @@ const findFirstReviewWithVersion = (reviews) => {
   for (const review of reviews) {
     if (!isValidReview(review)) continue;
     const reviewVersion = getVersionFromReview(review);
-    console.log("reviewVersion: ", reviewVersion);
-    if (reviewVersion !== null) {
+    if (reviewVersion) {
       // update version and break, we found the most recent version comment
       version = reviewVersion;
       break;

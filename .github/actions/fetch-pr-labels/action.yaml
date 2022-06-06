@@ -1,12 +1,6 @@
 name: "Fetch PR labels"
 description: "Fetch all label names assigned to a PR"
 inputs:
-  owner:
-    description: "Repository owner"
-    required: true
-  repo:
-    description: "Repository name"
-    required: true
   pull-number:
     description: "Pull request number"
     required: true
@@ -29,11 +23,11 @@ runs:
       with:
         script: |
           const request = {
-            owner: ${{ inputs.owner }},
-            repo: ${{ inputs.repo }},
+            owner: context.repo.owner,
+            repo: context.repo.repo,
             pull_number: ${{ inputs.pull-number }}
           }
-          core.info(`Getting PR #${request.pull-number} from ${request.owner}/${request.repo}`)
+          core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
           try {
             const { data } = await github.pulls.get(request)
             core.info(`Got PR data: ${JSON.stringify(data)}`)
