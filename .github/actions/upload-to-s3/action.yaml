@@ -39,6 +39,17 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
+    - name: Print inputs
+      run: |
+        echo "path-to-file: ${{ inputs.path-to-file }}"
+        echo "name: ${{ inputs.name }}"
+        echo "account-id: ${{ inputs.account-id }}"
+        echo "region: ${{ inputs.region }}"
+        echo "role: ${{ inputs.role }}"
+        echo "bucket: ${{ inputs.bucket }}"
+        echo "prefix: ${{ inputs.prefix }}"
+      shell: bash
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
