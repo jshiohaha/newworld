@@ -60,7 +60,7 @@ runs:
       id: set-pull-number
       shell: bash
       run: |
-        if [[ '${{ inputs.pull-number }}'' != '' ]]
+        if [[ '${{ inputs.pull-number }}' != '' ]]
         then
             echo "::set-output name=pull-number::${{ inputs.pull-number || -1 }}"
         else
