@@ -29,6 +29,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         node-version: ${{ env.NODE_VERSION }}
+
     - uses: ./.github/actions/anchor-publish/
     - uses: actions/upload-artifact@v2
       with:
