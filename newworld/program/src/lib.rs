@@ -14,7 +14,6 @@ pub mod newworld {
     pub fn add(ctx: Context<Add>) -> Result<()> {
         msg!("add operation");
         msg!("secondary print statement");
-        msg!("tertiary print statement");
         Ok(())
     }
 }
