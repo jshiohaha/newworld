@@ -21,12 +21,13 @@ runs:
       # assummption: we only care about the latest PR associated with the commit?
       with:
         script: |
-          const request = {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            commit_sha: ${{ inputs.commit-sha }}
-          }
-          const { data } = await github.request("GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", request)
+          const { data } = await github.request(
+            "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+            {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: ${{ inputs.commit-sha }}
+            })
           return data.length === 0 ? -1 : data[data.length-1].number
 
     - name: Set output
