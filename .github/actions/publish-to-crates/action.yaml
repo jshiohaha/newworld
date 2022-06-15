@@ -42,7 +42,7 @@ runs:
         echo "inputs.pull-number: ${{ inputs.pull-number }}"
 
     - name: Get PR for push event HEAD commit
-      if: inputs.pull-number == 'none'
+      if: ${{ inputs.pull-number == '' }}
       uses: ./.github/actions/get-pr-for-commit
       id: get-pr-for-commit
       with:
