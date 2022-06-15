@@ -61,8 +61,8 @@ jobs:
 
   upgrade-version-and-publish-binary:
     needs: changes
-    # on pull_request `close` into master (base_ref) === pull_request merged
-    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    # `push` event == someone pushed directly to main or merged a PR
+    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
