@@ -7,11 +7,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main]
-  # pull_request:
-  #   branches: [main]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
 
 permissions:
   id-token: write
@@ -32,56 +29,82 @@ defaults:
   run:
     working-directory: ./newworld/program
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  main-worklfow:
-    name: Main workflow
-    runs-on: ubuntu-18.04
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      package: ${{ steps.filter.outputs.package }}
     steps:
-      - uses: actions/checkout@v3
-      # - uses: ./.github/actions/install-linux-build-deps
-      # - uses: ./.github/actions/install-solana
-      #   with:
-      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      # - uses: ./.github/actions/install-rust
-      #   with:
-      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: actions/checkout@v2
+      # For pull requests it's not necessary to checkout the code
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            package:
+              - 'newworld/**'
 
-      # - name: Build and upload
-      #   uses: ./.github/actions/build-and-upload/
-      #   id: upload-binary-metadata
-      #   with:
-      #     program-binary: newworld.so
-      #     account-id: ${{ env.ACCOUNT_ID }}
-      #     region: ${{ env.REGION }}
-      #     role: ${{ env.ROLE }}
-      #     bucket: ${{ env.BUCKET }}
-      #     prefix: newworld
+  dump-context:
+    needs: changes
+    # # on pull_request `close` into master (base_ref) === pull_request merged
+    # if: |
+    #   ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') &&
+    #       github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    runs-on: ubuntu-latest
+    env:
+      cache_id: program-auction-house
 
+    # todo: does this work?
+    steps:
+      - uses: actions/checkout@v2
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Publish updated artifacts to Crates and Github
-        uses: ./.github/actions/publish-to-crates
-        id: publish-to-crates
-        with:
-          cargo-token: ${{ secrets.CARGO_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-name: newworld
-          path-to-cargo: ./newworld/program/Cargo.toml
-          pull-number: 8 # ${{ github.event.number }}
-          branch: main # ${{ github.ref }}
+  upgrade-version-and-publish-binary:
+    # needs: changes
+    # # on pull_request `close` into master (base_ref) === pull_request merged
+    # if: |
+    #   ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') &&
+    #       github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    runs-on: ubuntu-latest
+    env:
+      cache_id: program-auction-house
 
-
-      # - name: Publish updated artifacts to NPM and Github
-      #   uses: ./.github/actions/publish-to-npm
-      #   id: publish-to-npm
+    # todo: does this work?
+    steps:
+      - uses: actions/checkout@v2
+      # - name: Publish updated artifacts to Crates and Github
+      #   uses: ./.github/actions/publish-to-crates
+      #   id: publish-to-crates
       #   with:
-      #     npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      #     cargo-token: ${{ secrets.CARGO_TOKEN }}
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-name: newworld
-      #     path-to-package-dir: ./newworld/js
-      #     pull-number: 8 # ${{ github.event.number }}
-      #     branch: main # ${{ github.ref }}
+      #     package-name: auction-house
+      #     path-to-cargo: ./auction-house/program/Cargo.toml
+      #     pull-number: ${{ github.event.number }}
+      #     branch: ${{ github.ref }}
+
+      # - uses: ./.github/actions/setup-aws-env/
+      # - name: Build and upload
+      #   uses: ./.github/actions/build-and-upload/
+      #   id: upload-binary-metadata
+      #   with:
+      #     program-binary: auction-house.so
+      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+      #     region: ${{ env.BINARY_STORAGE_REGION }}
+      #     role: ${{ env.BINARY_STORAGE_ROLE }}
+      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+      #     prefix: auction-house
+
+      # todo: can we embed setup in the `build-and-upload` action?
+      - uses: ./.github/actions/setup-aws-env/
+      - name: Dump AWS env vars
+        run: |
+          echo "$BINARY_STORAGE_ACCOUNT_ID"
+          echo "$BINARY_STORAGE_REGION"
+          echo "$BINARY_STORAGE_ROLE"
+          echo "$BINARY_STORAGE_BUCKET"
+        shell: bash
