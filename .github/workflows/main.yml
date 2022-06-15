@@ -87,6 +87,19 @@ jobs:
         run: |
           echo "PR: ${{ steps.get-pr-for-commit.outputs.pull-number }}"
 
+      # if pull_number == '', then get pull_number from github.sha
+      # - name: prerelease or not
+      #   id: pre_or_not
+      #   run: |
+      #     if [$REF == 'refs/heads/master']
+      #     then
+      #         echo "::set-output name=prerelease::true"
+      #     else
+      #         echo "::set-output name=prerelease::false"
+      #     fi
+      #   env:
+      #     REF: ${{ github.ref }}
+
       - name: Publish updated artifacts to Crates and Github
         if: steps.get-pr-for-commit.outputs.pull-number > 0
         uses: ./.github/actions/publish-to-crates
@@ -96,19 +109,19 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-name: newworld
           path-to-cargo: ./newworld/program/Cargo.toml
-          pull-number: ${{ steps.get-pr-for-commit.outputs.pull-number }}
+          pull-number: ${{ github.event.number }} # ${{ steps.get-pr-for-commit.outputs.pull-number }}
           branch: ${{ github.ref }}
 
-      - name: Build and upload
-        uses: ./.github/actions/build-and-upload/
-        id: upload-binary-metadata
-        with:
-          program-binary: newworld.so
-          account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
-          region: ${{ env.BINARY_STORAGE_REGION }}
-          role: ${{ env.BINARY_STORAGE_ROLE }}
-          bucket: ${{ env.BINARY_STORAGE_BUCKET }}
-          prefix: newworld
+      # - name: Build and upload
+      #   uses: ./.github/actions/build-and-upload/
+      #   id: upload-binary-metadata
+      #   with:
+      #     program-binary: jshiohaha_newworld_test.so
+      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+      #     region: ${{ env.BINARY_STORAGE_REGION }}
+      #     role: ${{ env.BINARY_STORAGE_ROLE }}
+      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+      #     prefix: newworld
 
       # # todo: can we embed setup in the `build-and-upload` action?
       # - uses: ./.github/actions/setup-aws-env/
