@@ -20,10 +20,6 @@ env:
   SOLANA_VERSION_STABLE: 1.9.22
   RUST_TOOLCHAIN: stable
   PROGRAM_NAME: newworld
-  ACCOUNT_ID: 813125037859
-  REGION: us-east-1
-  ROLE: uploadToS3Role
-  BUCKET: programbuildsinfrastack-verifiablebuildbinariesb-1umx6gqtqe6gl
 
 defaults:
   run:
@@ -53,7 +49,7 @@ jobs:
     #       github.event_name == 'pull_request' && github.event.action == 'closed' }}
     runs-on: ubuntu-latest
     env:
-      cache_id: program-auction-house
+      cache_id: program-newworld
 
     # todo: does this work?
     steps:
@@ -66,12 +62,10 @@ jobs:
   upgrade-version-and-publish-binary:
     needs: changes
     # on pull_request `close` into master (base_ref) === pull_request merged
-    if: |
-      ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') &&
-          github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'pull_request' && github.event.action == 'closed' }}
     runs-on: ubuntu-latest
     env:
-      cache_id: program-auction-house
+      cache_id: program-newworld
 
     # todo: does this work?
     steps:
