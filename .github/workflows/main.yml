@@ -60,7 +60,7 @@ jobs:
   upgrade-version-and-publish-binary:
     needs: changes
     # `push` event == someone pushed directly to main or merged a PR
-    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
+    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
@@ -68,16 +68,15 @@ jobs:
     # todo: does this work?
     steps:
       - uses: actions/checkout@v2
-      # - uses: ./.github/actions/install-linux-build-deps
-      # - uses: ./.github/actions/install-solana
-      #   with:
-      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      # - uses: ./.github/actions/install-rust
-      #   with:
-      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: ./.github/actions/install-linux-build-deps
+      - uses: ./.github/actions/install-solana
+        with:
+          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      - uses: ./.github/actions/install-rust
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
 
       - name: Publish updated artifacts to Crates and Github
-        # if: steps.get-pr-for-commit.outputs.pull-number > 0
         uses: ./.github/actions/publish-to-crates
         id: publish-to-crates
         with:
@@ -88,23 +87,13 @@ jobs:
           commit-sha: ${{ github.sha }}
           branch: ${{ github.ref }}
 
-      # - name: Build and upload
-      #   uses: ./.github/actions/build-and-upload/
-      #   id: upload-binary-metadata
-      #   with:
-      #     program-binary: jshiohaha_newworld_test.so
-      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
-      #     region: ${{ env.BINARY_STORAGE_REGION }}
-      #     role: ${{ env.BINARY_STORAGE_ROLE }}
-      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
-      #     prefix: newworld
-
-      # # todo: can we embed setup in the `build-and-upload` action?
-      # - uses: ./.github/actions/setup-aws-env/
-      # - name: Dump AWS env vars
-      #   run: |
-      #     echo "$BINARY_STORAGE_ACCOUNT_ID"
-      #     echo "$BINARY_STORAGE_REGION"
-      #     echo "$BINARY_STORAGE_ROLE"
-      #     echo "$BINARY_STORAGE_BUCKET"
-      #   shell: bash
+      - name: Build and upload
+        uses: ./.github/actions/build-and-upload/
+        id: upload-binary-metadata
+        with:
+          program-binary: jshiohaha_newworld_test.so
+          account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+          region: ${{ env.BINARY_STORAGE_REGION }}
+          role: ${{ env.BINARY_STORAGE_ROLE }}
+          bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+          prefix: newworld
