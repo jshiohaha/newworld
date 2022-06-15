@@ -85,7 +85,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-name: newworld
           path-to-cargo: ./newworld/program/Cargo.toml
-          pull-number: ${{ github.event.number }} # ${{ steps.get-pr-for-commit.outputs.pull-number }}
+          commit-sha: ${{ github.sha }}
           branch: ${{ github.ref }}
 
       # - name: Build and upload
