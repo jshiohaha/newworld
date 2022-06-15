@@ -37,6 +37,7 @@ runs:
         if-no-files-found: error
 
     # todo: parse toml for version and use that in S3 prefix
+    - uses: ./.github/actions/setup-aws-env/
     - name: Upload binary to S3
       uses: ./.github/actions/upload-to-s3/
       id: upload-binary

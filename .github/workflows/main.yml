@@ -70,35 +70,34 @@ jobs:
     # todo: does this work?
     steps:
       - uses: actions/checkout@v2
-      # - name: Publish updated artifacts to Crates and Github
-      #   uses: ./.github/actions/publish-to-crates
-      #   id: publish-to-crates
-      #   with:
-      #     cargo-token: ${{ secrets.CARGO_TOKEN }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-name: auction-house
-      #     path-to-cargo: ./auction-house/program/Cargo.toml
-      #     pull-number: ${{ github.event.number }}
-      #     branch: ${{ github.ref }}
+      - name: Publish updated artifacts to Crates and Github
+        uses: ./.github/actions/publish-to-crates
+        id: publish-to-crates
+        with:
+          cargo-token: ${{ secrets.CARGO_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: newworld
+          path-to-cargo: ./newworld/program/Cargo.toml
+          pull-number: ${{ github.event.number }}
+          branch: ${{ github.ref }}
 
+      - name: Build and upload
+        uses: ./.github/actions/build-and-upload/
+        id: upload-binary-metadata
+        with:
+          program-binary: newworld.so
+          account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+          region: ${{ env.BINARY_STORAGE_REGION }}
+          role: ${{ env.BINARY_STORAGE_ROLE }}
+          bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+          prefix: newworld
+
+      # # todo: can we embed setup in the `build-and-upload` action?
       # - uses: ./.github/actions/setup-aws-env/
-      # - name: Build and upload
-      #   uses: ./.github/actions/build-and-upload/
-      #   id: upload-binary-metadata
-      #   with:
-      #     program-binary: auction-house.so
-      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
-      #     region: ${{ env.BINARY_STORAGE_REGION }}
-      #     role: ${{ env.BINARY_STORAGE_ROLE }}
-      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
-      #     prefix: auction-house
-
-      # todo: can we embed setup in the `build-and-upload` action?
-      - uses: ./.github/actions/setup-aws-env/
-      - name: Dump AWS env vars
-        run: |
-          echo "$BINARY_STORAGE_ACCOUNT_ID"
-          echo "$BINARY_STORAGE_REGION"
-          echo "$BINARY_STORAGE_ROLE"
-          echo "$BINARY_STORAGE_BUCKET"
-        shell: bash
+      # - name: Dump AWS env vars
+      #   run: |
+      #     echo "$BINARY_STORAGE_ACCOUNT_ID"
+      #     echo "$BINARY_STORAGE_REGION"
+      #     echo "$BINARY_STORAGE_ROLE"
+      #     echo "$BINARY_STORAGE_BUCKET"
+      #   shell: bash
