@@ -62,7 +62,7 @@ runs:
       run: |
         if [[ '${{ inputs.pull-number }}' != '' ]]
         then
-            echo "::set-output name=pull-number::${{ inputs.pull-number || -1 }}"
+            echo "::set-output name=pull-number::${{ inputs.pull-number }}"
         else
             echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number }}"
         fi
