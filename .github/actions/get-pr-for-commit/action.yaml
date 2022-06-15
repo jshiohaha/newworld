@@ -26,7 +26,7 @@ runs:
             {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: ${{ inputs.commit-sha }}
+              commit_sha: '${{ inputs.commit-sha }}'
             })
           return data.length === 0 ? -1 : data[data.length-1].number
 
