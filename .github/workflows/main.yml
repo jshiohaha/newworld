@@ -101,7 +101,7 @@ jobs:
       #     REF: ${{ github.ref }}
 
       - name: Publish updated artifacts to Crates and Github
-        if: steps.get-pr-for-commit.outputs.pull-number > 0
+        # if: steps.get-pr-for-commit.outputs.pull-number > 0
         uses: ./.github/actions/publish-to-crates
         id: publish-to-crates
         with:
