@@ -76,30 +76,6 @@ jobs:
       #   with:
       #     toolchain: ${{ env.RUST_TOOLCHAIN }}
 
-      - name: Get PR for push event HEAD commit
-        uses: ./.github/actions/get-pr-for-commit
-        id: get-pr-for-commit
-        with:
-          commit-sha: ${{ github.sha }}
-
-      - name: Print pull-number for commit sha
-        shell: bash
-        run: |
-          echo "PR: ${{ steps.get-pr-for-commit.outputs.pull-number }}"
-
-      # if pull_number == '', then get pull_number from github.sha
-      # - name: prerelease or not
-      #   id: pre_or_not
-      #   run: |
-      #     if [$REF == 'refs/heads/master']
-      #     then
-      #         echo "::set-output name=prerelease::true"
-      #     else
-      #         echo "::set-output name=prerelease::false"
-      #     fi
-      #   env:
-      #     REF: ${{ github.ref }}
-
       - name: Publish updated artifacts to Crates and Github
         # if: steps.get-pr-for-commit.outputs.pull-number > 0
         uses: ./.github/actions/publish-to-crates

@@ -21,7 +21,10 @@ inputs:
     required: true
   pull-number:
     description: "Pull request numeric ID"
-    required: true
+    required: false
+  commit-sha:
+    description: "Commit SHA of code to publish"
+    required: false
   branch:
     description: "Branch to update"
     required: true
@@ -33,11 +36,47 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
+    - name: Print pull number from inputs
+      shell: bash
+      run: |
+        echo "inputs.pull-number: ${{ inputs.pull-number }}"
+
+    - name: Get PR for push event HEAD commit
+      if: inputs.pull-number == 'none'
+      uses: ./.github/actions/get-pr-for-commit
+      id: get-pr-for-commit
+      with:
+        commit-sha: ${{ github.sha }}
+
+    - name: Print pull-number for commit sha
+      shell: bash
+      run: |
+        echo "PR: ${{ steps.get-pr-for-commit.outputs.pull-number }}"
+
+      # assumption: either recieve a pull-number directly or a commit SHA with an associated PR.
+      # otherwise, the rest of this action will fail. and, I couldn't find a way to manually set
+      # an error code for early exit.
+      - name: Decide the value of pull-number
+        id: set-pull-number
+        shell: bash
+        run: |
+          if [${{ inputs.pull-number }} == 'none']
+          then
+              echo "::set-output name=pull-number::${{ inputs.pull-number }}"
+          else
+              echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number"
+          fi
+
+    - name: Print pull-number from set-pull-number
+      shell: bash
+      run: |
+        echo "pull-number: ${{ steps.set-pull-number.outputs.pull-number }}"
+
     - name: Map PR review to version update
       uses: ./.github/actions/map-pr-review-to-version
       id: map-pr-review-to-version
       with:
-        pull-number: ${{ inputs.pull-number }}
+        pull-number: ${{ steps.set-pull-number.outputs.pull-number }}
 
     - name: Update version in Cargo.toml
       if: steps.map-pr-review-to-version.outputs.version != 'none'
