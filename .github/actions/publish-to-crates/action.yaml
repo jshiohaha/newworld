@@ -53,19 +53,19 @@ runs:
       run: |
         echo "PR: ${{ steps.get-pr-for-commit.outputs.pull-number }}"
 
-      # assumption: either recieve a pull-number directly or a commit SHA with an associated PR.
-      # otherwise, the rest of this action will fail. and, I couldn't find a way to manually set
-      # an error code for early exit.
-      - name: Decide the value of pull-number
-        id: set-pull-number
-        shell: bash
-        run: |
-          if [${{ inputs.pull-number }} == 'none']
-          then
-              echo "::set-output name=pull-number::${{ inputs.pull-number }}"
-          else
-              echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number"
-          fi
+    # assumption: either recieve a pull-number directly or a commit SHA with an associated PR.
+    # otherwise, the rest of this action will fail. and, I couldn't find a way to manually set
+    # an error code for early exit.
+    - name: Decide the value of pull-number
+      id: set-pull-number
+      shell: bash
+      run: |
+        if [${{ inputs.pull-number }} == 'none']
+        then
+            echo "::set-output name=pull-number::${{ inputs.pull-number }}"
+        else
+            echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number"
+        fi
 
     - name: Print pull-number from set-pull-number
       shell: bash
