@@ -46,13 +46,10 @@ jobs:
 
   dump-context:
     needs: changes
-    # `push` event == someone pushed directly to main or merged a PR
-    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
 
-    # todo: does this work?
     steps:
       - uses: actions/checkout@v2
       - name: Dump GitHub context
@@ -63,7 +60,7 @@ jobs:
   upgrade-version-and-publish-binary:
     needs: changes
     # `push` event == someone pushed directly to main or merged a PR
-    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
+    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
@@ -83,28 +80,28 @@ jobs:
         run: |
           echo "PR: ${{ steps.get-pr-for-commit.outputs.pull-number }}"
 
-      # - name: Publish updated artifacts to Crates and Github
-      #   if: steps.get-pr-for-commit.outputs.pull-number > 0
-      #   uses: ./.github/actions/publish-to-crates
-      #   id: publish-to-crates
-      #   with:
-      #     cargo-token: ${{ secrets.CARGO_TOKEN }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-name: newworld
-      #     path-to-cargo: ./newworld/program/Cargo.toml
-      #     pull-number: ${{ steps.get-pr-for-commit.outputs.pull-number }}
-      #     branch: ${{ github.ref }}
+      - name: Publish updated artifacts to Crates and Github
+        if: steps.get-pr-for-commit.outputs.pull-number > 0
+        uses: ./.github/actions/publish-to-crates
+        id: publish-to-crates
+        with:
+          cargo-token: ${{ secrets.CARGO_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name: newworld
+          path-to-cargo: ./newworld/program/Cargo.toml
+          pull-number: ${{ steps.get-pr-for-commit.outputs.pull-number }}
+          branch: ${{ github.ref }}
 
-      # - name: Build and upload
-      #   uses: ./.github/actions/build-and-upload/
-      #   id: upload-binary-metadata
-      #   with:
-      #     program-binary: newworld.so
-      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
-      #     region: ${{ env.BINARY_STORAGE_REGION }}
-      #     role: ${{ env.BINARY_STORAGE_ROLE }}
-      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
-      #     prefix: newworld
+      - name: Build and upload
+        uses: ./.github/actions/build-and-upload/
+        id: upload-binary-metadata
+        with:
+          program-binary: newworld.so
+          account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+          region: ${{ env.BINARY_STORAGE_REGION }}
+          role: ${{ env.BINARY_STORAGE_ROLE }}
+          bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+          prefix: newworld
 
       # # todo: can we embed setup in the `build-and-upload` action?
       # - uses: ./.github/actions/setup-aws-env/
