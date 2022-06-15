@@ -60,7 +60,7 @@ jobs:
   upgrade-version-and-publish-binary:
     needs: changes
     # `push` event == someone pushed directly to main or merged a PR
-    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
+    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
@@ -68,13 +68,13 @@ jobs:
     # todo: does this work?
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-linux-build-deps
-      - uses: ./.github/actions/install-solana
-        with:
-          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      - uses: ./.github/actions/install-rust
-        with:
-          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      # - uses: ./.github/actions/install-linux-build-deps
+      # - uses: ./.github/actions/install-solana
+      #   with:
+      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      # - uses: ./.github/actions/install-rust
+      #   with:
+      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
 
       - name: Get PR for push event HEAD commit
         uses: ./.github/actions/get-pr-for-commit
