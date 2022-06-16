@@ -3,12 +3,11 @@ description: "Export AWS environment variables to common GH context"
 runs:
   using: "composite"
   steps:
-    # values stored in secrets because updates do not require a code change
-    - run: echo "BINARY_STORAGE_ACCOUNT_ID=${{ secrets.BINARY_STORAGE_ACCOUNT_ID }}" >> $GITHUB_ENV
+    - run: echo "BINARY_STORAGE_ACCOUNT_ID=813125037859" >> $GITHUB_ENV
       shell: bash
-    - run: echo "BINARY_STORAGE_REGION=${{ secrets.BINARY_STORAGE_REGION }}" >> $GITHUB_ENV
+    - run: echo "BINARY_STORAGE_REGION=us-east-1" >> $GITHUB_ENV
       shell: bash
-    - run: echo "BINARY_STORAGE_ROLE=${{ secrets.BINARY_STORAGE_ROLE }}" >> $GITHUB_ENV
+    - run: echo "BINARY_STORAGE_ROLE=uploadToS3Role" >> $GITHUB_ENV
       shell: bash
-    - run: echo "BINARY_STORAGE_BUCKET=${{ secrets.BINARY_STORAGE_BUCKET }}" >> $GITHUB_ENV
+    - run: echo "BINARY_STORAGE_BUCKET=programbinarystorage-programbinaries5c3d16e8-kzk7oebhpkxe" >> $GITHUB_ENV
       shell: bash
