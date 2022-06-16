@@ -88,13 +88,21 @@ jobs:
       #     branch: ${{ github.ref }}
 
       - uses: ./.github/actions/setup-aws-env/
-      - name: Build and upload
-        uses: ./.github/actions/build-and-upload/
-        id: upload-binary-metadata
-        with:
-          program-binary: jshiohaha_newworld_test.so
-          account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
-          region: ${{ env.BINARY_STORAGE_REGION }}
-          role: ${{ env.BINARY_STORAGE_ROLE }}
-          bucket: ${{ env.BINARY_STORAGE_BUCKET }}
-          prefix: newworld
+      - name: Print inputs
+        run: |
+          echo "BINARY_STORAGE_ACCOUNT_ID: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}"
+          echo "BINARY_STORAGE_REGION: ${{ env.BINARY_STORAGE_REGION }}"
+          echo "BINARY_STORAGE_ROLE: ${{ env.BINARY_STORAGE_ROLE }}"
+          echo "BINARY_STORAGE_BUCKET: ${{ env.BINARY_STORAGE_BUCKET }}"
+        shell: bash
+
+      # - name: Build and upload
+      #   uses: ./.github/actions/build-and-upload/
+      #   id: upload-binary-metadata
+      #   with:
+      #     program-binary: jshiohaha_newworld_test.so
+      #     account-id: ${{ env.BINARY_STORAGE_ACCOUNT_ID }}
+      #     region: ${{ env.BINARY_STORAGE_REGION }}
+      #     role: ${{ env.BINARY_STORAGE_ROLE }}
+      #     bucket: ${{ env.BINARY_STORAGE_BUCKET }}
+      #     prefix: newworld
