@@ -29,23 +29,23 @@ defaults:
     working-directory: ./newworld/program
 
 jobs:
-  # changes:
-  #   runs-on: ubuntu-latest
-  #   # Set job outputs to values from filter step
-  #   outputs:
-  #     package: ${{ steps.filter.outputs.package }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     # For pull requests it's not necessary to checkout the code
-  #     - uses: dorny/paths-filter@v2
-  #       id: filter
-  #       with:
-  #         filters: |
-  #           package:
-  #             - 'newworld/**'
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      package: ${{ steps.filter.outputs.package }}
+    steps:
+      - uses: actions/checkout@v2
+      # For pull requests it's not necessary to checkout the code
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            package:
+              - 'newworld/**'
 
   dump-context:
-    # needs: changes
+    needs: changes
     runs-on: ubuntu-latest
     env:
       cache_id: program-newworld
@@ -100,11 +100,11 @@ jobs:
   #         prefix: newworld
 
   upgrade-version-and-publish-binary:
-    # needs: changes
-    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
+    needs: changes
+    if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     env:
-      cache_id: program-auction-house
+      cache_id: program-newworld
 
     steps:
       - uses: actions/checkout@v2
@@ -115,5 +115,5 @@ jobs:
           npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-package-dir: ./newworld/js
-          commit-sha: 09d62da18abd6b02d8b1c3f6ff72d68fe0873877 # ${{ github.sha }}
+          commit-sha: ${{ github.sha }}
           branch: ${{ github.ref }}
