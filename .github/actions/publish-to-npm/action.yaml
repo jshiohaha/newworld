@@ -41,7 +41,7 @@ runs:
       uses: ./.github/actions/get-pr-for-commit
       id: get-pr-for-commit
       with:
-        commit-sha: ${{ github.sha }}
+        commit-sha: ${{ inputs.commit-sha }}
 
     - name: Decide the value of pull-number
       id: set-pull-number
