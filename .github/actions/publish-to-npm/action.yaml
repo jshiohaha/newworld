@@ -72,10 +72,10 @@ runs:
         echo "Updated version: ${{ steps.map-pr-review-to-version.outputs.version }}"
         echo "from json: ${{ fromJson('["", "none"]') }}"
         echo "contains: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) }}"
-        echo "equal?: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false' }}"
+        echo "equal?: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false }}"
 
     - name: Install dependencies && upgrade package version
-      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false'
+      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false
       id: update-package-version
       shell: bash
       run: |
@@ -91,7 +91,7 @@ runs:
         PATH_TO_PACKAGE_DIR: ${{ inputs.path-to-package-dir }}
 
     - name: NPM login
-      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false'
+      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false
       shell: bash
       run: |
         echo "//registry.npmjs.org/:_authToken=${NPM_PUBLISH_TOKEN}" > ~/.npmrc
@@ -99,7 +99,7 @@ runs:
         NPM_PUBLISH_TOKEN: ${{ inputs.npm-token }}
 
     - name: Publish artifacts to NPM
-      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false'
+      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false
       run: npm publish $PATH_TO_PACKAGE_DIR
       shell: bash
       env:
@@ -107,7 +107,7 @@ runs:
         PATH_TO_PACKAGE_DIR: ${{ inputs.path-to-package-dir }}
 
     - name: Push changes to Github
-      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false'
+      if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github-token }}
