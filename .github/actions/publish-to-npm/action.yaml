@@ -12,15 +12,18 @@ inputs:
   github-token:
     description: "Github token for authenticated requests"
     required: true
-  package-name:
-    description: "Package name to update"
-    required: true
   path-to-package-dir:
     description: "Path to the package to update's directory"
     required: true
-  pull-number:
-    description: "Pull request numeric ID"
+  path-to-cargo:
+    description: "Path to the package to update's Cargo.toml"
     required: true
+  pull-number:
+    description: "Pull request numeric ID. If this is empty, expect a commit-sha with an associated PR."
+    required: false
+  commit-sha:
+    description: "Commit SHA of code to publish"
+    required: false
   branch:
     description: "Branch to update"
     required: true
@@ -32,11 +35,36 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
+    - name: Get PR for push event HEAD commit
+      # only fetch PR for commit if pull-number is not specified
+      if: ${{ inputs.pull-number == '' }}
+      uses: ./.github/actions/get-pr-for-commit
+      id: get-pr-for-commit
+      with:
+        commit-sha: ${{ github.sha }}
+
+    - name: Decide the value of pull-number
+      id: set-pull-number
+      shell: bash
+      run: |
+        if [[ '${{ inputs.pull-number }}' != '' ]]
+        then
+            echo "::set-output name=pull-number::${{ inputs.pull-number }}"
+        else
+            echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number }}"
+        fi
+
+    - name: Print pull-number to use in remaider of action
+      shell: bash
+      run: |
+        echo "pull-number: ${{ steps.set-pull-number.outputs.pull-number }}"
+
     - name: Map PR review to version update
+      if: steps.set-pull-number.outputs.pull-number > 0
       uses: ./.github/actions/map-pr-review-to-version
       id: map-pr-review-to-version
       with:
-        pull-number: ${{ inputs.pull-number }}
+        pull-number: ${{ steps.set-pull-number.outputs.pull-number }}
 
     - name: Print updated package version
       shell: bash

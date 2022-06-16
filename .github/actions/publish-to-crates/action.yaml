@@ -20,7 +20,7 @@ inputs:
     description: "Path to the package to update's Cargo.toml"
     required: true
   pull-number:
-    description: "Pull request numeric ID"
+    description: "Pull request numeric ID. If this is empty, expect a commit-sha with an associated PR."
     required: false
   commit-sha:
     description: "Commit SHA of code to publish"
@@ -37,15 +37,13 @@ runs:
         node-version: ${{ env.NODE_VERSION }}
 
     - name: Get PR for push event HEAD commit
+      # only fetch PR for commit if pull-number is not specified
       if: ${{ inputs.pull-number == '' }}
       uses: ./.github/actions/get-pr-for-commit
       id: get-pr-for-commit
       with:
-        commit-sha: ${{ github.sha }}
+        commit-sha: ${{ inputs.commit-sha }}
 
-    # assumption: either recieve a pull-number directly or a commit SHA with an associated PR.
-    # otherwise, the rest of this action will fail. and, I couldn't find a way to manually set
-    # an error code for early exit.
     - name: Decide the value of pull-number
       id: set-pull-number
       shell: bash
@@ -57,7 +55,7 @@ runs:
             echo "::set-output name=pull-number::${{ steps.get-pr-for-commit.outputs.pull-number }}"
         fi
 
-    - name: Print pull-number from set-pull-number
+    - name: Print pull-number to use in remainder of action
       shell: bash
       run: |
         echo "pull-number: ${{ steps.set-pull-number.outputs.pull-number }}"
