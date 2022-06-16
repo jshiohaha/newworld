@@ -115,5 +115,5 @@ jobs:
           npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-package-dir: ./newworld/js
-          commit-sha: c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
+          commit-sha: 3341b3bf34363408c8952ea7bf31ded658073264 # c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
           branch: ${{ github.ref }}
