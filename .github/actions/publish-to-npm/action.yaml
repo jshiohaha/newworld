@@ -70,7 +70,7 @@ runs:
       shell: bash
       run: |
         echo "Updated version: ${{ steps.map-pr-review-to-version.outputs.version }}"
-        echo "from json: ${{ fromJson('["", "none"]' }}"
+        echo "from json: ${{ fromJson('["", "none"]') }}"
         echo "contains: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) }}"
         echo "equal?: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == 'false' }}"
 
