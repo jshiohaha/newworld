@@ -59,7 +59,7 @@ jobs:
               return p
             }, {})
             console.log(uniqueFilesObj)
-            return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)))
+            return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)).map((el) => `\"${el}\"`))
 
   update-pr-with-changes:
     needs: [get-changes-scope] # , get-version-scope]
@@ -67,12 +67,18 @@ jobs:
     # outputs:
     #   changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
     steps:
+      - name: Print changed files
+        shell: bash
+        run: echo "${{ needs.get-changes-scope.outputs.changed-packages }}"
+
       # checkout PR's HEAD commit
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+
       # setup git config
       - run: |
+          git log
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
           git status
@@ -81,9 +87,9 @@ jobs:
         id: make-change
         shell: bash
         run: |
+          git status
           echo "hello world" > hello.txt
           git add .
-          git commit -m "yay"
           git status
 
       - name: Check change in another step
