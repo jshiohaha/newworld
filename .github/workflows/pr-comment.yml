@@ -3,8 +3,8 @@
 name: pr-comment
 
 on:
-  pull_request_review_comment:
-    types: [created, deleted]
+  pull_request_review:
+    types: [submitted, edited]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -46,8 +46,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Print review body
         run: |
-          echo "${{ github.comment.body }}"
-          echo "${{ github.comment.author_association }}"
+          echo "${{ github.review.body }}"
+          echo "${{ github.review.author_association }}"
           echo "${{ github.pull_request.number }}"
 
   # map fetched changed files to package / lang (list)
