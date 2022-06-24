@@ -83,6 +83,11 @@ jobs:
         shell: bash
         run: echo "${{ needs.get-changes-scope.outputs.changed-packages }}"
 
+      # setup git config
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
       # checkout PR's HEAD commit
       - uses: actions/checkout@v3
         # we always want to be at HEAD?
@@ -90,11 +95,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
       # # track to the PR's HEAD commit SHA
       # - run: git reset --hard ${{ github.event.pull_request.head.sha }}
-
-      # setup git config
-      - run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
 
       # actually make version updates in packages
       - name: Make version changes

@@ -17,10 +17,8 @@ runs:
     - uses: actions/checkout@v3
       with:
         ref: ${{ inputs.branch }}
-
     - name: Install cargo-release
       run: cargo install cargo-release
-
     - name: Make version changes
       uses: actions/github-script@v4
       with:
