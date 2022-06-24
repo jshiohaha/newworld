@@ -23,5 +23,7 @@ runs:
       uses: actions/github-script@v4
       with:
         script: |
-          const script = require('.github/actions/make-version-changes/script.js')
-          await script({github, context, core}, ${{ inputs.changed-packages }}, ${{ inputs.versioning }})
+          echo "hello world"
+
+# const script = require('.github/actions/make-version-changes/script.js')
+# await script({github, context, core}, ${{ inputs.changed-packages }}, ${{ inputs.versioning }})
