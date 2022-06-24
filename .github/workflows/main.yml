@@ -29,33 +29,32 @@ env:
 #     working-directory: ./newworld/js
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    # Set job outputs to values from filter step
-    outputs:
-      package: ${{ steps.filter.outputs.package }}
-    steps:
-      - uses: actions/checkout@v2
-      # For pull requests it's not necessary to checkout the code
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            package:
-              - 'newworld/**'
-
-  # dump-context:
-  #   needs: changes
+  # changes:
   #   runs-on: ubuntu-latest
-  #   env:
-  #     cache_id: program-newworld
-
+  #   # Set job outputs to values from filter step
+  #   outputs:
+  #     package: ${{ steps.filter.outputs.package }}
   #   steps:
   #     - uses: actions/checkout@v2
-  #     - name: Dump GitHub context
-  #       env:
-  #         GITHUB_CONTEXT: ${{ toJson(github) }}
-  #       run: echo "$GITHUB_CONTEXT"
+  #     # For pull requests it's not necessary to checkout the code
+  #     - uses: dorny/paths-filter@v2
+  #       id: filter
+  #       with:
+  #         filters: |
+  #           package:
+  #             - 'newworld/**'
+
+  dump-context:
+    runs-on: ubuntu-latest
+    env:
+      cache_id: program-newworld
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
   # upgrade-version-and-publish-binary:
   #   # needs: changes
@@ -99,21 +98,21 @@ jobs:
   #         bucket: ${{ env.BINARY_STORAGE_BUCKET }}
   #         prefix: newworld
 
-  upgrade-version-and-publish-binary:
-    needs: changes
-    # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    env:
-      cache_id: program-newworld
+  # upgrade-version-and-publish-binary:
+  #   needs: changes
+  #   # if: ${{ (needs.changes.outputs.core == 'true' || needs.changes.outputs.package == 'true') && github.event_name == 'push' }}
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     cache_id: program-newworld
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Publish updated artifacts to NPM and Github
-        uses: ./.github/actions/publish-to-npm
-        id: publish-to-npm
-        with:
-          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-package-dir: ./newworld/js
-          commit-sha: 3341b3bf34363408c8952ea7bf31ded658073264 # c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
-          branch: ${{ github.ref }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Publish updated artifacts to NPM and Github
+  #       uses: ./.github/actions/publish-to-npm
+  #       id: publish-to-npm
+  #       with:
+  #         npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         path-to-package-dir: ./newworld/js
+  #         commit-sha: 3341b3bf34363408c8952ea7bf31ded658073264 # c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
+  #         branch: ${{ github.ref }}

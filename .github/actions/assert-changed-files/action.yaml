@@ -34,6 +34,7 @@ runs:
       # env.ASSERTION exported from script.js
       run: echo "::set-output name=assertion::${{ env.ASSERTION }}"
       shell: bash
+
 # - name: Assert changed files
 #   uses: ./.github/actions/assert-changed-files
 #   id: assert-changed-files

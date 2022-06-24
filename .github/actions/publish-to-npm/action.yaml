@@ -66,14 +66,6 @@ runs:
       with:
         pull-number: ${{ steps.set-pull-number.outputs.pull-number }}
 
-    - name: Print updated package version
-      shell: bash
-      run: |
-        echo "Updated version: ${{ steps.map-pr-review-to-version.outputs.version }}"
-        echo "from json: ${{ fromJson('["", "none"]') }}"
-        echo "contains: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) }}"
-        echo "equal?: ${{ contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false }}"
-
     - name: Install dependencies && upgrade package version
       if: contains(fromJson('["", "none"]'), steps.map-pr-review-to-version.outputs.version) == false
       id: update-package-version
