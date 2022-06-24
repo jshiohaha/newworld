@@ -48,18 +48,18 @@ jobs:
         id: get-changed-package-scope
         with:
           script: |
-            const regexp = /[a-zA-Z\-]+\/(js|program)/g;
-            const files = ${{ steps.list-changed-files.output.changed-files }};
+            const regexp = /[a-zA-Z\-]+\/(js|program)/g
+            const files = ${{ steps.list-changed-files.output.changed-files }}
             const uniqueFilesObj = files.reduce((p, file) => {
-              const match = file.match(regexp);
+              const match = file.match(regexp)
               if (match) {
                 // use first match result
-                if (!p[match[0]]) p[match[0]] = 1;
+                if (!p[match[0]]) p[match[0]] = 1
               }
-              return p;
-            }, {});
-            console.log(uniqueFilesObj);
-            return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)));
+              return p
+            }, {})
+            console.log(uniqueFilesObj)
+            return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)))
 
   update-pr-with-changes:
     needs: [get-changes-scope] # , get-version-scope]
