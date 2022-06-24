@@ -126,6 +126,9 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   // packages   => [auction-house/program, candy-machine/js]
   // versioning => ["patch"] // patch:js, minor:rust
 
+  await exec('git config user.name github-actions[bot]');
+  await exec('git config user.email github-actions[bot]@users.noreply.github.com');
+
   // for each versioning, check if applies to package?
   for (const version of versioning) {
     const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
