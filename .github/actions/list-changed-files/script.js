@@ -59,6 +59,6 @@ module.exports = async ({ github, context, core }, pull_number) => {
 
   core.exportVariable(
     "CHANGED_FILES",
-    JSON.stringify(Array.from(Object.keys(changedFiles)))
+    JSON.stringify(Array.from(changedFiles))
   );
 };
