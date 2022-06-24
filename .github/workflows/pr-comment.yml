@@ -48,8 +48,8 @@ jobs:
         id: get-changed-package-scope
         with:
           script: |
-            const regexp = /[a-zA-Z\-]+\/(js|program)/g
             const files = ${{ steps.list-changed-files.output.changed-files }}
+            const regexp = /[a-zA-Z\-]+\/(js|program)/g
             const uniqueFilesObj = files.reduce((p, file) => {
               const match = file.match(regexp)
               if (match) {
