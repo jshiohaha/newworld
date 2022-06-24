@@ -32,11 +32,11 @@ jobs:
 
   fetch-changed-files:
     runs-on: ubuntu-latest
-    id: fetch-changed-files
     steps:
       - uses: actions/checkout@v2
       - name: Fetch changed files
         uses: ./.github/actions/fetch-changed-files
+        id: fetch-changed-files
         with:
           pull-number: 18
 
