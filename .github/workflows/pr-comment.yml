@@ -101,6 +101,9 @@ jobs:
         shell: bash
         run: |
           git status
+          git commit -m "yeeee"
+          git status
+          git log
 
   # actually make version updates in packages
 
