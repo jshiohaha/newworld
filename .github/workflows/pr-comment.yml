@@ -92,7 +92,7 @@ jobs:
           git status
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
-          echo "hello world" > hello.txt
+          echo "hello world" > hello
           git add .
           git status
 
