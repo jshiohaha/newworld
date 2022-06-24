@@ -30,8 +30,10 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-  list-changed-files:
+  get-changes-scope:
     runs-on: ubuntu-latest
+    outputs:
+      changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
     steps:
       - uses: actions/checkout@v2
       - name: Fetch changed files
@@ -40,17 +42,94 @@ jobs:
         with:
           pull-number: ${{ github.event.pull_request.number }}
 
-  print-review-body:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Print review body
-        run: |
-          echo "${{ github.event.review.body }}"
-          echo "${{ github.event.review.author_association }}"
-          echo "${{ github.event.pull_request.number }}"
+      # map fetched changed files to package / lang (list)
+      - name: Get scope of changed packages
+        uses: actions/github-script@v4
+        id: get-changed-package-scope
+        with:
+          script: |
+            const regexp = /[a-zA-Z\-]+\/(js|program)/g;
+            const files = ${{ steps.list-changed-files.output.changed-files }};
+            const uniqueFilesObj = files.reduce((p, file) => {
+              const match = file.match(regexp);
+              if (match) {
+                // use first match result
+                if (!p[match[0]]) p[match[0]] = 1;
+              }
+              return p;
+            }, {});
+            console.log(uniqueFilesObj);
+            return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)));
 
-  # map fetched changed files to package / lang (list)
+  # # fetch version from comment
+  # get-version-scope:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Fetch changed files
+  #       uses: ./.github/actions/list-changed-files
+  #       id: list-changed-files
+  #       with:
+  #         pull-number: ${{ github.event.pull_request.number }}
+
+  #     - name: Get scope of changed packages
+  #       uses: actions/github-script@v4
+  #       id: get-changed-package-scope
+  #       with:
+  #         script: |
+  #           const regexp = /[a-zA-Z\-]+\/(js|program)/g;
+  #           const files = ${{ steps.list-changed-files.output.changed-files }};
+  #           const uniqueFilesObj = files.reduce((p, file) => {
+  #             const match = file.match(regexp);
+  #             if (match) {
+  #               // use first match result
+  #               if (!p[match[0]]) p[match[0]] = 1;
+  #             }
+  #             return p;
+  #           }, {});
+  #           console.log(uniqueFilesObj);
+  #           return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)));
+
+  update-pr-with-changes:
+    needs: [get-changes-scope] # , get-version-scope]
+    runs-on: ubuntu-latest
+    outputs:
+      changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
+    steps:
+      # checkout PR's HEAD commit
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      # setup git config
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git status
+
+    - name: Make change in step
+      id: make-change
+      shell: bash
+      run: |
+        echo "hello world" > hello.txt
+        git add .
+        git commit -m "yay"
+        git status
+
+    - name: Check change in another step
+      id: check-change
+      shell: bash
+      run: |
+        git status
+
+  # actually make version updates in packages
+
+  # git commit -m "generated"
+  # git add $PATH_TO_CARGO
+  # git commit -m "chore: update ${PACKAGE_NAME} crate to v${UPDATED_VERSION}"
+  # git tag $PACKAGE_NAME@$UPDATED_VERSION
+
   # fetch version command from comment (1 for now)
   # run update version on all packages that match command
   # -- route differently based on package manager

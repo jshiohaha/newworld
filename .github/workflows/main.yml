@@ -116,3 +116,13 @@ jobs:
   #         path-to-package-dir: ./newworld/js
   #         commit-sha: 3341b3bf34363408c8952ea7bf31ded658073264 # c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
   #         branch: ${{ github.ref }}
+
+  # print-review-body:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Print review body
+  #       run: |
+  #         echo "${{ github.event.review.body }}"
+  #         echo "${{ github.event.review.author_association }}"
+  #         echo "${{ github.event.pull_request.number }}"
