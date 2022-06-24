@@ -74,8 +74,8 @@ jobs:
       # checkout PR's HEAD commit
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - run: git checkout ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      # - run: git checkout ${{ github.event.pull_request.head.ref }}
 
       # setup git config
       - run: |
