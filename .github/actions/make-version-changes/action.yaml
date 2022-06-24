@@ -7,17 +7,19 @@ inputs:
   versioning:
     description: "Versioning command(s)"
     required: true
-  # branch:
-  #   description: "Branch to checkout"
-  #   required: true
+  branch:
+    description: "Branch to checkout"
+    required: true
 
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.branch }}
+
     - name: Install cargo-release
       run: cargo install cargo-release
-
-    # - uses: actions/checkout@v3
 
     - name: Make version changes
       uses: actions/github-script@v4

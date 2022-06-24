@@ -103,6 +103,7 @@ jobs:
         with:
           changed-packages: ${{ needs.get-changes-scope.outputs.changed-packages }}
           versioning: ${{ needs.get-version-scope.outputs.version }}
+          branch: ${{ github.event.pull_request.head.ref }}
 
       # - name: Push changes to Github
       #   uses: ad-m/github-push-action@master
