@@ -15,8 +15,8 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-      # with:
-      #   ref: ${{ inputs.branch }}
+      with:
+        ref: ${{ inputs.branch }}
     - name: Install cargo-release
       shell: bash
       run: cargo install cargo-release
@@ -25,7 +25,5 @@ runs:
       uses: actions/github-script@v4
       with:
         script: |
-          echo "hello world"
-
-# const script = require('.github/actions/make-version-changes/script.js')
-# await script({github, context, core}, ${{ inputs.changed-packages }}, ${{ inputs.versioning }})
+          const script = require('.github/actions/make-version-changes/script.js')
+          await script({github, context, core}, ${{ inputs.changed-packages }}, ${{ inputs.versioning }})
