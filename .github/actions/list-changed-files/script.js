@@ -43,14 +43,7 @@ fetchAllChangedFiles = async (
   return files;
 };
 
-module.exports = async (
-  { github, context, core },
-  pull_number,
-  target_package,
-  target_extensions
-) => {
-  const parsed_target_extensions = JSON.parse(target_extensions);
-  console.log(parsed_target_extensions);
+module.exports = async ({ github, context, core }, pull_number) => {
   const changedFiles = await fetchAllChangedFiles(
     github,
     context.repo.owner,
