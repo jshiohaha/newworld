@@ -33,10 +33,10 @@ jobs:
   get-changes-scope:
     runs-on: ubuntu-latest
     outputs:
-      changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
+      changed-packages: ${{ steps.get-changed-package-scope.outputs.result }}
     steps:
       - uses: actions/checkout@v2
-      - name: Fetch changed files
+      - name: List changed files
         uses: ./.github/actions/list-changed-files
         id: list-changed-files
         with:
@@ -48,7 +48,7 @@ jobs:
         id: get-changed-package-scope
         with:
           script: |
-            const files = ${{ steps.list-changed-files.output.changed-files }}
+            const files = ${{ steps.list-changed-files.outputs.changed-files }}
             const regexp = /[a-zA-Z\-]+\/(js|program)/g
             const uniqueFilesObj = files.reduce((p, file) => {
               const match = file.match(regexp)
