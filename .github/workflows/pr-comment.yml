@@ -79,11 +79,13 @@ jobs:
     # needs: [get-changes-scope, get-version-scope]
     runs-on: ubuntu-latest
     steps:
-      # checkout PR's HEAD commit
       - uses: actions/checkout@v3
-        # we always want to be at HEAD?
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
+
+      # # checkout PR's HEAD commit
+      # - uses: actions/checkout@v3
+      #   # we always want to be at HEAD?
+      #   with:
+      #     ref: ${{ github.event.pull_request.head.ref }}
 
       # - name: Print changed files
       #   shell: bash
