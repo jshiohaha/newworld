@@ -97,7 +97,7 @@ jobs:
         uses: ./.github/actions/make-version-changes
         id: make-version-changes
         with:
-          changed-packages: ["newworld/program/src/lib.rs"] # ${{ needs.get-changes-scope.outputs.changed-packages }}
+          changed-packages: '["newworld/program/src/lib.rs"]' # ${{ needs.get-changes-scope.outputs.changed-packages }}
           versioning: "patch" # ${{ needs.get-version-scope.outputs.version }}
           branch: ${{ github.event.pull_request.head.ref }}
 
