@@ -64,8 +64,8 @@ jobs:
   update-pr-with-changes:
     needs: [get-changes-scope] # , get-version-scope]
     runs-on: ubuntu-latest
-    outputs:
-      changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
+    # outputs:
+    #   changed-packages: ${{steps.get-changed-package-scope.outputs.result}}
     steps:
       # checkout PR's HEAD commit
       - uses: actions/checkout@v3
@@ -77,20 +77,20 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
           git status
 
-    - name: Make change in step
-      id: make-change
-      shell: bash
-      run: |
-        echo "hello world" > hello.txt
-        git add .
-        git commit -m "yay"
-        git status
+      - name: Make change in step
+        id: make-change
+        shell: bash
+        run: |
+          echo "hello world" > hello.txt
+          git add .
+          git commit -m "yay"
+          git status
 
-    - name: Check change in another step
-      id: check-change
-      shell: bash
-      run: |
-        git status
+      - name: Check change in another step
+        id: check-change
+        shell: bash
+        run: |
+          git status
 
   # actually make version updates in packages
 
