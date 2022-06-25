@@ -141,15 +141,11 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
 
 // todo: add comment for expected format
 module.exports = async ({ github, context, core }, packages, versioning) => {
-  // const base = path.join(__dirname);
-  // const cwdArgs = [root];
-  // console.log("root: ", root);
-  // console.log("cwdArgs: ", cwdArgs);
-
-  console.log("GITHUB_ACTION", process.env.GITHUB_ACTION);
-  console.log("GITHUB_ACTION_PATH", process.env.GITHUB_ACTION_PATH);
-  console.log("GITHUB_EVENT_PATH", process.env.GITHUB_EVENT_PATH);
-  console.log("GITHUB_PATH", process.env.GITHUB_PATH);
+  const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
+  // ./.github/actions/<name>
+  const cwdArgs = base.split("/").slice(0, base.length - 4);
+  console.log("base: ", base);
+  console.log("cwdArgs: ", cwdArgs);
 
   // wrappedExec("git status");
   // wrappedExec("echo 'hello world' > hello");
