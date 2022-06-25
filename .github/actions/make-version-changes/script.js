@@ -59,8 +59,8 @@ const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
 const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
 
 const isPackageType = (actual, target) => actual === target;
-const isCratesPackage = (type) => isPackageType(actual, "js");
-const isNpmPackage = (type) => isPackageType(actual, "program");
+const isCratesPackage = (actual) => isPackageType(actual, "js");
+const isNpmPackage = (actual) => isPackageType(actual, "program");
 
 // (package, type, semvar)
 const parseVersioningCommand = (cmd) => {
