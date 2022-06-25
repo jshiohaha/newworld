@@ -30,11 +30,14 @@ fetchAllChangedFiles = async (
       per_page,
       page,
     });
+    console.log(`fetched page ${page}`);
 
+    // break early if we received no results
     if (data.length === 0) break;
     files = [...files, ...data.map((f) => f.filename)];
+    // break early if we received fewer results than the max
+    if (data.length < per_page) break;
 
-    console.log(`fetched page ${page}`);
     page += 1;
   }
 
@@ -43,14 +46,7 @@ fetchAllChangedFiles = async (
   return files;
 };
 
-module.exports = async (
-  { github, context, core },
-  pull_number,
-  target_package,
-  target_extensions
-) => {
-  const parsed_target_extensions = JSON.parse(target_extensions);
-  console.log(parsed_target_extensions);
+module.exports = async ({ github, context, core }, pull_number) => {
   const changedFiles = await fetchAllChangedFiles(
     github,
     context.repo.owner,
@@ -63,6 +59,7 @@ module.exports = async (
 
   core.exportVariable(
     "CHANGED_FILES",
-    JSON.stringify(Array.from(Object.keys(changedFiles)))
+    // explicitly add quotation marks for later parsing
+    JSON.stringify(Array.from(changedFiles).map((el) => `\"${el}\"`))
   );
 };

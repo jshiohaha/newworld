@@ -35,7 +35,7 @@ jobs:
   #   outputs:
   #     package: ${{ steps.filter.outputs.package }}
   #   steps:
-  #     - uses: actions/checkout@v2
+  #     - uses: actions/checkout@v3
   #     # For pull requests it's not necessary to checkout the code
   #     - uses: dorny/paths-filter@v2
   #       id: filter
@@ -50,7 +50,7 @@ jobs:
       cache_id: program-newworld
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -66,7 +66,7 @@ jobs:
 
   #   # todo: does this work?
   #   steps:
-  #     - uses: actions/checkout@v2
+  #     - uses: actions/checkout@v3
   #     - uses: ./.github/actions/install-linux-build-deps
   #     - uses: ./.github/actions/install-solana
   #       with:
@@ -106,7 +106,7 @@ jobs:
   #     cache_id: program-newworld
 
   #   steps:
-  #     - uses: actions/checkout@v2
+  #     - uses: actions/checkout@v3
   #     - name: Publish updated artifacts to NPM and Github
   #       uses: ./.github/actions/publish-to-npm
   #       id: publish-to-npm
@@ -116,3 +116,13 @@ jobs:
   #         path-to-package-dir: ./newworld/js
   #         commit-sha: 3341b3bf34363408c8952ea7bf31ded658073264 # c1f38095268f78cc9089bd6e451061e594418654 # ${{ github.sha }}
   #         branch: ${{ github.ref }}
+
+  # print-review-body:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Print review body
+  #       run: |
+  #         echo "${{ github.event.review.body }}"
+  #         echo "${{ github.event.review.author_association }}"
+  #         echo "${{ github.event.pull_request.number }}"

@@ -12,6 +12,7 @@ on:
 permissions:
   id-token: write
   contents: write
+  packages: write
 
 env:
   NODE_VERSION: 17.0.1
@@ -24,33 +25,86 @@ jobs:
   dump-context:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-  fetch-changed-files:
+  # get-changes-scope:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     changed-packages: ${{ steps.get-changed-package-scope.outputs.result }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: List changed files
+  #       uses: ./.github/actions/list-changed-files
+  #       id: list-changed-files
+  #       with:
+  #         pull-number: ${{ github.event.pull_request.number }}
+
+  #     # map fetched changed files to package / lang (list)
+  #     - name: Get scope of changed packages
+  #       uses: actions/github-script@v4
+  #       id: get-changed-package-scope
+  #       with:
+  #         script: |
+  #           const files = JSON.parse('${{ steps.list-changed-files.outputs.changed-files }}')
+  #           const regexp = /[a-zA-Z\-]+\/(js|program)/g
+  #           const uniqueFilesObj = files.reduce((p, file) => {
+  #             const match = file.match(regexp)
+  #             if (match) {
+  #               // use first match result
+  #               if (!p[match[0]]) p[match[0]] = 1
+  #             }
+  #             return p
+  #           }, {})
+  #           console.log(uniqueFilesObj)
+  #           return JSON.stringify(Array.from(Object.keys(uniqueFilesObj)).map((el) => `\"${el}\"`))
+
+  # # fetch version from comment
+  # get-version-scope:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     version: ${{ steps.map-pr-review-to-version.outputs.version }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Map PR review to version update
+  #       uses: ./.github/actions/map-pr-review-to-version
+  #       id: map-pr-review-to-version
+  #       with:
+  #         pull-number: ${{ github.event.pull_request.number }}
+
+  update-pr-with-changes:
+    # needs: [get-changes-scope, get-version-scope]
     runs-on: ubuntu-latest
-    id: fetch-changed-files
     steps:
-      - uses: actions/checkout@v2
-      - name: Fetch changed files
-        uses: ./.github/actions/fetch-changed-files
+      - uses: actions/checkout@v3
+
+      # # checkout PR's HEAD commit
+      # - uses: actions/checkout@v3
+      #   # we always want to be at HEAD?
+      #   with:
+      #     ref: ${{ github.event.pull_request.head.ref }}
+
+      # - name: Print changed files
+      #   shell: bash
+      #   run: echo "${{ needs.get-changes-scope.outputs.changed-packages }}"
+
+      # # track to the PR's HEAD commit SHA
+      # - run: git reset --hard ${{ github.event.pull_request.head.sha }}
+
+      # actually make version updates in packages
+      - name: Make version changes
+        uses: ./.github/actions/make-version-changes
+        id: make-version-changes
         with:
-          pull-number: 18
+          changed-packages: '["newworld/program"]' # ${{ needs.get-changes-scope.outputs.changed-packages }}
+          versioning: "patch" # ${{ needs.get-version-scope.outputs.version }}
+          branch: ${{ github.event.pull_request.head.ref }}
 
-  print-review-body:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Print review body
-        run: |
-          echo "${{ github.review.body }}"
-          echo "${{ github.review.author_association }}"
-          echo "${{ github.pull_request.number }}"
-
-  # map fetched changed files to package / lang (list)
-  # fetch version command from comment (1 for now)
-  # run update version on all packages that match command
-  # -- route differently based on package manager
+      # - name: Push changes to Github
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.event.pull_request.head.ref }}

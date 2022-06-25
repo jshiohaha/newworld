@@ -8,7 +8,7 @@ inputs:
 outputs:
   changed-files:
     description: Version
-    value: ${{ steps.set-assertion.outputs.changed-files }}
+    value: ${{ steps.set-changed-files.outputs.changed-files }}
 
 runs:
   using: "composite"
@@ -19,7 +19,7 @@ runs:
       with:
         script: |
           const script = require('.github/actions/list-changed-files/script.js')
-          await script({github, context, core}, ${{ inputs.pull-number }}, '${{ inputs.package-name }}', '${{ inputs.extensions }}')
+          await script({github, context, core}, ${{ inputs.pull-number }})
 
     - name: Set changed-files from PR
       id: set-changed-files
