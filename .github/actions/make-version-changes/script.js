@@ -128,7 +128,7 @@ module.exports = async (
   console.log("packages: ", packages);
   console.log("versioning: ", versioning);
 
-  if (versioning.length) {
+  if (versioning.length === 0) {
     console.log("No versioning updates to make. Exiting early.");
     return;
   }
