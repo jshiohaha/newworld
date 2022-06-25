@@ -139,7 +139,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
     // back one dir + js dir + idl dir
     // note: cwdArgs == currentDir.split("/")
     const idlDirComponents = [
-      ...cwdArgs.slice(0, currentDir.length - 1),
+      ...cwdArgs.slice(0, cwdArgs.length - 1),
       "js",
       "idl",
     ];
