@@ -56,166 +56,163 @@ const MPL_PROGRAM_CONFIG = {
   },
 };
 
-const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
-const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
+// const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
+// const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
 
-const isPackageType = (actual, target) => actual === target;
-const isCratesPackage = (actual) => isPackageType(actual, "program");
-const isNpmPackage = (actual) => isPackageType(actual, "js");
+// const isPackageType = (actual, target) => actual === target;
+// const isCratesPackage = (actual) => isPackageType(actual, "program");
+// const isNpmPackage = (actual) => isPackageType(actual, "js");
 
-// (package, type, semvar)
-const parseVersioningCommand = (cmd) => {
-  return ["*", "*", cmd];
-};
+// // (package, type, semvar)
+// const parseVersioningCommand = (cmd) => {
+//   return ["*", "*", cmd];
+// };
 
-const shouldUpdate = (actual, target) => target === "*" || target === actual;
+// const shouldUpdate = (actual, target) => target === "*" || target === actual;
 
-// const getCratePackageVersion = () => {
-//   const package_id_file = "package_id";
-//   await exec(`cargo pkgid > ${package_id_file}`);
+// // const getCratePackageVersion = () => {
+// //   const package_id_file = "package_id";
+// //   await exec(`cargo pkgid > ${package_id_file}`);
 
-//   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
-//   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
-//   const match = fileVersionDirty.match(regexp);
-//   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
+// //   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
+// //   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
+// //   const match = fileVersionDirty.match(regexp);
+// //   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
 
-//   return match[0];
-// }
+// //   return match[0];
+// // }
 
-const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
-  console.log("updating rust package");
-  const currentDir = cwdArgs.join("/");
+// const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
+//   console.log("updating rust package");
+//   const currentDir = cwdArgs.join("/");
 
-  console.log("which cargo ");
-  execSync(`which cargo`);
-  console.log("cargo version");
-  execSync(`cargo --version`);
-  // adds git info automatically, --no-tag
-  execSync(
-    `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
-    { cwd: currentDir }
-  );
-  console.log("status after release: ", execSync(`git status`));
+//   console.log("currentDir: ", currentDir);
 
-  // generate IDL
-  if (packageHasIdl(pkg)) {
-    let idlName = `${pkg.replace("-", "_")}.json`;
-    if (packageUsesAnchor(pkg)) {
-      // build via anchor to generate IDL
-      execSync(`anchor build --skip-lint --idl ../../target/idl`, {
-        cwd: currentDir,
-      });
-    } else {
-      // generate IDL via shank
-      execSync(`shank idl --out-dir ../../target/idl  --crate-root .`, {
-        cwd: currentDir,
-      });
-      // prepend `mpl_` to IDL name
-      idlName = `mpl_${idlName}`;
-    }
+//   // adds git info automatically, --no-tag
+//   execSync(
+//     `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
+//     { cwd: currentDir }
+//   );
+//   console.log("status after release: ", execSync(`git status`));
 
-    // cp IDL to js dir
-    execSync(`cp ../../target/idl/${idlName} ../js/idl/`, {
-      cwd: currentDir,
-    });
+//   // generate IDL
+//   if (packageHasIdl(pkg)) {
+//     let idlName = `${pkg.replace("-", "_")}.json`;
+//     if (packageUsesAnchor(pkg)) {
+//       // build via anchor to generate IDL
+//       execSync(`anchor build --skip-lint --idl ../../target/idl`, {
+//         cwd: currentDir,
+//       });
+//     } else {
+//       // generate IDL via shank
+//       execSync(`shank idl --out-dir ../../target/idl  --crate-root .`, {
+//         cwd: currentDir,
+//       });
+//       // prepend `mpl_` to IDL name
+//       idlName = `mpl_${idlName}`;
+//     }
 
-    // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
-    //   recursive: false,
-    //   force: false,
-    // });
-  }
-};
+//     // cp IDL to js dir
+//     execSync(`cp ../../target/idl/${idlName} ../js/idl/`, {
+//       cwd: currentDir,
+//     });
 
-const updateNpmPackage = async (exec, cwdArgs, _pkg, semvar) => {
-  console.log("updating js package");
+//     // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
+//     //   recursive: false,
+//     //   force: false,
+//     // });
+//   }
+// };
 
-  // adds git info automatically
-  execSync(`npm version ${semvar}`, { cwd: cwdArgs.join("/") });
-  console.log("log after upate: ", execSync("git log"));
-};
+// const updateNpmPackage = async (exec, cwdArgs, _pkg, semvar) => {
+//   console.log("updating js package");
+
+//   // adds git info automatically
+//   execSync(`npm version ${semvar}`, { cwd: cwdArgs.join("/") });
+//   console.log("log after upate: ", execSync("git log"));
+// };
 
 // todo: add comment for expected format
-module.exports = async (
-  { github, context, core, glob, io, exec },
-  packages,
-  versioning
-) => {
+module.exports = async ({ github, context, core }, packages, versioning) => {
   const base = path.join(__dirname);
   const cwdArgs = [base];
-
   console.log("base: ", base);
   console.log("cwdArgs: ", cwdArgs);
 
-  execSync("pwd", { cwd: cwdArgs.join("/") });
-  console.log(`===========================`);
+  execSync("git status");
+  execSync("echo 'hello world' > hello");
+  execSync("git status");
 
-  console.log("packages: ", packages);
-  console.log("versioning: ", versioning);
+  // execSync("pwd", { cwd: cwdArgs.join("/") });
+  // console.log(`===========================`);
 
-  if (versioning.length === 0) {
-    console.log("No versioning updates to make. Exiting early.");
-    return;
-  }
+  // console.log("packages: ", packages);
+  // console.log("versioning: ", versioning);
 
-  // packages   => [auction-house/program, candy-machine/js]
-  // versioning => ["patch"] // patch:js, minor:rust
+  // if (versioning.length === 0) {
+  //   console.log("No versioning updates to make. Exiting early.");
+  //   return;
+  // }
 
-  execSync("git config user.name github-actions[bot]", {
-    cwd: cwdArgs.join("/"),
-  });
-  execSync(
-    "git config user.email github-actions[bot]@users.noreply.github.com",
-    { cwd: cwdArgs.join("/") }
-  );
+  // // packages   => [auction-house/program, candy-machine/js]
+  // // versioning => ["patch"] // patch:js, minor:rust
 
-  // for each versioning, check if applies to package?
-  for (const version of versioning) {
-    const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
-    if (semvar === "none") {
-      console.log(
-        "No versioning updates to make when semvar === none. Continuing."
-      );
-      continue;
-    }
+  // execSync("git config user.name github-actions[bot]", {
+  //   cwd: cwdArgs.join("/"),
+  // });
+  // execSync(
+  //   "git config user.email github-actions[bot]@users.noreply.github.com",
+  //   { cwd: cwdArgs.join("/") }
+  // );
 
-    for (const package of packages) {
-      if (!shouldUpdate(package, targetPkg)) {
-        console.log(
-          `No updates for package ${package} based on version command ${version}`
-        );
-        continue;
-      }
+  // // for each versioning, check if applies to package?
+  // for (const version of versioning) {
+  //   const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
+  //   if (semvar === "none") {
+  //     console.log(
+  //       "No versioning updates to make when semvar === none. Continuing."
+  //     );
+  //     continue;
+  //   }
 
-      const [name, type] = package.split("/");
-      if (!fs.existsSync(name)) {
-        console.log("could not find dir: ", name);
-        continue;
-      }
+  //   for (const package of packages) {
+  //     if (!shouldUpdate(package, targetPkg)) {
+  //       console.log(
+  //         `No updates for package ${package} based on version command ${version}`
+  //       );
+  //       continue;
+  //     }
 
-      // cd to package
-      console.log(`cd to package: ${name}`);
-      cwdArgs.push(name);
+  //     const [name, type] = package.split("/");
+  //     if (!fs.existsSync(name)) {
+  //       console.log("could not find dir: ", name);
+  //       continue;
+  //     }
 
-      if (shouldUpdate(type, targetType)) {
-        console.log(`add type to cwd: ${type}`);
-        cwdArgs.push(type);
+  //     // cd to package
+  //     console.log(`cd to package: ${name}`);
+  //     cwdArgs.push(name);
 
-        if (isCratesPackage(type))
-          await updateCratesPackage(exec, io, cwdArgs, package, semvar);
-        else if (isNpmPackage(type))
-          await updateNpmPackage(exec, cwdArgs, package, semvar);
-        else continue;
-      } else {
-        console.log(
-          `no update required for package = ${package} of type = ${type}`
-        );
-        continue;
-      }
+  //     if (shouldUpdate(type, targetType)) {
+  //       console.log(`add type to cwd: ${type}`);
+  //       cwdArgs.push(type);
 
-      // chdir back two levels - back to root, should match original cwd
-      console.log("remove 2 args to go back 2 dirs");
-      cwdArgs.pop();
-      cwdArgs.pop();
-    }
-  }
+  //       if (isCratesPackage(type))
+  //         await updateCratesPackage(exec, io, cwdArgs, package, semvar);
+  //       else if (isNpmPackage(type))
+  //         await updateNpmPackage(exec, cwdArgs, package, semvar);
+  //       else continue;
+  //     } else {
+  //       console.log(
+  //         `no update required for package = ${package} of type = ${type}`
+  //       );
+  //       continue;
+  //     }
+
+  //     // chdir back two levels - back to root, should match original cwd
+  //     console.log("remove 2 args to go back 2 dirs");
+  //     cwdArgs.pop();
+  //     cwdArgs.pop();
+  //   }
+  // }
 };
