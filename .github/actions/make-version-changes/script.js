@@ -155,7 +155,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
 
     console.log("=====================");
     // append IDL change to rust version bump commit
-    wrappedExec(`git commit --amend -C HEAD`);
+    wrappedExec(`git add -A && git commit --amend -C HEAD`);
     console.log("=====================");
     wrappedExec(`git log`);
     console.log("=====================");
