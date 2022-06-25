@@ -105,30 +105,39 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
     `cargo release --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
     currentDir
   );
-  console.log("status after release: ");
-  wrappedExec(`git status`);
+  wrappedExec(`git log`);
+  // wrappedExec(`shank --help`);
 
-  // // generate IDL
-  // if (packageHasIdl(pkg)) {
-  //   let idlName = `${pkg.replace("-", "_")}.json`;
-  //   if (packageUsesAnchor(pkg)) {
-  //     // build via anchor to generate IDL
-  //     wrappedExec(`anchor build --skip-lint --idl ../../target/idl`, currentDir);
-  //   } else {
-  //     // generate IDL via shank
-  //     wrappedExec(`shank idl --out-dir ../../target/idl  --crate-root .`, currentDir);
-  //     // prepend `mpl_` to IDL name
-  //     idlName = `mpl_${idlName}`;
-  //   }
+  // generate IDL
+  if (packageHasIdl(pkg)) {
+    let idlName = `${pkg.replace("-", "_")}.json`;
+    if (packageUsesAnchor(pkg)) {
+      console.log("generate IDL via anchor");
+      // build via anchor to generate IDL
+      wrappedExec(
+        `anchor build --skip-lint --idl ../../target/idl`,
+        currentDir
+      );
+    } else {
+      console.log("generate IDL via shank");
+      // generate IDL via shank
+      wrappedExec(
+        `shank idl --out-dir ../../target/idl  --crate-root .`,
+        currentDir
+      );
+      // prepend `mpl_` to IDL name
+      idlName = `mpl_${idlName}`;
+    }
 
-  //   // cp IDL to js dir
-  //   wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
+    console.log("idlName: ", idlName);
+    // cp IDL to js dir
+    wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
 
-  // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
-  //   recursive: false,
-  //   force: false,
-  // });
-  // }
+    // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
+    //   recursive: false,
+    //   force: false,
+    // });
+  }
 };
 
 const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
