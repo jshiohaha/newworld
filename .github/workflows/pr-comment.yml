@@ -103,11 +103,11 @@ jobs:
           versioning: "patch" # ${{ needs.get-version-scope.outputs.version }}
           branch: ${{ github.event.pull_request.head.ref }}
 
-    - name: After version update, lfg
-      shell: bash
-      run: |
-        git status
-        git log
+      - name: After version update, lfg
+        shell: bash
+        run: |
+          git status
+          git log
 
       # - name: Push changes to Github
       #   uses: ad-m/github-push-action@master
