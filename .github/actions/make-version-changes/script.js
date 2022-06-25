@@ -128,7 +128,7 @@ const updateCratesPackage = async (cwdArgs, pkg, semvar) => {
     //   recursive: false,
     //   force: false,
     // });
-  }
+  // }
 };
 
 const updateNpmPackage = async (cwdArgs, _pkg, semvar) => {
