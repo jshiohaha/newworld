@@ -86,6 +86,8 @@ const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
 
+  execSync(`which cargo`);
+  execSync(`cargo --version`);
   // adds git info automatically, --no-tag
   execSync(
     `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
