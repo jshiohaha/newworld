@@ -34,4 +34,4 @@ runs:
       with:
         script: |
           const script = require('.github/actions/make-version-changes/script.js')
-          await script({github, context, core}, ${{ inputs.changed-packages }}, ['${{ inputs.versioning }}'], ${{ env.GITHUB_ACTION_PATH }})
+          await script({github, context, core}, ${{ inputs.changed-packages }}, ['${{ inputs.versioning }}'])
