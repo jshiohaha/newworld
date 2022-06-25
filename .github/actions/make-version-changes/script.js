@@ -211,13 +211,12 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
         console.log(`add type to cwd: ${type}`);
         cwdArgs.push(type);
 
-        if (isCratesPackage(type))
-          updateCratesPackage(cwdArgs, package, semvar);
-        else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, package, semvar);
+        if (isCratesPackage(type)) updateCratesPackage(cwdArgs, name, semvar);
+        else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, name, semvar);
         else continue;
       } else {
         console.log(
-          `no update required for package = ${package} of type = ${type}`
+          `no update required for package = ${name} of type = ${type}`
         );
         continue;
       }
