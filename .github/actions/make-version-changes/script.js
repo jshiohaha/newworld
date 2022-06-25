@@ -5,56 +5,56 @@ const fs = require("fs");
 // store somewhere else?
 const MPL_PROGRAM_CONFIG = {
   "auction-house": {
-    "has_idl": "true",
-    "uses_anchor": "true"
+    has_idl: "true",
+    uses_anchor: "true",
   },
-  "auction": {
-    "has_idl": "false",
-    "uses_anchor": "false"
+  auction: {
+    has_idl: "false",
+    uses_anchor: "false",
   },
-  "auctioneer": {
-    "has_idl": "true",
-    "uses_anchor": "true"
+  auctioneer: {
+    has_idl: "true",
+    uses_anchor: "true",
   },
-  "core": {
-    "has_idl": "false",
-    "uses_anchor": "false"
+  core: {
+    has_idl: "false",
+    uses_anchor: "false",
   },
   "candy-machine": {
-    "has_idl": "true",
-    "uses_anchor": "true"
+    has_idl: "true",
+    uses_anchor: "true",
   },
   "fixed-price-sale": {
-    "has_idl": "true",
-    "uses_anchor": "true"
+    has_idl: "true",
+    uses_anchor: "true",
   },
-  "gumdrop": {
-    "has_idl": "false",
-    "uses_anchor": "false"
+  gumdrop: {
+    has_idl: "false",
+    uses_anchor: "false",
   },
-  "metaplex": {
-    "has_idl": "false",
-    "uses_anchor": "false"
+  metaplex: {
+    has_idl: "false",
+    uses_anchor: "false",
   },
   "nft-packs": {
-    "has_idl": "false",
-    "uses_anchor": "false"
+    has_idl: "false",
+    uses_anchor: "false",
   },
   "token-entangler": {
-    "has_idl": "true",
-    "uses_anchor": "true"
+    has_idl: "true",
+    uses_anchor: "true",
   },
   // uses shank
   "token-metadata": {
-    "has_idl": "true",
-    "uses_anchor": "false"
+    has_idl: "true",
+    uses_anchor: "false",
   },
   // uses shank
   "token-vault": {
-    "has_idl": "true",
-    "uses_anchor": "false"
+    has_idl: "true",
+    uses_anchor: "false",
   },
-}
+};
 
 const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
 const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
@@ -82,11 +82,13 @@ const shouldUpdate = (actual, target) => target === "*" || target === actual;
 //   return match[0];
 // }
 
-const updateCratesPackage = (pkg, semvar) => {
+const updateCratesPackage = async (pkg, semvar) => {
   console.log("updating rust package");
 
   // adds git info automatically, --no-tag
-  await exec(`cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`);
+  await exec(
+    `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`
+  );
   console.log("status after release: ", await exec(`git status`));
 
   // generate IDL
@@ -103,11 +105,14 @@ const updateCratesPackage = (pkg, semvar) => {
     }
 
     // cp IDL to js dir
-    await io.cp(`../../target/idl/${idlName}`, '../js/idl/', { recursive: false, force: false });
+    await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
+      recursive: false,
+      force: false,
+    });
   }
 };
 
-const updateNpmPackage = (_pkg, semvar) => {
+const updateNpmPackage = async (_pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
@@ -126,14 +131,18 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   // packages   => [auction-house/program, candy-machine/js]
   // versioning => ["patch"] // patch:js, minor:rust
 
-  await exec('git config user.name github-actions[bot]');
-  await exec('git config user.email github-actions[bot]@users.noreply.github.com');
+  await exec("git config user.name github-actions[bot]");
+  await exec(
+    "git config user.email github-actions[bot]@users.noreply.github.com"
+  );
 
   // for each versioning, check if applies to package?
   for (const version of versioning) {
     const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
     if (semvar === "none") {
-      console.log("No versioning updates to make when semvar === none. Continuing.");
+      console.log(
+        "No versioning updates to make when semvar === none. Continuing."
+      );
       continue;
     }
 
@@ -160,8 +169,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
         await exec(`cd ${type}`);
         console.log("current dir: ", await exec.exec("pwd"));
 
-        if (isCratesPackage(type)) updateCratesPackage(package, semvar);
-        else if (isNpmPackage(type)) updateNpmPackage(package, semvar);
+        if (isCratesPackage(type)) await updateCratesPackage(package, semvar);
+        else if (isNpmPackage(type)) await updateNpmPackage(package, semvar);
         else continue;
       } else {
         console.log(
