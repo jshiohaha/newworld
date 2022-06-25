@@ -100,12 +100,9 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
 
-  console.log("currentDir: ", currentDir);
-  wrappedExec(`ls ${currentDir}`);
-
-  // adds git info automatically, --no-tag
+  // adds git info automatically
   wrappedExec(
-    `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
+    `cargo release --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
     currentDir
   );
   console.log("status after release: ");
@@ -148,7 +145,6 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   // ./.github/actions/<name>
   const splitBase = base.split("/");
   const cwdArgs = splitBase.slice(0, splitBase.length - 4);
-  // .filter((el) => el.length > 0);
   console.log("cwdArgs: ", cwdArgs);
   console.log(`===========================`);
 
@@ -161,14 +157,14 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
     return;
   }
 
-  // packages   => [auction-house/program, candy-machine/js]
-  // versioning => ["patch"] // patch:js, minor:rust
-
   wrappedExec("git config user.name github-actions[bot]", cwdArgs.join("/"));
   wrappedExec(
     "git config user.email github-actions[bot]@users.noreply.github.com",
     cwdArgs.join("/")
   );
+
+  // packages   => [auction-house/program, candy-machine/js]
+  // versioning => ["patch"] // patch:js, minor:rust
 
   // for each versioning, check if applies to package?
   for (const version of versioning) {
