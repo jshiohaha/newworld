@@ -18,11 +18,12 @@ runs:
       with:
         ref: ${{ inputs.branch }}
 
-    - name: Install cargo-release
-      shell: bash
-      run: |
-        cargo install cargo-release
-      # cargo install shank-cli
+    - uses: ./.github/actions/setup-anchor/
+    # - name: Install cargo-release
+    #   shell: bash
+    #   run: |
+    #     cargo install cargo-release
+    #   # cargo install shank-cli
 
     # - name: Install dependency packages for script
     #   run: |

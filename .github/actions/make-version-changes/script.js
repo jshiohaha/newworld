@@ -104,13 +104,13 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
 
-  // adds git info automatically
-  wrappedExec(
-    `cargo release --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
-    currentDir
-  );
-  wrappedExec(`git log`);
-  // wrappedExec(`shank --help`);
+  // // adds git info automatically
+  // wrappedExec(
+  //   `cargo release --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
+  //   currentDir
+  // );
+  // wrappedExec(`git log`);
+  // // wrappedExec(`shank --help`);
 
   // generate IDL
   if (packageHasIdl(pkg)) {
