@@ -161,7 +161,7 @@ module.exports = async (
         continue;
       }
 
-      const [name, type] = package.split("//");
+      const [name, type] = package.split("/");
       if (!fs.existsSync(name)) {
         console.log("could not find dir: ", name);
         continue;
