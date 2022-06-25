@@ -136,12 +136,16 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
     //   idlName = `mpl_${idlName}`;
     // }
 
-    console.log("=====================");
-    wrappedExec("ls .", currentDir);
-    console.log("=====================");
-    wrappedExec("ls ../", currentDir);
+    const idlDir = "../../js/idl";
+    if (!fs.existsSync(idlDir)) {
+      console.log(`creating ${idlDir}...`);
+      wrappedExec(`mkdir ${idlDir}`, currentDir);
+    }
+
     console.log("=====================");
     wrappedExec("ls ../js", currentDir);
+    console.log("=====================");
+    wrappedExec("ls ../js/idl", currentDir);
     console.log("=====================");
 
     console.log("idlName: ", idlName);
