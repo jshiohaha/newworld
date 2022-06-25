@@ -88,18 +88,6 @@ const parseVersioningCommand = (cmd) => {
 
 const shouldUpdate = (actual, target) => target === "*" || target === actual;
 
-// const getCratePackageVersion = () => {
-//   const package_id_file = "package_id";
-//   await exec(`cargo pkgid > ${package_id_file}`);
-
-//   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
-//   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
-//   const match = fileVersionDirty.match(regexp);
-//   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
-
-//   return match[0];
-// }
-
 const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
@@ -117,47 +105,42 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
   // generate IDL
   if (packageHasIdl(pkg)) {
     let idlName = `${pkg.replace("-", "_")}.json`;
-    // if (packageUsesAnchor(pkg)) {
-    //   console.log("generate IDL via anchor");
-    //   // build via anchor to generate IDL
-    //   wrappedExec(
-    //     `anchor build --skip-lint --idl ../../target/idl`,
-    //     currentDir
-    //   );
-    // } else {
-    //   console.log("generate IDL via shank");
-    //   // generate IDL via shank
-    //   // todo: test shank command in mpl
-    //   wrappedExec(
-    //     `shank idl --out-dir ../../target/idl  --crate-root .`,
-    //     currentDir
-    //   );
-    //   // prepend `mpl_` to IDL name
-    //   idlName = `mpl_${idlName}`;
-    // }
+    if (packageUsesAnchor(pkg)) {
+      console.log("generate IDL via anchor");
+      // build via anchor to generate IDL
+      wrappedExec(
+        `anchor build --skip-lint --idl ../../target/idl`,
+        currentDir
+      );
+    } else {
+      console.log("generate IDL via shank");
+      // generate IDL via shank
+      // todo: test shank command in mpl
+      wrappedExec(
+        `shank idl --out-dir ../../target/idl  --crate-root .`,
+        currentDir
+      );
+      // prepend `mpl_` to IDL name
+      idlName = `mpl_${idlName}`;
+    }
 
-    // back one dir + js dir + idl dir
+    // create ../js/idl dir if it does not exist; back one dir + js dir + idl dir
     // note: cwdArgs == currentDir.split("/")
-    const idlDirComponents = [
-      ...cwdArgs.slice(0, cwdArgs.length - 1),
-      "js",
-      "idl",
-    ];
-    const idlDir = idlDirComponents.join("/");
+    const idlDir = [...cwdArgs.slice(0, cwdArgs.length - 1), "js", "idl"].join(
+      "/"
+    );
     if (!fs.existsSync(idlDir)) {
       console.log(`creating ${idlDir}`);
       await io.mkdirP(idlDir);
     }
 
     console.log("=====================");
-    wrappedExec("ls ../js", currentDir);
-    console.log("=====================");
     wrappedExec("ls ../js/idl", currentDir);
     console.log("=====================");
 
     console.log("idlName: ", idlName);
     // cp IDL to js dir
-    // wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
+    wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
   }
 };
 
