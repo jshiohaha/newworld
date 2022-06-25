@@ -125,6 +125,7 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
     } else {
       console.log("generate IDL via shank");
       // generate IDL via shank
+      // todo: test shank command in mpl
       wrappedExec(
         `shank idl --out-dir ../../target/idl  --crate-root .`,
         currentDir
@@ -133,6 +134,7 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
       idlName = `mpl_${idlName}`;
     }
 
+    wrappedExec("ls ../js/idl/", currentDir);
     console.log("idlName: ", idlName);
     // cp IDL to js dir
     wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
