@@ -146,7 +146,7 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   console.log("base: ", base);
   console.log("cwdArgs: ", cwdArgs);
 
-  console.log("context: ", context);
+  console.log("github: ", github);
   // GITHUB_ACTION_PATH
 
   wrappedExec("git status");
