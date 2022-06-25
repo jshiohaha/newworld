@@ -147,9 +147,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
   // ./.github/actions/<name>
   const splitBase = base.split("/");
-  const cwdArgs = splitBase
-    .slice(0, splitBase.length - 4)
-    .filter((el) => el.length > 0);
+  const cwdArgs = splitBase.slice(0, splitBase.length - 4);
+  // .filter((el) => el.length > 0);
   console.log("cwdArgs: ", cwdArgs);
   console.log(`===========================`);
 
