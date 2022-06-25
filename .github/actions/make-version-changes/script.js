@@ -136,7 +136,13 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
     //   idlName = `mpl_${idlName}`;
     // }
 
-    const idlDir = "../../js/idl";
+    // back one dir + js dir + idl dir
+    const idlDirComponents = [
+      ...currentDir.slice(0, currentDir.length - 1),
+      "js",
+      "idl",
+    ];
+    const idlDir = idlDirComponents.join("/");
     if (!fs.existsSync(idlDir)) {
       console.log(`creating ${idlDir}`);
       await io.mkdirP(idlDir);
@@ -150,14 +156,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
 
     console.log("idlName: ", idlName);
     // cp IDL to js dir
-    // wrappedExec(`cp c ../js/idl/`, currentDir);
-
-    // await io.cp(`../../target/idl/${idlName}`, `../../target/idl/${idlName}`, { recursive: true, force: false });
-
-    // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
-    //   recursive: false,
-    //   force: false,
-    // });
+    // wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
   }
 };
 
