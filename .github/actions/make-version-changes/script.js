@@ -100,7 +100,7 @@ const shouldUpdate = (actual, target) => target === "*" || target === actual;
 //   return match[0];
 // }
 
-const updateCratesPackage = (cwdArgs, pkg, semvar) => {
+const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
 
@@ -138,8 +138,8 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
 
     const idlDir = "../../js/idl";
     if (!fs.existsSync(idlDir)) {
-      console.log(`creating ${idlDir}...`);
-      wrappedExec(`mkdir ${idlDir}`, currentDir);
+      console.log(`creating ${idlDir}`);
+      await io.mkdirP(idlDir);
     }
 
     console.log("=====================");
@@ -150,7 +150,9 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
 
     console.log("idlName: ", idlName);
     // cp IDL to js dir
-    // wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
+    // wrappedExec(`cp c ../js/idl/`, currentDir);
+
+    // await io.cp(`../../target/idl/${idlName}`, `../../target/idl/${idlName}`, { recursive: true, force: false });
 
     // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
     //   recursive: false,
@@ -167,8 +169,13 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
   console.log("log after upate: ", wrappedExec("git log"));
 };
 
+await io.mkdirP("path/to/make");
 // todo: add comment for expected format
-module.exports = async ({ github, context, core }, packages, versioning) => {
+module.exports = async (
+  { github, context, core, io },
+  packages,
+  versioning
+) => {
   const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
   // ./.github/actions/<name>
   const splitBase = base.split("/");
@@ -226,7 +233,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
         console.log(`add type to cwd: ${type}`);
         cwdArgs.push(type);
 
-        if (isCratesPackage(type)) updateCratesPackage(cwdArgs, name, semvar);
+        if (isCratesPackage(type))
+          await updateCratesPackage(io, cwdArgs, name, semvar);
         else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, name, semvar);
         else continue;
       } else {
