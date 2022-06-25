@@ -80,21 +80,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # - uses: ./.github/actions/install-linux-build-deps
-      # - uses: ./.github/actions/install-solana
-      #   with:
-      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      # - uses: ./.github/actions/install-rust
-      #   with:
-      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
-      # - uses: ./.github/actions/setup-anchor/
-
       # # checkout PR's HEAD commit
       # - uses: actions/checkout@v3
       #   # we always want to be at HEAD?
       #   with:
       #     ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: ./.github/actions/install-linux-build-deps
+      - uses: ./.github/actions/install-solana
+        with:
+          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      - uses: ./.github/actions/install-rust
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+      - uses: ./.github/actions/setup-anchor/
 
       # - name: Print changed files
       #   shell: bash
@@ -108,8 +107,8 @@ jobs:
         uses: ./.github/actions/make-version-changes
         id: make-version-changes
         with:
-          changed-packages: '["newworld/program"]' # ${{ needs.get-changes-scope.outputs.changed-packages }}
-          versioning: "patch" # ${{ needs.get-version-scope.outputs.version }}
+          changed-packages: ${{ needs.get-changes-scope.outputs.changed-packages }}
+          versioning: ${{ needs.get-version-scope.outputs.version }}
           branch: ${{ github.event.pull_request.head.ref }}
 
       - name: Push changes to Github
