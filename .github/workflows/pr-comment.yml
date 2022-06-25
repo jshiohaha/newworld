@@ -32,7 +32,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
   get-changes-scope:
-    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
+    if: contains(fromJson('["OWNER", "MEMBER"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
     runs-on: ubuntu-latest
     outputs:
       changed-packages: ${{ steps.get-changed-package-scope.outputs.result }}
@@ -65,7 +65,7 @@ jobs:
 
   # fetch version from comment
   get-version-scope:
-    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
+    if: contains(fromJson('["OWNER", "MEMBER"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
     runs-on: ubuntu-latest
     outputs:
       versioning: ${{ steps.parse-version-info.outputs.versioning }}
