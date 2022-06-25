@@ -202,7 +202,7 @@ module.exports = async (
 
   wrappedExec("echo 'hello world' > hello", cwdArgs.join("/"));
   wrappedExec("git add -A && git commit -m 'yeet'", cwdArgs.join("/"));
-  wrappedExec("git log", currentDir);
+  wrappedExec("git log", cwdArgs.join("/"));
 
   // // packages   => [auction-house/program, candy-machine/js]
   // // versioning => ["patch"] // patch:js, minor:rust
