@@ -32,6 +32,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
   get-changes-scope:
+    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
     runs-on: ubuntu-latest
     outputs:
       changed-packages: ${{ steps.get-changed-package-scope.outputs.result }}
@@ -64,19 +65,22 @@ jobs:
 
   # fetch version from comment
   get-version-scope:
+    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.map-pr-review-to-version.outputs.version }}
+      versioning: ${{ steps.parse-version-info.outputs.versioning }}
+      has-versioning: ${{ steps.parse-version-info.outputs.has-versioning }}
     steps:
       - uses: actions/checkout@v3
-      - name: Map PR review to version update
-        uses: ./.github/actions/map-pr-review-to-version
-        id: map-pr-review-to-version
+      - name: Parse version info from review
+        uses: ./.github/actions/parse-version-command
+        id: parse-version-info
         with:
-          pull-number: ${{ github.event.pull_request.number }}
+          body: ${{ github.event.review.body }}
 
   update-pr-with-changes:
     needs: [get-changes-scope, get-version-scope]
+    if: ${{ (needs.get-version-scope.has-versioning == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -88,14 +92,16 @@ jobs:
       # # track to the PR's HEAD commit SHA
       # - run: git reset --hard ${{ github.event.pull_request.head.sha }}
 
-      - uses: ./.github/actions/install-linux-build-deps
-      - uses: ./.github/actions/install-solana
-        with:
-          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      - uses: ./.github/actions/install-rust
-        with:
-          toolchain: ${{ env.RUST_TOOLCHAIN }}
-      - uses: ./.github/actions/setup-anchor/
+      # ====================================
+      # - uses: ./.github/actions/install-linux-build-deps
+      # - uses: ./.github/actions/install-solana
+      #   with:
+      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      # - uses: ./.github/actions/install-rust
+      #   with:
+      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
+      # - uses: ./.github/actions/setup-anchor/
+      # ====================================
 
       # actually make version updates in packages
       - name: Make version changes

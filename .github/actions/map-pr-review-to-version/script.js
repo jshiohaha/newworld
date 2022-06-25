@@ -133,5 +133,5 @@ module.exports = async ({ github, context, core }, pull_number) => {
   );
   const version = findFirstReviewWithVersion(reviews);
   // force js to recognize this as a quoted string for subsequent consumers
-  core.exportVariable("REVIEW_VERSION", version);
+  core.exportVariable("REVIEW_VERSION", [`\"${version}\"`]);
 };

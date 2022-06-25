@@ -201,7 +201,7 @@ module.exports = async (
   );
 
   // packages   => [auction-house/program, candy-machine/js]
-  // versioning => ["patch"] // patch:js, minor:rust
+  // versioning => ["patch"]
 
   // for each versioning, check if applies to package?
   for (const version of versioning) {
