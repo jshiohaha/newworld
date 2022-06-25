@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { execSync } = require("child_process");
 
 // store somewhere else?
 const MPL_PROGRAM_CONFIG = {
@@ -170,13 +171,13 @@ module.exports = async (
       // cd to package
       console.log(`cd to package: ${name}`);
       await exec.exec("ls");
-      await exec.exec(`cd ${name}`);
+      execSync(`cd ${name}`, { stdio: "inherit" });
       console.log("current dir: ", await exec.exec("pwd"));
 
       if (shouldUpdate(type, targetType)) {
         console.log(`cd to type: ${type}`);
         await exec.exec("ls");
-        await exec.exec(`cd ${type}`);
+        execSync(`cd ${type}`, { stdio: "inherit" });
         console.log("current dir: ", await exec.exec("pwd"));
 
         if (isCratesPackage(type))
@@ -192,7 +193,7 @@ module.exports = async (
       }
 
       // chdir back two levels - back to root, should match original cwd
-      await exec.exec(`cd ../../`);
+      execSync(`cd ../../`, { stdio: "inherit" });
       console.log("current dir: ", await exec.exec("pwd"));
     }
   }
