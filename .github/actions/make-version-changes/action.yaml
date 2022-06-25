@@ -26,8 +26,5 @@ runs:
       uses: actions/github-script@v4
       with:
         script: |
-          const script = require('.github/actions/make-version-changes/fuckyou.js')
-          await script({github, context, core})
-
-# const script = require('.github/actions/make-version-changes/script.js')
-# await script({github, context, core}, ${{ inputs.changed-packages }}, '${{ inputs.versioning }}')
+          const script = require('.github/actions/make-version-changes/script.js')
+          await script({github, context, core}, ${{ inputs.changed-packages }}, '${{ inputs.versioning }}')
