@@ -125,6 +125,9 @@ module.exports = async (
   versioning
 ) => {
   await exec.exec("pwd");
+  console.log("packages: ", packages);
+  console.log("versioning: ", versioning);
+
   if (versioning.length) {
     console.log("No versioning updates to make. Exiting early.");
     return;
