@@ -84,19 +84,19 @@ const parseVersioningCommand = (cmd) => {
 
 const shouldUpdate = (actual, target) => target === "*" || target === actual;
 
-const getCratePackageVersion = () => {
-  const package_id_file = "package_id";
-  await exec(`cargo pkgid > ${package_id_file}`);
+// const getCratePackageVersion = () => {
+//   const package_id_file = "package_id";
+//   await exec(`cargo pkgid > ${package_id_file}`);
 
-  const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
-  const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
-  const match = fileVersionDirty.match(regexp);
-  if (!match) throw new Error("Could not match version from ", fileVersionDirty);
+//   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
+//   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
+//   const match = fileVersionDirty.match(regexp);
+//   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
 
-  return match[0];
-}
+//   return match[0];
+// }
 
-const updateCratesPackage = async (cwdArgs, pkg, semvar) => {
+const updateCratesPackage = (cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
   const currentDir = cwdArgs.join("/");
 
@@ -124,14 +124,14 @@ const updateCratesPackage = async (cwdArgs, pkg, semvar) => {
   //   // cp IDL to js dir
   //   wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
 
-    // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
-    //   recursive: false,
-    //   force: false,
-    // });
+  // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
+  //   recursive: false,
+  //   force: false,
+  // });
   // }
 };
 
-const updateNpmPackage = async (cwdArgs, _pkg, semvar) => {
+const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
@@ -202,9 +202,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
         cwdArgs.push(type);
 
         if (isCratesPackage(type))
-          await updateCratesPackage(cwdArgs, package, semvar);
-        else if (isNpmPackage(type))
-          await updateNpmPackage(cwdArgs, package, semvar);
+          updateCratesPackage(cwdArgs, package, semvar);
+        else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, package, semvar);
         else continue;
       } else {
         console.log(
