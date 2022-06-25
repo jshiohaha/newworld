@@ -159,7 +159,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
     console.log("=====================");
     wrappedExec(`git log`);
     console.log("=====================");
-    wrappedExec(`git diff`);
+    wrappedExec(`git diff HEAD~1 HEAD`);
     console.log("=====================");
   }
 };
@@ -200,56 +200,60 @@ module.exports = async (
     cwdArgs.join("/")
   );
 
-  // packages   => [auction-house/program, candy-machine/js]
-  // versioning => ["patch"] // patch:js, minor:rust
+  wrappedExec("echo 'hello world' > hello", cwdArgs.join("/"));
+  wrappedExec("git add -A && git commit -m 'yeet'", cwdArgs.join("/"));
+  wrappedExec("git log", currentDir);
 
-  // for each versioning, check if applies to package?
-  for (const version of versioning) {
-    const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
-    if (semvar === "none") {
-      console.log(
-        "No versioning updates to make when semvar === none. Continuing."
-      );
-      continue;
-    }
+  // // packages   => [auction-house/program, candy-machine/js]
+  // // versioning => ["patch"] // patch:js, minor:rust
 
-    for (const package of packages) {
-      if (!shouldUpdate(package, targetPkg)) {
-        console.log(
-          `No updates for package ${package} based on version command ${version}`
-        );
-        continue;
-      }
+  // // for each versioning, check if applies to package?
+  // for (const version of versioning) {
+  //   const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
+  //   if (semvar === "none") {
+  //     console.log(
+  //       "No versioning updates to make when semvar === none. Continuing."
+  //     );
+  //     continue;
+  //   }
 
-      const [name, type] = package.split("/");
-      if (!fs.existsSync(name)) {
-        console.log("could not find dir: ", name);
-        continue;
-      }
+  //   for (const package of packages) {
+  //     if (!shouldUpdate(package, targetPkg)) {
+  //       console.log(
+  //         `No updates for package ${package} based on version command ${version}`
+  //       );
+  //       continue;
+  //     }
 
-      // cd to package
-      console.log(`cd to package: ${name}`);
-      cwdArgs.push(name);
+  //     const [name, type] = package.split("/");
+  //     if (!fs.existsSync(name)) {
+  //       console.log("could not find dir: ", name);
+  //       continue;
+  //     }
 
-      if (shouldUpdate(type, targetType)) {
-        console.log(`add type to cwd: ${type}`);
-        cwdArgs.push(type);
+  //     // cd to package
+  //     console.log(`cd to package: ${name}`);
+  //     cwdArgs.push(name);
 
-        if (isCratesPackage(type))
-          await updateCratesPackage(io, cwdArgs, name, semvar);
-        else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, name, semvar);
-        else continue;
-      } else {
-        console.log(
-          `no update required for package = ${name} of type = ${type}`
-        );
-        continue;
-      }
+  //     if (shouldUpdate(type, targetType)) {
+  //       console.log(`add type to cwd: ${type}`);
+  //       cwdArgs.push(type);
 
-      // chdir back two levels - back to root, should match original cwd
-      console.log("remove 2 args to go back 2 dirs");
-      cwdArgs.pop();
-      cwdArgs.pop();
-    }
-  }
+  //       if (isCratesPackage(type))
+  //         await updateCratesPackage(io, cwdArgs, name, semvar);
+  //       else if (isNpmPackage(type)) updateNpmPackage(cwdArgs, name, semvar);
+  //       else continue;
+  //     } else {
+  //       console.log(
+  //         `no update required for package = ${name} of type = ${type}`
+  //       );
+  //       continue;
+  //     }
+
+  //     // chdir back two levels - back to root, should match original cwd
+  //     console.log("remove 2 args to go back 2 dirs");
+  //     cwdArgs.pop();
+  //     cwdArgs.pop();
+  // }
+  // }
 };
