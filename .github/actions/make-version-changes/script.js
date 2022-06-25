@@ -143,22 +143,19 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
 module.exports = async ({ github, context, core }, packages, versioning) => {
   const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
   // ./.github/actions/<name>
-  const cwdArgs = base.split("/").slice(0, base.length - 4);
-  console.log("base: ", base);
+  const splitBase = base.split("/");
+  const cwdArgs = splitBase
+    .slice(0, splitBase.length - 4)
+    .filter((el) => el.length > 0);
   console.log("cwdArgs: ", cwdArgs);
-
-  // wrappedExec("git status");
-  // wrappedExec("echo 'hello world' > hello");
-  // wrappedExec("git status");
-  // wrappedExec("pwd", cwdArgs.join("/"));
   console.log(`===========================`);
 
-  // console.log("versioning: ", versioning);
+  console.log("versioning: ", versioning);
 
-  // if (versioning.length === 0) {
-  //   console.log("No versioning updates to make. Exiting early.");
-  //   return;
-  // }
+  if (versioning.length === 0) {
+    console.log("No versioning updates to make. Exiting early.");
+    return;
+  }
 
   // // packages   => [auction-house/program, candy-machine/js]
   // // versioning => ["patch"] // patch:js, minor:rust
