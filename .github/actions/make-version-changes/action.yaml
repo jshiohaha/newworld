@@ -24,6 +24,7 @@ runs:
 
     - name: Make version changes
       uses: actions/github-script@v4
+      shell: bash
       with:
         script: |
           const script = require('.github/actions/make-version-changes/script.js')
