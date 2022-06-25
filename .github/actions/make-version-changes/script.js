@@ -139,14 +139,13 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   console.log("base: ", base);
   console.log("cwdArgs: ", cwdArgs);
 
-  execSync("git status");
-  execSync("echo 'hello world' > hello");
-  execSync("git status");
+  execSync("git status", { stdio: "inherit" });
+  execSync("echo 'hello world' > hello", { stdio: "inherit" });
+  execSync("git status", { stdio: "inherit" });
 
   // execSync("pwd", { cwd: cwdArgs.join("/") });
   // console.log(`===========================`);
 
-  // console.log("packages: ", packages);
   // console.log("versioning: ", versioning);
 
   // if (versioning.length === 0) {
