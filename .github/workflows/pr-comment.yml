@@ -81,14 +81,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/install-linux-build-deps
-      - uses: ./.github/actions/install-solana
-        with:
-          solana_version: ${{ env.SOLANA_VERSION_STABLE }}
-      - uses: ./.github/actions/install-rust
-        with:
-          toolchain: ${{ env.RUST_TOOLCHAIN }}
-      - uses: ./.github/actions/setup-anchor/
+      # - uses: ./.github/actions/install-linux-build-deps
+      # - uses: ./.github/actions/install-solana
+      #   with:
+      #     solana_version: ${{ env.SOLANA_VERSION_STABLE }}
+      # - uses: ./.github/actions/install-rust
+      #   with:
+      #     toolchain: ${{ env.RUST_TOOLCHAIN }}
+      # - uses: ./.github/actions/setup-anchor/
 
       # # checkout PR's HEAD commit
       # - uses: actions/checkout@v3
