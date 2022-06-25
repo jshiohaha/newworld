@@ -140,18 +140,20 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
 };
 
 // todo: add comment for expected format
-module.exports = async ({ github, context, core }, packages, versioning) => {
-  const base = path.join(__dirname);
-  const cwdArgs = [base];
-  console.log("base: ", base);
+module.exports = async (
+  { github, context, core },
+  packages,
+  versioning,
+  root
+) => {
+  // const base = path.join(__dirname);
+  const cwdArgs = [root];
+  console.log("root: ", root);
   console.log("cwdArgs: ", cwdArgs);
 
-  console.log("github: ", github);
-  // GITHUB_ACTION_PATH
-
-  wrappedExec("git status");
-  wrappedExec("echo 'hello world' > hello");
-  wrappedExec("git status");
+  // wrappedExec("git status");
+  // wrappedExec("echo 'hello world' > hello");
+  // wrappedExec("git status");
 
   wrappedExec("pwd", cwdArgs.join("/"));
   console.log(`===========================`);
