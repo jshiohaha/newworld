@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: echo "${{ needs.get-version-scope.has-versioning }}"
+      - run: echo "${{ needs.get-version-scope.outputs.has-versioning }}"
 
       # # checkout PR's HEAD commit
       # - uses: actions/checkout@v3
@@ -112,7 +112,7 @@ jobs:
         id: make-version-changes
         with:
           changed-packages: ${{ needs.get-changes-scope.outputs.changed-packages }}
-          versioning: ${{ needs.get-version-scope.outputs.version }}
+          versioning: ${{ needs.get-version-scope.outputs.versioning }}
           branch: ${{ github.event.pull_request.head.ref }}
 
       - name: Push changes to Github
