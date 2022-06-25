@@ -56,6 +56,20 @@ const MPL_PROGRAM_CONFIG = {
   },
 };
 
+const wrappedExec = (cmd, cwd) => {
+  let args = {
+    stdio: "inherit",
+  };
+
+  if (cwd) {
+    args["cwd"] = cwd;
+  } else {
+    args["cwd"] = path.join(__dirname);
+  }
+
+  execSync(cmd, args);
+};
+
 // const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
 // const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
 
@@ -70,17 +84,17 @@ const MPL_PROGRAM_CONFIG = {
 
 // const shouldUpdate = (actual, target) => target === "*" || target === actual;
 
-// // const getCratePackageVersion = () => {
-// //   const package_id_file = "package_id";
-// //   await exec(`cargo pkgid > ${package_id_file}`);
+// const getCratePackageVersion = () => {
+//   const package_id_file = "package_id";
+//   await exec(`cargo pkgid > ${package_id_file}`);
 
-// //   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
-// //   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
-// //   const match = fileVersionDirty.match(regexp);
-// //   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
+//   const fileVersionDirty = fs.readFileSync(package_id_file,'utf8');
+//   const regexp = /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$)/g
+//   const match = fileVersionDirty.match(regexp);
+//   if (!match) throw new Error("Could not match version from ", fileVersionDirty);
 
-// //   return match[0];
-// // }
+//   return match[0];
+// }
 
 // const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
 //   console.log("updating rust package");
@@ -139,9 +153,9 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   console.log("base: ", base);
   console.log("cwdArgs: ", cwdArgs);
 
-  execSync("git status", { stdio: "inherit" });
-  execSync("echo 'hello world' > hello", { stdio: "inherit" });
-  execSync("git status", { stdio: "inherit" });
+  wrappedExec("git status");
+  wrappedExec("echo 'hello world' > hello");
+  wrappedExec("git status");
 
   // execSync("pwd", { cwd: cwdArgs.join("/") });
   // console.log(`===========================`);
