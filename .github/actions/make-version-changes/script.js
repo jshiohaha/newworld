@@ -112,6 +112,8 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
   // wrappedExec(`git log`);
   // // wrappedExec(`shank --help`);
 
+  wrappedExec("pwd", currentDir);
+
   // generate IDL
   if (packageHasIdl(pkg)) {
     let idlName = `${pkg.replace("-", "_")}.json`;
@@ -134,7 +136,14 @@ const updateCratesPackage = (cwdArgs, pkg, semvar) => {
       idlName = `mpl_${idlName}`;
     }
 
-    wrappedExec("ls ../js/idl/", currentDir);
+    console.log("=====================");
+    wrappedExec("ls .", currentDir);
+    console.log("=====================");
+    wrappedExec("ls ../", currentDir);
+    console.log("=====================");
+    wrappedExec("ls ../js", currentDir);
+    console.log("=====================");
+
     console.log("idlName: ", idlName);
     // cp IDL to js dir
     wrappedExec(`cp ../../target/idl/${idlName} ../js/idl/`, currentDir);
