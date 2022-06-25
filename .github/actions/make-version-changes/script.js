@@ -169,7 +169,6 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
   console.log("log after upate: ", wrappedExec("git log"));
 };
 
-await io.mkdirP("path/to/make");
 // todo: add comment for expected format
 module.exports = async (
   { github, context, core, io },
