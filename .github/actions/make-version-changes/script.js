@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 // store somewhere else?
 const MPL_PROGRAM_CONFIG = {
@@ -59,8 +60,8 @@ const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
 const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
 
 const isPackageType = (actual, target) => actual === target;
-const isCratesPackage = (actual) => isPackageType(actual, "js");
-const isNpmPackage = (actual) => isPackageType(actual, "program");
+const isCratesPackage = (actual) => isPackageType(actual, "program");
+const isNpmPackage = (actual) => isPackageType(actual, "js");
 
 // (package, type, semvar)
 const parseVersioningCommand = (cmd) => {
@@ -86,23 +87,23 @@ const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
   const currentDir = cwdArgs.join("/");
 
   // adds git info automatically, --no-tag
-  await exec.exec(
+  execSync(
     `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
     { cwd: currentDir }
   );
-  console.log("status after release: ", await exec.exec(`git status`));
+  console.log("status after release: ", execSync(`git status`));
 
   // generate IDL
   if (packageHasIdl(pkg)) {
     let idlName = `${pkg.replace("-", "_")}.json`;
     if (packageUsesAnchor(pkg)) {
       // build via anchor to generate IDL
-      await exec.exec(`anchor build --skip-lint --idl ../../target/idl`, {
+      execSync(`anchor build --skip-lint --idl ../../target/idl`, {
         cwd: currentDir,
       });
     } else {
       // generate IDL via shank
-      await exec.exec(`shank idl --out-dir ../../target/idl  --crate-root .`, {
+      execSync(`shank idl --out-dir ../../target/idl  --crate-root .`, {
         cwd: currentDir,
       });
       // prepend `mpl_` to IDL name
@@ -110,7 +111,7 @@ const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
     }
 
     // cp IDL to js dir
-    await exec.exec(`cp ../../target/idl/${idlName} ../js/idl/`, {
+    execSync(`cp ../../target/idl/${idlName} ../js/idl/`, {
       cwd: currentDir,
     });
 
@@ -125,8 +126,8 @@ const updateNpmPackage = async (exec, cwdArgs, _pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
-  await exec.exec(`npm version ${semvar}`, { cwd: cwdArgs.join("/") });
-  console.log("log after upate: ", await exec.exec("git log"));
+  execSync(`npm version ${semvar}`, { cwd: cwdArgs.join("/") });
+  console.log("log after upate: ", execSync("git log"));
 };
 
 // todo: add comment for expected format
@@ -141,7 +142,7 @@ module.exports = async (
   console.log("base: ", base);
   console.log("cwdArgs: ", cwdArgs);
 
-  await exec.exec("pwd", { cwd: cwdArgs.join("/") });
+  execSync("pwd", { cwd: cwdArgs.join("/") });
   console.log(`===========================`);
 
   console.log("packages: ", packages);
@@ -155,10 +156,10 @@ module.exports = async (
   // packages   => [auction-house/program, candy-machine/js]
   // versioning => ["patch"] // patch:js, minor:rust
 
-  await exec.exec("git config user.name github-actions[bot]", {
+  execSync("git config user.name github-actions[bot]", {
     cwd: cwdArgs.join("/"),
   });
-  await exec.exec(
+  execSync(
     "git config user.email github-actions[bot]@users.noreply.github.com",
     { cwd: cwdArgs.join("/") }
   );
