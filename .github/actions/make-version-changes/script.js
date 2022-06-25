@@ -4,6 +4,10 @@ const { execSync } = require("child_process");
 
 // store somewhere else?
 const MPL_PROGRAM_CONFIG = {
+  newworld: {
+    has_idl: "true",
+    uses_anchor: "true",
+  },
   "auction-house": {
     has_idl: "true",
     uses_anchor: "true",
