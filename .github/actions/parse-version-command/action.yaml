@@ -22,7 +22,7 @@ runs:
       with:
         script: |
           const script = require('.github/actions/parse-version-command/script.js')
-          await script({github, context, core}, ${{ inputs.body }})
+          await script({github, context, core}, '${{ inputs.body }}')
 
     - name: Set Output
       id: set-output
