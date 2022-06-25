@@ -1,5 +1,3 @@
-const exec = require("@actions/exec");
-const io = require("@actions/io");
 const fs = require("fs");
 
 // store somewhere else?
@@ -82,7 +80,7 @@ const shouldUpdate = (actual, target) => target === "*" || target === actual;
 //   return match[0];
 // }
 
-const updateCratesPackage = async (pkg, semvar) => {
+const updateCratesPackage = async (io, pkg, semvar) => {
   console.log("updating rust package");
 
   // adds git info automatically, --no-tag
@@ -121,7 +119,7 @@ const updateNpmPackage = async (_pkg, semvar) => {
 };
 
 // todo: add comment for expected format
-module.exports = async ({ github, context, core }, packages, versioning) => {
+module.exports = async ({ exec, io }, packages, versioning) => {
   console.log("current dir: ", await exec.exec("pwd"));
   if (versioning.length) {
     console.log("No versioning updates to make. Exiting early.");
@@ -169,7 +167,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
         await exec(`cd ${type}`);
         console.log("current dir: ", await exec.exec("pwd"));
 
-        if (isCratesPackage(type)) await updateCratesPackage(package, semvar);
+        if (isCratesPackage(type))
+          await updateCratesPackage(io, package, semvar);
         else if (isNpmPackage(type)) await updateNpmPackage(package, semvar);
         else continue;
       } else {
