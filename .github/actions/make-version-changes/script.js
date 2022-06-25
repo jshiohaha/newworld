@@ -153,6 +153,8 @@ module.exports = async ({ github, context, core }, packages, versioning) => {
   console.log("cwdArgs: ", cwdArgs);
   console.log(`===========================`);
 
+  wrappedExec("ls", cwdArgs.join("/"));
+
   console.log("versioning: ", versioning);
 
   if (versioning.length === 0) {
