@@ -171,7 +171,7 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
 
 // todo: add comment for expected format
 module.exports = async (
-  { github, context, core, io },
+  { github, context, core, glob, io },
   packages,
   versioning
 ) => {
