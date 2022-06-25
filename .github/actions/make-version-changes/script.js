@@ -119,7 +119,11 @@ const updateNpmPackage = async (_pkg, semvar) => {
 };
 
 // todo: add comment for expected format
-module.exports = async ({ exec, io }, packages, versioning) => {
+module.exports = async (
+  { github, context, core, glob, io, exec },
+  packages,
+  versioning
+) => {
   console.log("current dir: ", await exec.exec("pwd"));
   if (versioning.length) {
     console.log("No versioning updates to make. Exiting early.");
