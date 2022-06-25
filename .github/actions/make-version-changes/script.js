@@ -125,6 +125,8 @@ module.exports = async (
   versioning
 ) => {
   await exec.exec("pwd");
+  await exec.exec("ls");
+
   console.log("packages: ", packages);
   console.log("versioning: ", versioning);
 
@@ -166,11 +168,14 @@ module.exports = async (
       }
 
       // cd to package
+      console.log(`cd to package: ${name}`);
+      await exec.exec("ls");
       await exec.exec(`cd ${name}`);
       console.log("current dir: ", await exec.exec("pwd"));
 
       if (shouldUpdate(type, targetType)) {
-        // cd to program
+        console.log(`cd to type: ${type}`);
+        await exec.exec("ls");
         await exec.exec(`cd ${type}`);
         console.log("current dir: ", await exec.exec("pwd"));
 
