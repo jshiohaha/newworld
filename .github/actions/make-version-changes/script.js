@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { execSync } = require("child_process");
+const path = require("path");
 
 // store somewhere else?
 const MPL_PROGRAM_CONFIG = {
@@ -81,12 +81,14 @@ const shouldUpdate = (actual, target) => target === "*" || target === actual;
 //   return match[0];
 // }
 
-const updateCratesPackage = async (exec, io, pkg, semvar) => {
+const updateCratesPackage = async (exec, io, cwdArgs, pkg, semvar) => {
   console.log("updating rust package");
+  const currentDir = cwdArgs.join("/");
 
   // adds git info automatically, --no-tag
   await exec.exec(
-    `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`
+    `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`,
+    { cwd: currentDir }
   );
   console.log("status after release: ", await exec.exec(`git status`));
 
@@ -95,27 +97,35 @@ const updateCratesPackage = async (exec, io, pkg, semvar) => {
     let idlName = `${pkg.replace("-", "_")}.json`;
     if (packageUsesAnchor(pkg)) {
       // build via anchor to generate IDL
-      await exec.exec(`anchor build --skip-lint --idl ../../target/idl`);
+      await exec.exec(`anchor build --skip-lint --idl ../../target/idl`, {
+        cwd: currentDir,
+      });
     } else {
       // generate IDL via shank
-      await exec.exec(`shank idl --out-dir ../../target/idl  --crate-root .`);
+      await exec.exec(`shank idl --out-dir ../../target/idl  --crate-root .`, {
+        cwd: currentDir,
+      });
       // prepend `mpl_` to IDL name
       idlName = `mpl_${idlName}`;
     }
 
     // cp IDL to js dir
-    await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
-      recursive: false,
-      force: false,
+    await exec.exec(`cp ../../target/idl/${idlName} ../js/idl/`, {
+      cwd: currentDir,
     });
+
+    // await io.cp(`../../target/idl/${idlName}`, "../js/idl/", {
+    //   recursive: false,
+    //   force: false,
+    // });
   }
 };
 
-const updateNpmPackage = async (exec, _pkg, semvar) => {
+const updateNpmPackage = async (exec, cwdArgs, _pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
-  await exec.exec(`npm version ${semvar}`);
+  await exec.exec(`npm version ${semvar}`, { cwd: cwdArgs.join("/") });
   console.log("log after upate: ", await exec.exec("git log"));
 };
 
@@ -125,8 +135,14 @@ module.exports = async (
   packages,
   versioning
 ) => {
-  await exec.exec("pwd");
-  await exec.exec("ls");
+  const base = path.join(__dirname);
+  const cwdArgs = [base];
+
+  console.log("base: ", base);
+  console.log("cwdArgs: ", cwdArgs);
+
+  await exec.exec("pwd", { cwd: cwdArgs.join("/") });
+  console.log(`===========================`);
 
   console.log("packages: ", packages);
   console.log("versioning: ", versioning);
@@ -139,9 +155,12 @@ module.exports = async (
   // packages   => [auction-house/program, candy-machine/js]
   // versioning => ["patch"] // patch:js, minor:rust
 
-  await exec.exec("git config user.name github-actions[bot]");
+  await exec.exec("git config user.name github-actions[bot]", {
+    cwd: cwdArgs.join("/"),
+  });
   await exec.exec(
-    "git config user.email github-actions[bot]@users.noreply.github.com"
+    "git config user.email github-actions[bot]@users.noreply.github.com",
+    { cwd: cwdArgs.join("/") }
   );
 
   // for each versioning, check if applies to package?
@@ -170,20 +189,16 @@ module.exports = async (
 
       // cd to package
       console.log(`cd to package: ${name}`);
-      await exec.exec("ls");
-      execSync(`cd ${name}`, { stdio: "inherit" });
-      console.log("current dir: ", await exec.exec("pwd"));
+      cwdArgs.push(name);
 
       if (shouldUpdate(type, targetType)) {
-        console.log(`cd to type: ${type}`);
-        await exec.exec("ls");
-        execSync(`cd ${type}`, { stdio: "inherit" });
-        console.log("current dir: ", await exec.exec("pwd"));
+        console.log(`add type to cwd: ${type}`);
+        cwdArgs.push(type);
 
         if (isCratesPackage(type))
-          await updateCratesPackage(exec, io, package, semvar);
+          await updateCratesPackage(exec, io, cwdArgs, package, semvar);
         else if (isNpmPackage(type))
-          await updateNpmPackage(exec, package, semvar);
+          await updateNpmPackage(exec, cwdArgs, package, semvar);
         else continue;
       } else {
         console.log(
@@ -193,8 +208,9 @@ module.exports = async (
       }
 
       // chdir back two levels - back to root, should match original cwd
-      execSync(`cd ../../`, { stdio: "inherit" });
-      console.log("current dir: ", await exec.exec("pwd"));
+      console.log("remove 2 args to go back 2 dirs");
+      cwdArgs.pop();
+      cwdArgs.pop();
     }
   }
 };
