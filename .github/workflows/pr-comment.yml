@@ -80,7 +80,7 @@ jobs:
 
   update-pr-with-changes:
     needs: [get-changes-scope, get-version-scope]
-    if: ${{ (needs.get-version-scope.has-versioning == 'true' }}
+    if: ${{ needs.get-version-scope.has-versioning == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
