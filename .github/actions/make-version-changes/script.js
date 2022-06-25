@@ -80,24 +80,24 @@ const shouldUpdate = (actual, target) => target === "*" || target === actual;
 //   return match[0];
 // }
 
-const updateCratesPackage = async (io, pkg, semvar) => {
+const updateCratesPackage = async (exec, io, pkg, semvar) => {
   console.log("updating rust package");
 
   // adds git info automatically, --no-tag
-  await exec(
+  await exec.exec(
     `cargo release --no-publish --no-push --no-confirm --verbose --execute ${semvar}`
   );
-  console.log("status after release: ", await exec(`git status`));
+  console.log("status after release: ", await exec.exec(`git status`));
 
   // generate IDL
   if (packageHasIdl(pkg)) {
     let idlName = `${pkg.replace("-", "_")}.json`;
     if (packageUsesAnchor(pkg)) {
       // build via anchor to generate IDL
-      await exec(`anchor build --skip-lint --idl ../../target/idl`);
+      await exec.exec(`anchor build --skip-lint --idl ../../target/idl`);
     } else {
       // generate IDL via shank
-      await exec(`shank idl --out-dir ../../target/idl  --crate-root .`);
+      await exec.exec(`shank idl --out-dir ../../target/idl  --crate-root .`);
       // prepend `mpl_` to IDL name
       idlName = `mpl_${idlName}`;
     }
@@ -110,11 +110,11 @@ const updateCratesPackage = async (io, pkg, semvar) => {
   }
 };
 
-const updateNpmPackage = async (_pkg, semvar) => {
+const updateNpmPackage = async (exec, _pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
-  await exec(`npm version ${semvar}`);
+  await exec.exec(`npm version ${semvar}`);
   console.log("log after upate: ", await exec.exec("git log"));
 };
 
@@ -136,8 +136,8 @@ module.exports = async (
   // packages   => [auction-house/program, candy-machine/js]
   // versioning => ["patch"] // patch:js, minor:rust
 
-  await exec("git config user.name github-actions[bot]");
-  await exec(
+  await exec.exec("git config user.name github-actions[bot]");
+  await exec.exec(
     "git config user.email github-actions[bot]@users.noreply.github.com"
   );
 
@@ -166,17 +166,18 @@ module.exports = async (
       }
 
       // cd to package
-      await exec(`cd ${name}`);
+      await exec.exec(`cd ${name}`);
       console.log("current dir: ", await exec.exec("pwd"));
 
       if (shouldUpdate(type, targetType)) {
         // cd to program
-        await exec(`cd ${type}`);
+        await exec.exec(`cd ${type}`);
         console.log("current dir: ", await exec.exec("pwd"));
 
         if (isCratesPackage(type))
-          await updateCratesPackage(io, package, semvar);
-        else if (isNpmPackage(type)) await updateNpmPackage(package, semvar);
+          await updateCratesPackage(exec, io, package, semvar);
+        else if (isNpmPackage(type))
+          await updateNpmPackage(exec, package, semvar);
         else continue;
       } else {
         console.log(
@@ -186,7 +187,7 @@ module.exports = async (
       }
 
       // chdir back two levels - back to root, should match original cwd
-      await exec(`cd ../../`);
+      await exec.exec(`cd ../../`);
       console.log("current dir: ", await exec.exec("pwd"));
     }
   }
