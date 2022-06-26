@@ -638,7 +638,7 @@ dependencies = [
 
 [[package]]
 name = "jshiohaha-newworld-test"
-version = "0.4.7"
+version = "0.5.0"
 dependencies = [
  "anchor-lang",
 ]

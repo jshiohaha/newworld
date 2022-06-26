@@ -1,0 +1,16 @@
+{
+  "version": "0.5.0",
+  "name": "newworld",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [],
+      "args": []
+    },
+    {
+      "name": "add",
+      "accounts": [],
+      "args": []
+    }
+  ]
+}
