@@ -216,6 +216,8 @@ module.exports = async (
     console.log("targetPkg: ", targetPkg);
     console.log("targetType: ", targetType);
 
+    console.log("packages: ", packages);
+
     for (const package of packages) {
       console.log("package: ", package);
 
