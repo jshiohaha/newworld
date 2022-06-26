@@ -60,6 +60,6 @@ module.exports = async ({ github, context, core }, pull_number) => {
   core.exportVariable(
     "CHANGED_FILES",
     // explicitly add quotation marks for later parsing
-    JSON.stringify(Array.from(changedFiles).map((el) => `\"${el}\"`))
+    JSON.stringify(Array.from(changedFiles)) // .map((el) => `\"${el}\"`))
   );
 };
