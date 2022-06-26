@@ -201,6 +201,7 @@ module.exports = async (
 
   // for each versioning, check if applies to package?
   for (const version of versioning) {
+    console.log("version: ", version);
     const [semvar, targetPkg, targetType] = parseVersioningCommand(version);
     if (semvar === "none") {
       console.log(
@@ -208,6 +209,10 @@ module.exports = async (
       );
       continue;
     }
+
+    console.log("semvar: ", semvar);
+    console.log("targetPkg: ", targetPkg);
+    console.log("targetType: ", targetType);
 
     for (const package of packages) {
       if (!shouldUpdate(package, targetPkg)) {
@@ -218,6 +223,9 @@ module.exports = async (
       }
 
       const [name, type] = package.split("/");
+      console.log("name: ", name);
+      console.log("type: ", type);
+
       if (!fs.existsSync(name)) {
         console.log("could not find dir: ", name);
         continue;
