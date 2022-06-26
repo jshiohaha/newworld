@@ -74,18 +74,14 @@ const wrappedExec = (cmd, cwd) => {
   execSync(cmd, args);
 };
 
-const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
-const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
-
 const isPackageType = (actual, target) => actual === target;
 const isCratesPackage = (actual) => isPackageType(actual, "program");
 const isNpmPackage = (actual) => isPackageType(actual, "js");
 
-// (package, type, semvar)
-const parseVersioningCommand = (cmd) => {
-  return ["*", "*", cmd];
-};
+const packageUsesAnchor = (pkg) => MPL_PROGRAM_CONFIG[pkg]["uses_anchor"];
+const packageHasIdl = (pkg) => MPL_PROGRAM_CONFIG[pkg]["has_idl"];
 
+const parseVersioningCommand = (cmd) => cmd.split(":");
 const shouldUpdate = (actual, target) => target === "*" || target === actual;
 
 const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
@@ -205,7 +201,7 @@ module.exports = async (
 
   // for each versioning, check if applies to package?
   for (const version of versioning) {
-    const [targetPkg, targetType, semvar] = parseVersioningCommand(version);
+    const [semvar, targetPkg, targetType] = parseVersioningCommand(version);
     if (semvar === "none") {
       console.log(
         "No versioning updates to make when semvar === none. Continuing."
