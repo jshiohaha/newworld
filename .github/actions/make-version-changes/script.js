@@ -221,7 +221,7 @@ module.exports = async (
     packages = JSON.parse(packages);
     for (const package of packages) {
       // make sure package doesn't have extra quotes or spacing
-      package = package.replace(/\s+\"\'$/gm, "");
+      package = package.replace(/\s+|\"|\'/g, "");
       console.log("package: ", package);
 
       if (!shouldUpdate(package, targetPkg)) {
