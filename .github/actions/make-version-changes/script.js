@@ -174,6 +174,8 @@ module.exports = async (
   packages,
   versioning
 ) => {
+  // versioning = JSON.parse(versioning);
+
   const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
   // ./.github/actions/<name>
   const splitBase = base.split("/");
@@ -214,7 +216,11 @@ module.exports = async (
     console.log("targetPkg: ", targetPkg);
     console.log("targetType: ", targetType);
 
+    console.log("packages: ", packages);
+
     for (const package of packages) {
+      console.log("package: ", package);
+
       if (!shouldUpdate(package, targetPkg)) {
         console.log(
           `No updates for package ${package} based on version command ${version}`
