@@ -217,6 +217,8 @@ module.exports = async (
     console.log("targetType: ", targetType);
 
     for (const package of packages) {
+      console.log("package: ", package);
+
       if (!shouldUpdate(package, targetPkg)) {
         console.log(
           `No updates for package ${package} based on version command ${version}`
