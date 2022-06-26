@@ -1,6 +1,6 @@
 [package]
 name = "jshiohaha-newworld-test"
-version = "0.4.7"
+version = "0.4.8"
 edition = "2021"
 description = "Created with Anchor"
 authors = [ "Jacob Shiohira <dev@jacobshiohira.com>" ]
