@@ -50,7 +50,7 @@ jobs:
         id: get-changed-package-scope
         with:
           script: |
-            const files = JSON.parse('${{ steps.list-changed-files.outputs.changed-files }}')
+            const files = JSON.parse(${{ steps.list-changed-files.outputs.changed-files }})
             const regexp = /[a-zA-Z\-]+\/(js|program)/g
             const uniqueFilesObj = files.reduce((p, file) => {
               const match = file.match(regexp)
