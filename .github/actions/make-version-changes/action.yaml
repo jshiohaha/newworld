@@ -18,7 +18,16 @@ runs:
       with:
         ref: ${{ inputs.branch }}
 
-    - name: Install cargo-release
+    - uses: actions/cache@v2
+      name: Cache Cargo Release
+      id: cache-cargo-release
+      with:
+        path: |
+          ~/.cargo/bin/cargo-release
+        key: cargo-release-${{ runner.os }}
+
+    - name: Install Cargo Release
+      if: steps.cache-solana-install.cache-hit != 'true'
       shell: bash
       run: |
         cargo install cargo-release
