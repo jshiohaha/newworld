@@ -174,7 +174,7 @@ module.exports = async (
   packages,
   versioning
 ) => {
-  versioning = JSON.parse(versioning);
+  // versioning = JSON.parse(versioning);
 
   const base = process.env.GITHUB_ACTION_PATH; // path.join(__dirname);
   // ./.github/actions/<name>
