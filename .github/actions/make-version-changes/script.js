@@ -132,6 +132,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
       "js",
       "idl",
     ].join("/");
+
     if (!fs.existsSync(destIdlDir)) {
       console.log(`creating ${destIdlDir}`);
       await io.mkdirP(destIdlDir);
