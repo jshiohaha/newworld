@@ -32,7 +32,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
   get-changes-scope:
-    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
+    if: contains(fromJson('["OWNER", "MEMBER"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.state) == true
     runs-on: ubuntu-latest
     outputs:
       changed-packages: ${{ steps.get-changed-package-scope.outputs.result }}
@@ -65,7 +65,7 @@ jobs:
 
   # fetch version from comment
   get-version-scope:
-    if: contains(fromJson('["owner", "member"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.commented) == true
+    if: contains(fromJson('["OWNER", "MEMBER"]'), github.event.review.author_association) == true && contains(fromJson('["approved", "commented"]'), github.event.review.state) == true
     runs-on: ubuntu-latest
     outputs:
       versioning: ${{ steps.parse-version-info.outputs.versioning }}
@@ -80,10 +80,11 @@ jobs:
 
   update-pr-with-changes:
     needs: [get-changes-scope, get-version-scope]
-    if: ${{ (needs.get-version-scope.has-versioning == 'true' }}
+    if: ${{ needs.get-version-scope.has-versioning }} == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       # # checkout PR's HEAD commit
       # - uses: actions/checkout@v3
       #   # we always want to be at HEAD?
@@ -109,7 +110,7 @@ jobs:
         id: make-version-changes
         with:
           changed-packages: ${{ needs.get-changes-scope.outputs.changed-packages }}
-          versioning: ${{ needs.get-version-scope.outputs.version }}
+          versioning: ${{ needs.get-version-scope.outputs.versioning }}
           branch: ${{ github.event.pull_request.head.ref }}
 
       - name: Push changes to Github
