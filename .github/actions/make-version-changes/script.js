@@ -164,6 +164,7 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
   console.log("updating js package");
 
   // adds git info automatically
+  wrappedExec("yarn install", cwdArgs.join("/"));
   wrappedExec(`npm version ${semvar}`, cwdArgs.join("/"));
   console.log("log after upate: ", wrappedExec("git log"));
 };
