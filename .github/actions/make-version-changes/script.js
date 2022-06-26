@@ -218,6 +218,7 @@ module.exports = async (
 
     console.log("packages: ", packages);
 
+    packages = JSON.parse(packages);
     for (const package of packages) {
       console.log("package: ", package);
 
