@@ -1,5 +1,4 @@
 name: Manually sync versions
-description: "Manually sync master branch version with  with package manager"
 
 on:
   workflow_dispatch:
