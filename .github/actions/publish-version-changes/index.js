@@ -123,11 +123,11 @@ const tryPublishCratesPackage = async (cargoToken, cwdArgs) => {
   const remoteCrateVersion = await getLatestPublishedCrateVersion(crateName);
   console.log("remoteCrateVersion: ", remoteCrateVersion);
 
-  // only publissh if local crate is behind remote crate
+  // only publish if local crate is behind remote crate
   if (shouldPublishPackage(localCrateVersion, remoteCrateVersion)) {
     // wrappedExec(`cargo login ${cargoToken}`, currentDir);
     wrappedExec(
-      `cargo publish --token ${cargoToken} -p $PACKAGE_NAME`,
+      `cargo publish --token ${cargoToken} -p ${crateName}`,
       currentDir
     );
   } else {
