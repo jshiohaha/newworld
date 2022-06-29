@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       packages:
-        description: 'List of packages and first subdir to udpate, e.g. \'["candy-machine/js", "auction-house/program"]\''
+        description: 'List of packages and first subdir to udpate, e.g. ["candy-machine/js", "auction-house/program"]'
         required: true
         default: '["candy-machine/js"]'
 
