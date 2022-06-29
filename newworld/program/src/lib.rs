@@ -7,7 +7,7 @@ pub mod newworld {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("initialize operation, sheesh");
+        msg!("initialize operation");
         Ok(())
     }
 
