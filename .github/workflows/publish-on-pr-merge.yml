@@ -1,0 +1,43 @@
+name: Manually sync versions
+description: "Manually sync master branch version with  with package manager"
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'List of packages and first subdir to udpate, e.g. \'["candy-machine/js", "auction-house/program"]\''
+        required: true
+        default: '["candy-machine/js"]'
+
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+
+env:
+  NODE_VERSION: 17.0.1
+  ANCHOR_VERSION: 0.22.0
+  SOLANA_VERSION_STABLE: 1.9.22
+  RUST_TOOLCHAIN: stable
+
+jobs:
+  dump-context:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+  update-pr-with-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make version changes
+        uses: ./.github/actions/publish-version-changes
+        id: publish-version-changes
+        with:
+          changed-packages: ${{ inputs.packages }}
+          cargo-token: ${{ secrets.CARGO_TOKEN }}
+          npm-token: ${{ secrets.NPM_PUBLISH_TOKEN }}

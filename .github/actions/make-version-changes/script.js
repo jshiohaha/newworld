@@ -90,7 +90,7 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
 
   // adds git info automatically
   wrappedExec(
-    `cargo release --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
+    `cargo release -vv --no-publish --no-push --no-confirm --verbose --execute --no-tag ${semvar}`,
     currentDir
   );
   wrappedExec(`git log`);
@@ -158,6 +158,8 @@ const updateCratesPackage = async (io, cwdArgs, pkg, semvar) => {
     console.log("=====================");
     wrappedExec(`git diff HEAD~1 HEAD`);
     console.log("=====================");
+
+    wrappedExec("git push", currentDir);
   }
 };
 
@@ -168,6 +170,8 @@ const updateNpmPackage = (cwdArgs, _pkg, semvar) => {
   wrappedExec("yarn install", cwdArgs.join("/"));
   wrappedExec(`npm version ${semvar}`, cwdArgs.join("/"));
   console.log("log after upate: ", wrappedExec("git log"));
+
+  wrappedExec("git push", currentDir);
 };
 
 // todo: add comment for expected format

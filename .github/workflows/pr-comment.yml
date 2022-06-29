@@ -113,8 +113,8 @@ jobs:
           versioning: ${{ needs.get-version-scope.outputs.versioning }}
           branch: ${{ github.event.pull_request.head.ref }}
 
-      - name: Push changes to Github
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.event.pull_request.head.ref }}
+      # - name: Push changes to Github
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.event.pull_request.head.ref }}
