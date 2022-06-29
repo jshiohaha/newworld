@@ -71,7 +71,7 @@ const tryPublishNpmPackage = async (npmToken, cwdArgs) => {
       currentDir
     );
     console.log(`cwdArgs: `, cwdArgs);
-    wrappedExec(`npm publish $${currentDir}`, currentDir);
+    wrappedExec(`npm publish ./package.json`, currentDir);
   } else {
     console.log("no publish needed");
   }
