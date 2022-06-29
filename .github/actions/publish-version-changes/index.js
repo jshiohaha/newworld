@@ -150,12 +150,7 @@ const tryPublishCratesPackage = async (cargoToken, cwdArgs) => {
  * @param {versioning} arr List of version commands in the form semvar:pkg:type where type = `program|js`
  * @return void
  */
-module.exports = async (
-  { github, context, core },
-  packages,
-  cargoToken,
-  npmToken
-) => {
+module.exports = async (packages, cargoToken, npmToken) => {
   if (packages.length === 0) {
     console.log("No packges to publish. Exiting early.");
     return;
