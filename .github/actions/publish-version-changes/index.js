@@ -70,6 +70,7 @@ const tryPublishNpmPackage = async (npmToken, cwdArgs) => {
       `echo "//registry.npmjs.org/:_authToken=${npmToken}" > ~/.npmrc`,
       currentDir
     );
+    console.log(`cwdArgs: `, cwdArgs);
     wrappedExec(`npm publish $${currentDir}`, currentDir);
   } else {
     console.log("no publish needed");
@@ -165,6 +166,8 @@ module.exports = async (
   const parentDirsToHome = 4; // ~/<home>/./.github/actions/<name>
   const cwdArgs = splitBase.slice(0, splitBase.length - parentDirsToHome);
 
+  console.log(`cwdArgs: `, cwdArgs);
+
   // JSON.parse(packages)
   for (let package of packages) {
     // make sure package doesn't have extra quotes or spacing
@@ -176,6 +179,7 @@ module.exports = async (
 
       cwdArgs.push(...[name, type]);
       console.log("after push args");
+      console.log(`cwdArgs: `, cwdArgs);
 
       if (isCratesPackage(type))
         await tryPublishCratesPackage(cargoToken, cwdArgs, toml);
