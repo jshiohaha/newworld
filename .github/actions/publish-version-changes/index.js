@@ -168,25 +168,24 @@ module.exports = async (packages, cargoToken, npmToken) => {
     // make sure package doesn't have extra quotes or spacing
     package = package.replace(/\s+|\"|\'/g, "");
     const [name, type] = package.split("/");
+    console.log(`Processing package [${name}] of type [${type}]`);
+    cwdArgs.push(...[name, type]);
+
+    console.log("after push args");
+    console.log(`cwdArgs: `, cwdArgs);
 
     try {
-      console.log(`Processing package [${name}] of type [${type}]`);
-
-      cwdArgs.push(...[name, type]);
-      console.log("after push args");
-      console.log(`cwdArgs: `, cwdArgs);
-
       if (isCratesPackage(type))
         await tryPublishCratesPackage(cargoToken, cwdArgs, toml);
       else if (isNpmPackage(type))
         await tryPublishNpmPackage(npmToken, cwdArgs);
       else continue;
-
+    } catch (e) {
+      console.log(`could not process ${name}/${type} - got error ${e}`);
+    } finally {
       // chdir back two levels - back to root, should match original cwd
       cwdArgs.pop();
       cwdArgs.pop();
-    } catch (e) {
-      console.log(`could not process ${name}/${type} - got error ${e}`);
     }
   }
 };
