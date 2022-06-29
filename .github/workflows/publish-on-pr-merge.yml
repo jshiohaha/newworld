@@ -11,12 +11,6 @@ on:
 permissions:
   id-token: write
 
-env:
-  NODE_VERSION: 17.0.1
-  ANCHOR_VERSION: 0.22.0
-  SOLANA_VERSION_STABLE: 1.9.22
-  RUST_TOOLCHAIN: stable
-
 jobs:
   dump-context:
     runs-on: ubuntu-latest
@@ -31,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Make version changes
+      - name: Publish version changes
         uses: ./.github/actions/publish-version-changes
         id: publish-version-changes
         with:

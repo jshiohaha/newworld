@@ -5,12 +5,12 @@ inputs:
   changed-packages:
     description: "Changed packages - in format of <package>/<type>"
     required: true
-  # cargo-token:
-  #   description: 'Token with which we can publish crates'
-  #   required: true
-  # npm-token:
-  #   description: 'Token with which we can publish NPM packages'
-  #   required: true
+  cargo-token:
+    description: "Token with which we can publish crates"
+    required: true
+  npm-token:
+    description: "Token with which we can publish NPM packages"
+    required: true
 
 runs:
   using: "composite"
@@ -20,8 +20,7 @@ runs:
     - name: Install dependency packages for script
       run: |
         yarn init --yes
-        yarn add @iarna/toml
-        yarn add axios
+        yarn add @iarna/toml axios
       shell: bash
 
     - name: Make version changes
