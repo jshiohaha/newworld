@@ -29,4 +29,4 @@ runs:
       with:
         script: |
           const script = require('.github/actions/publish-version-changes/index.js')
-          await script({github, context, core}, ${{ inputs.changed-packages }}, ${{ inputs.cargo-token }}, ${{ inputs.npm-token }})
+          await script({github, context, core}, ${{ inputs.changed-packages }}, '${{ inputs.cargo-token }}', '${{ inputs.npm-token }}')
